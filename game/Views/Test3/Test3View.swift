@@ -42,6 +42,7 @@ class Test3View: UIView {
     
     var vertexScale: Float = 1
     var previousVertexScale: Float = 0
+    var previousScaleMoveValue: Float = 0
     
     var scaleSessionStartScaleLocation: FloatPoint = FloatPoint()
     
@@ -120,7 +121,8 @@ class Test3View: UIView {
 //            previousVertexTransform.1 = Float(yTransform) + previousVertexTransform.1
         }
         
-        print("\nTransform: \(vertexTransform)")
+        print("\nVertex Scale: \(vertexScale)")
+        print("Transform: \(vertexTransform)")
     }
     
     @objc func scaled() {
@@ -146,18 +148,26 @@ class Test3View: UIView {
             print("\n\n\n\n\n\n\n\n\nNEW SCALE ----\n\n\n\n\n\n\n\n\n")
         }
         
+        
         // Calculate Move Value
 
-        let moveValue1: Float = (1 / (scale) - 1)
+        let moveValue1: Float = (1 / (vertexScale) - 1)
         let moveValue2: Float = scaleSessionStartScaleLocation.x
         let moveValue3: Float = -moveValue1 * moveValue2
+        let moveValue4: Float = moveValue3 + previousScaleMoveValue * moveValue1
+        vertexTransform = (moveValue4, 0)
         
-        vertexTransform = (moveValue3, 0)
+        print("\nVertex Scale:        \(vertexScale)")
+        print("Transform X:         \(vertexTransform.0)")
+        print("Previous Scale Move: \(previousScaleMoveValue)")
+        print("Session Start Touch: \(scaleSessionStartScaleLocation.x)")
+        print("Move Multiplier:     \(moveValue1)")
         
         if pinchGesture.state == .ended {
+            previousScaleMoveValue = moveValue4
             previousVertexScale = originalScale - 1
 //            previousVertexTransform.0 = Float(xTransform) + previousVertexTransform.0
-            previousVertexTransform.0 = moveValue3
+            previousVertexTransform.0 = moveValue4
         }
     }
     
@@ -170,6 +180,8 @@ class Test3View: UIView {
         vertexScale = 1
         previousVertexScale = 0
         testValue = 1
+        
+        previousScaleMoveValue = 0
     }
     
     func newGrid() {
@@ -190,7 +202,8 @@ class Test3View: UIView {
     }
     
     func test() {
-        testValue = 0
+        vertexTransform.0 = 3
+        vertexScale = 0.25
     }
     
     // Render
