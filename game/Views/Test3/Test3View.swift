@@ -22,8 +22,6 @@ struct FloatPoint {
 
 class Test3View: UIView {
     
-    
-    
     // MARK: Properties
     
     var testValue: Float = 1
@@ -37,14 +35,13 @@ class Test3View: UIView {
     var vertexColorBuffer: MTLBuffer!
     
     var vertexTransform: (Float, Float) = (0, 0)
-    var previousVertexTransform: (Float, Float) = (0, 0)
-    var previousPanLocation: CGPoint!
+    var previousVertexTransform: FloatPoint = FloatPoint()
+    var startPanLocation: FloatPoint = FloatPoint()
     
     var vertexScale: Float = 1
     var previousVertexScale: Float = 0
-    var previousScaleMoveValue: Float = 0
-    
-    var scaleSessionStartScaleLocation: FloatPoint = FloatPoint()
+    var scaleStartLocationAjusted: FloatPoint = FloatPoint()
+    var scaleStartLocation: FloatPoint = FloatPoint()
     
     var pipelineState: MTLRenderPipelineState!
     var commandQueue: MTLCommandQueue!
@@ -65,18 +62,17 @@ class Test3View: UIView {
             }
         }
     }
-    let defaultGridWidth: Int = 20
+    let defaultGridWidth: Int = 1000
     var yGridHeight: Int!
     
     // Vertex Stuff
     var vertexCount: Int = 0
     
-    // MARK: Views
+    // MARK: Gestures
     
     weak var panGesture:   UIPanGestureRecognizer!
     weak var pinchGesture: UIPinchGestureRecognizer!
     weak var tapGesture: UITapGestureRecognizer!
-    
     
     // MARK: Style Guide
     
@@ -84,8 +80,8 @@ class Test3View: UIView {
     
     // Game Loop
     @objc func gameloop() {
-        autoreleasepool { [weak self] in
-            self?.render()
+        autoreleasepool {
+            self.render()
         }
     }
     
@@ -102,72 +98,57 @@ class Test3View: UIView {
     }
     
     @objc func panned() {
-        let location = panGesture.location(in: self)
+        var location = getPointInCordinateSpace(point: FloatPoint(panGesture.location(in: self)))
         if panGesture.state == .began {
-            previousPanLocation = location
+            startPanLocation = location
         }
-        let xTransform1 = location.x - previousPanLocation.x
-        let xTransform2 = xTransform1 / bounds.width
-        let xTransform = xTransform2 * 2
-//        let yTransform1 = location.y - previousPanLocation.y
-//        let yTransform2 = yTransform1 / bounds.height
-//        let yTransform = yTransform2 * 2
         
-//        vertexTransform = (Float(xTransform) + previousVertexTransform.0, Float(yTransform) + previousVertexTransform.1)
-        vertexTransform = (Float(xTransform) + previousVertexTransform.0, 0)
+        location.x -= startPanLocation.x
+        location.y -= startPanLocation.y
         
+        vertexTransform = (location.x + previousVertexTransform.x, location.y + previousVertexTransform.y)
+
         if panGesture.state == .ended {
-            previousVertexTransform.0 = Float(xTransform) + previousVertexTransform.0
-//            previousVertexTransform.1 = Float(yTransform) + previousVertexTransform.1
+            previousVertexTransform.x += location.x
+            previousVertexTransform.y += location.y
         }
-        
-        print("\nVertex Scale: \(vertexScale)")
-        print("Transform: \(vertexTransform)")
     }
     
     @objc func scaled() {
-//        print("\nPinch Scale:    \(pinchGesture.scale)")
-//        print("Previous Scale: \(previousVertexScale)")
-        let scale = Float(pinchGesture.scale)
-        let originalScale = scale
-//        print("Before Scale: \(scale)")
-//        if scale > 1 {
-//            scale = scale / (scale * (scale * 2))
-//        } else {
-//
+        var scale = Float(pinchGesture.scale)
+        if scale >= 1 {
+            scale = scale / (scale * (scale))
+        } else {
+            scale = 1 / scale
+        }
+//        if scale - previousVertexScale > 1 {
+//            scale = 1
+//            previousVertexScale = 0
 //        }
-//        print("After: \(scale)")
-        vertexScale = scale + previousVertexScale
         
-        // Transform
+        scale = 1 - (1 - scale) * (1 - previousVertexScale)
         
-        if pinchGesture.state == .began {
-            let location = FloatPoint(pinchGesture.location(in: self))
-            scaleSessionStartScaleLocation = getAdjustedPointInCordinateSpace(point: location)
+        if pinchGesture.numberOfTouches >= 2 {
             
-            print("\n\n\n\n\n\n\n\n\nNEW SCALE ----\n\n\n\n\n\n\n\n\n")
+            let location = FloatPoint(pinchGesture.location(in: self))
+            if pinchGesture.state == .began {
+                scaleStartLocationAjusted = getAdjustedPointInCordinateSpace(point: location)
+                scaleStartLocation = getPointInCordinateSpace(point: location)
+            }
+            
+            vertexScale = scale - previousVertexScale
+            
+            let transform = getPointInCordinateSpace(point: location)
+            
+            let multiplier = 1 / vertexScale
+            vertexTransform.0 = -scaleStartLocationAjusted.x * multiplier + scaleStartLocation.x + transform.x - scaleStartLocation.x
+            vertexTransform.1 = -scaleStartLocationAjusted.y * multiplier + scaleStartLocation.y + transform.y - scaleStartLocation.y
         }
         
-        
-        // Calculate Move Value
-
-        let moveValue1: Float = (1 / (vertexScale) - 1)
-        let moveValue2: Float = scaleSessionStartScaleLocation.x
-        let moveValue3: Float = -moveValue1 * moveValue2
-        let moveValue4: Float = moveValue3 + previousScaleMoveValue * moveValue1
-        vertexTransform = (moveValue4, 0)
-        
-        print("\nVertex Scale:        \(vertexScale)")
-        print("Transform X:         \(vertexTransform.0)")
-        print("Previous Scale Move: \(previousScaleMoveValue)")
-        print("Session Start Touch: \(scaleSessionStartScaleLocation.x)")
-        print("Move Multiplier:     \(moveValue1)")
-        
         if pinchGesture.state == .ended {
-            previousScaleMoveValue = moveValue4
-            previousVertexScale = originalScale - 1
-//            previousVertexTransform.0 = Float(xTransform) + previousVertexTransform.0
-            previousVertexTransform.0 = moveValue4
+            previousVertexScale += 1 - scale
+            previousVertexTransform.x = vertexTransform.0
+            previousVertexTransform.y = vertexTransform.1
         }
     }
     
@@ -176,12 +157,10 @@ class Test3View: UIView {
     // Reset
     func reset() {
         vertexTransform = (0, 0)
-        previousVertexTransform = (0, 0)
+        previousVertexTransform = FloatPoint()
         vertexScale = 1
         previousVertexScale = 0
         testValue = 1
-        
-        previousScaleMoveValue = 0
     }
     
     func newGrid() {
@@ -202,8 +181,7 @@ class Test3View: UIView {
     }
     
     func test() {
-        vertexTransform.0 = 3
-        vertexScale = 0.25
+        
     }
     
     // Render
@@ -237,39 +215,27 @@ class Test3View: UIView {
         var floatPoint = FloatPoint()
         floatPoint.x = point.x / width * 2 - 1
         floatPoint.y = point.y / height * 2 - 1
-//        print("FloatPoint1: \(floatPoint)")
         return floatPoint
     }
     
     // Get Touch In Adjusted Cordinate Space
     func getAdjustedPointInCordinateSpace(point: FloatPoint) -> FloatPoint {
         var floatPoint = getPointInCordinateSpace(point: point)
-//        print("FloatPoint2: \(floatPoint)")
-//        print("Scale: \(vertexScale)")
-//        print("Trans: \(vertexTransform)")
         floatPoint.x = floatPoint.x * vertexScale + -vertexTransform.0 * vertexScale
         floatPoint.y = floatPoint.y * vertexScale + -vertexTransform.1 * vertexScale
-//        print("FloatPoint3: \(floatPoint)")
         return floatPoint
     }
     
     // Get Vertex Data (Vertexs, Vertex Count, Cube Count)
     func getVertexData() -> ([Float], Int, Int) {
-        
-//        print("Screen Width: \(bounds.width)")
-//        print("Screen Height: \(bounds.height)")
+
         let cellSize: CGFloat = bounds.width / CGFloat(defaultGridWidth)
-//        print("Cell Size: \(cellSize)")
-//        print("Height / Cell Size: \(bounds.height / cellSize)")
-//        print("Cells Needed To Fill Space: \((bounds.height / cellSize).rounded(.up))")
         
         // Get Starting Point For Starting Y
         var yCellsRequired = Int((bounds.height / cellSize).rounded(.up))
         if yCellsRequired % 2 == 1 {
             yCellsRequired += 1
         }
-//        print("Cells Required: \(yCellsRequired * defaultGridWidth)")
-//        print("Y Cells Required: \(yCellsRequired)")
         
         let xStepAmount = 2 / Float(bounds.width  / cellSize)
         let yStepAmount = 2 / Float(bounds.height / cellSize)
@@ -277,7 +243,6 @@ class Test3View: UIView {
         let yStartingPoint1 = CGFloat(yCellsRequired) * CGFloat(yStepAmount)
         let yStartingPoint2 = yStartingPoint1 - 2
         let yStartingPoint =  yStartingPoint2 / 2
-//        print("Starting Point: \(yStartingPoint)")
 
         var vertexData: [Float] = []
         
@@ -305,13 +270,6 @@ class Test3View: UIView {
                 vertexData.append(cubeBottomY)
                 vertexData.append(cubeLeftX)
                 vertexData.append(cubeBottomY)
-                
-//                print("\nY Cell:       \(y)")
-//                print("X Cell:       \(x)")
-//                print("Cube Left X:  \(cubeLeftX)")
-//                print("Cube Right X: \(cubeRightX)")
-//                print("Cube Top Y:   \(cubeTopY)")
-//                print("Cube BottomY: \(cubeBottomY)")
             }
         }
         yGridHeight = yCellsRequired
@@ -409,30 +367,20 @@ class Test3View: UIView {
 
         commandQueue = device.makeCommandQueue()
 
-        // Display some shit
         timer = CADisplayLink(target: self, selector: #selector(gameloop))
         timer.add(to: RunLoop.main, forMode: .default)
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned))
+        panGesture.maximumNumberOfTouches = 1
         addGestureRecognizer(panGesture)
-        panGesture.delegate = self
         self.panGesture = panGesture
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(scaled))
         addGestureRecognizer(pinchGesture)
-        pinchGesture.delegate = self
         self.pinchGesture = pinchGesture
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapped))
         addGestureRecognizer(tapGesture)
-        tapGesture.delegate = self
         self.tapGesture = tapGesture
-    }
-}
-
-extension Test3View: UIGestureRecognizerDelegate {
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
     }
 }
