@@ -17,6 +17,7 @@ class InitialViewController: UIViewController {
     weak var testGameButton1: UIButton!
     weak var testGameButton2: UIButton!
     weak var testGameButton3: UIButton!
+    weak var testGameButton4: UIButton!
     
     // MARK: Style Guide
     
@@ -46,6 +47,12 @@ class InitialViewController: UIViewController {
     // Test Game Button 3 Tapped
     @objc func testGameButton3Tapped() {
         let viewController = Test3ViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    // Test Game Button 4 Tapped
+    @objc func testGameButton4Tapped() {
+        let viewController = Test4ViewController()
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -112,5 +119,20 @@ class InitialViewController: UIViewController {
             testGameButton3.heightAnchor.constraint(equalToConstant: 44)
         ])
         self.testGameButton3 = testGameButton3
+        
+        // Test Game Button 4
+        let testGameButton4 = UIButton()
+        testGameButton4.addTarget(self, action: #selector(testGameButton4Tapped), for: .touchUpInside)
+        testGameButton4.backgroundColor = .background2
+        testGameButton4.layer.cornerRadius = 12
+        testGameButton4.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(testGameButton4)
+        NSLayoutConstraint.activate([
+            testGameButton4.topAnchor.constraint(equalTo: testGameButton3.bottomAnchor, constant: 8),
+            testGameButton4.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            testGameButton4.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            testGameButton4.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        self.testGameButton4 = testGameButton4
     }
 }

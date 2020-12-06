@@ -15,6 +15,10 @@
 		865E362A2573238000B8A2C6 /* Test2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865E36292573238000B8A2C6 /* Test2ViewController.swift */; };
 		865E362D257323A600B8A2C6 /* Test2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865E362C257323A600B8A2C6 /* Test2View.swift */; };
 		865E363E25732A0500B8A2C6 /* Test2.metal in Sources */ = {isa = PBXBuildFile; fileRef = 865E363D25732A0500B8A2C6 /* Test2.metal */; };
+		869B1100257CCC5A0062BC3B /* Test4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869B10FF257CCC5A0062BC3B /* Test4View.swift */; };
+		869B1103257CCC810062BC3B /* Test4.metal in Sources */ = {isa = PBXBuildFile; fileRef = 869B1102257CCC810062BC3B /* Test4.metal */; };
+		869B1106257CCE3D0062BC3B /* Test4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869B1105257CCE3D0062BC3B /* Test4ViewController.swift */; };
+		869B1109257CD1330062BC3B /* Test4View2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869B1108257CD1330062BC3B /* Test4View2.swift */; };
 		86ADAFA2256074D600A252A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ADAFA1256074D600A252A5 /* AppDelegate.swift */; };
 		86ADAFAB256074D800A252A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFAA256074D800A252A5 /* Assets.xcassets */; };
 		86ADAFAE256074D800A252A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFAC256074D800A252A5 /* LaunchScreen.storyboard */; };
@@ -37,6 +41,10 @@
 		865E36292573238000B8A2C6 /* Test2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test2ViewController.swift; sourceTree = "<group>"; };
 		865E362C257323A600B8A2C6 /* Test2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test2View.swift; sourceTree = "<group>"; };
 		865E363D25732A0500B8A2C6 /* Test2.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Test2.metal; sourceTree = "<group>"; };
+		869B10FF257CCC5A0062BC3B /* Test4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test4View.swift; sourceTree = "<group>"; };
+		869B1102257CCC810062BC3B /* Test4.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Test4.metal; sourceTree = "<group>"; };
+		869B1105257CCE3D0062BC3B /* Test4ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test4ViewController.swift; sourceTree = "<group>"; };
+		869B1108257CD1330062BC3B /* Test4View2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test4View2.swift; sourceTree = "<group>"; };
 		86ADAF9E256074D600A252A5 /* game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86ADAFA1256074D600A252A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86ADAFAA256074D800A252A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -79,6 +87,16 @@
 				865E363D25732A0500B8A2C6 /* Test2.metal */,
 			);
 			path = Test2;
+			sourceTree = "<group>";
+		};
+		869B10FE257CCC410062BC3B /* Test4 */ = {
+			isa = PBXGroup;
+			children = (
+				869B10FF257CCC5A0062BC3B /* Test4View.swift */,
+				869B1108257CD1330062BC3B /* Test4View2.swift */,
+				869B1102257CCC810062BC3B /* Test4.metal */,
+			);
+			path = Test4;
 			sourceTree = "<group>";
 		};
 		86ADAF95256074D600A252A5 = {
@@ -129,6 +147,7 @@
 				865E362425730CA100B8A2C6 /* Test1View.swift */,
 				865E362F257324FB00B8A2C6 /* Test2 */,
 				860C95AA2575F02700B9CEBE /* Test3 */,
+				869B10FE257CCC410062BC3B /* Test4 */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -140,6 +159,7 @@
 				865E361F25730B0100B8A2C6 /* Test1ViewController.swift */,
 				865E36292573238000B8A2C6 /* Test2ViewController.swift */,
 				860C95A72575EFDD00B9CEBE /* Test3ViewController.swift */,
+				869B1105257CCE3D0062BC3B /* Test4ViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -270,15 +290,19 @@
 			files = (
 				865E362025730B0100B8A2C6 /* Test1ViewController.swift in Sources */,
 				865E362A2573238000B8A2C6 /* Test2ViewController.swift in Sources */,
+				869B1106257CCE3D0062BC3B /* Test4ViewController.swift in Sources */,
 				86ADAFA2256074D600A252A5 /* AppDelegate.swift in Sources */,
 				860C95B12575F0BC00B9CEBE /* Test3.metal in Sources */,
 				86ADAFCC256083A800A252A5 /* UIColor.swift in Sources */,
 				865E362525730CA100B8A2C6 /* Test1View.swift in Sources */,
 				86ADAFD0256088C500A252A5 /* Text.swift in Sources */,
 				865E363E25732A0500B8A2C6 /* Test2.metal in Sources */,
+				869B1100257CCC5A0062BC3B /* Test4View.swift in Sources */,
 				860C95AE2575F04A00B9CEBE /* Test3View.swift in Sources */,
 				86ADAFC1256075C300A252A5 /* InitialViewController.swift in Sources */,
+				869B1109257CD1330062BC3B /* Test4View2.swift in Sources */,
 				860C95A82575EFDD00B9CEBE /* Test3ViewController.swift in Sources */,
+				869B1103257CCC810062BC3B /* Test4.metal in Sources */,
 				865E362D257323A600B8A2C6 /* Test2View.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

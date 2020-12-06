@@ -1,59 +1,57 @@
 //
-//  Test3View.swift
+//  Test4View.swift
 //  game
 //
-//  Created by Jackson Tubbs on 11/30/20.
+//  Created by Jackson Tubbs on 12/6/20.
 //
 
 import UIKit
 import Metal
 
-// MARK: Structures
-
-struct FloatPoint {
-    var x: Float
-    var y: Float
-    
-    init(_ point: CGPoint = .zero) {
-        x = Float(point.x)
-        y = Float(point.y)
-    }
+protocol Test4ViewDelegate: class {
+    func tapped(x: Int, y: Int)
 }
 
-class Test3View: UIView {
+class Test4View: UIView {
     
     // MARK: Properties
     
-    var testValue: Float = 1
+    // Delegate
+    weak var delegate: Test4ViewDelegate?
     
-    var width: Float!
-    var height: Float!
+    // Rendering
+    private var device:                    MTLDevice!
+    private var metalLayer:                CAMetalLayer!
+    private var vertexBuffer:              MTLBuffer!
+    private var vertexColorBuffer:         MTLBuffer!
+    private var pipelineState:             MTLRenderPipelineState!
+    private var commandQueue:              MTLCommandQueue!
+    private var timer:                     CADisplayLink!
     
-    var device: MTLDevice!
-    var metalLayer: CAMetalLayer!
-    var vertexBuffer: MTLBuffer!
-    var vertexColorBuffer: MTLBuffer!
+    // Transform
+    private var vertexTransform:           (Float, Float) = (0, 0)
+    private var previousVertexTransform:   FloatPoint = FloatPoint()
+    private var startPanLocation:          FloatPoint = FloatPoint()
     
-    var vertexTransform: (Float, Float) = (0, 0)
-    var previousVertexTransform: FloatPoint = FloatPoint()
-    var startPanLocation: FloatPoint = FloatPoint()
+    // Scale
+    private var vertexScale:               Float = 1
+    private var previousVertexScale:       Float = 0
+    private var scaleStartLocationAjusted: FloatPoint = FloatPoint()
+    private var scaleStartLocation:        FloatPoint = FloatPoint()
     
-    var vertexScale: Float = 1
-    var previousVertexScale: Float = 0
-    var scaleStartLocationAjusted: FloatPoint = FloatPoint()
-    var scaleStartLocation: FloatPoint = FloatPoint()
+    private var gridWidth:                 Int = 32
+    private var gridHeight:                Int!
     
-    var pipelineState: MTLRenderPipelineState!
-    var commandQueue: MTLCommandQueue!
-    var timer: CADisplayLink!
+    // Vertex Stuff
+    private var vertexCount:               Int = 0
     
-    // Zooming And Panning
-    let maxZoom: Float = 10
-    let zoomSpeed: Float = 1
-    
-    var didSetupView = false
+    // Bounds
+    private var width:                     Float!
+    private var height:                    Float!
+    private var didSetupView =             false
     override var bounds: CGRect {
         didSet {
+            print("Did Set Bounds: \(bounds)")
             if !didSetupView {
                 width = Float(bounds.width)
                 height = Float(bounds.height)
@@ -62,19 +60,24 @@ class Test3View: UIView {
             }
         }
     }
-    let defaultGridWidth: Int = 100
-    var yGridHeight: Int!
     
-    // Vertex Stuff
-    var vertexCount: Int = 0
+    // Gestures
     
-    // MARK: Gestures
+    private weak var panGesture:           UIPanGestureRecognizer!
+    private weak var pinchGesture:         UIPinchGestureRecognizer!
+    private weak var tapGesture:           UITapGestureRecognizer!
     
-    weak var panGesture:   UIPanGestureRecognizer!
-    weak var pinchGesture: UIPinchGestureRecognizer!
-    weak var tapGesture: UITapGestureRecognizer!
+    // MARK: Init
     
-    // MARK: Style Guide
+    
+//    init(gridWidth: Int) {
+//        super.init(frame: .zero)
+//        self.gridWidth = gridWidth
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        super.init(coder: coder)
+//    }
     
     // MARK: OJBC
     
@@ -85,16 +88,13 @@ class Test3View: UIView {
         }
     }
     
+    // Tapped
     @objc func tapped() {
-        let selection = UISelectionFeedbackGenerator()
-        selection.selectionChanged()
-        
         let location = getAdjustedPointInCordinateSpace(point: FloatPoint(tapGesture.location(in: self)))
-        print("\nLocation: \(location)")
-        let xCube = (location.x + 1) / 2 * Float(defaultGridWidth)
-        let yCube = (location.y + 1) / 2 * Float(yGridHeight)
-        print("X Cube:   \(Int(xCube.rounded(.up)))")
-        print("Y Cube:   \(Int(yCube.rounded(.up)))")
+        let xCube = (location.x + 1) / 2 * Float(gridWidth)
+        let yCube = (location.y + 1) / 2 * Float(gridHeight)
+        delegate?.tapped(x: Int(xCube.rounded(.down)),
+                         y: Int(yCube.rounded(.down)))
     }
     
     @objc func panned() {
@@ -154,13 +154,17 @@ class Test3View: UIView {
     
     // MARK: Helpers
     
+    // End Game
+    func endGame() {
+        timer.invalidate()
+    }
+    
     // Reset
     func reset() {
         vertexTransform = (0, 0)
         previousVertexTransform = FloatPoint()
         vertexScale = 1
         previousVertexScale = 0
-        testValue = 1
     }
     
     func newGrid() {
@@ -180,10 +184,6 @@ class Test3View: UIView {
         print("Data Size: \((dataSize + dataSize2) / 1000) KB")
     }
     
-    func test() {
-        
-    }
-    
     // Render
     func render() {
         guard let drawable = metalLayer?.nextDrawable() else { return }
@@ -197,7 +197,7 @@ class Test3View: UIView {
             alpha: 1)
 
         let commandBuffer = commandQueue.makeCommandBuffer()!
-
+        
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
         renderEncoder.setRenderPipelineState(pipelineState)
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
@@ -229,33 +229,34 @@ class Test3View: UIView {
     // Get Vertex Data (Vertexs, Vertex Count, Cube Count)
     func getVertexData() -> ([Float], Int, Int) {
 
-        let cellSize: CGFloat = bounds.width / CGFloat(defaultGridWidth)
+        let cellSize: Float = width / Float(gridWidth)
+        
+        print("Cell Size: \(cellSize)")
         
         // Get Starting Point For Starting Y
-        var yCellsRequired = Int((bounds.height / cellSize).rounded(.up))
-        if yCellsRequired % 2 == 1 {
-            yCellsRequired += 1
+        var gridHeight = Int((height / cellSize).rounded(.up))
+        if gridHeight % 2 == 1 {
+            gridHeight += 1
         }
         
-        let xStepAmount = 2 / Float(bounds.width  / cellSize)
-        let yStepAmount = 2 / Float(bounds.height / cellSize)
+        let xStepAmount = 2 / width  / cellSize
+        let yStepAmount = 2 / height / cellSize
         
-        let yStartingPoint1 = CGFloat(yCellsRequired) * CGFloat(yStepAmount)
+        let yStartingPoint1 = Float(gridHeight) * yStepAmount
         let yStartingPoint2 = yStartingPoint1 - 2
         let yStartingPoint =  yStartingPoint2 / 2
 
         var vertexData: [Float] = []
         
-        for y in 0..<yCellsRequired {
-            for x in 0..<defaultGridWidth {
+        for y in 0..<gridHeight {
+            for x in 0..<gridWidth {
+                let cubeLeftX    = xStepAmount  * Float(x) - 1
+                let cubeRightX1  = xStepAmount  * Float(x + 1) - 1
+                let cubeRightX   = cubeRightX1
                 
-                let cubeLeftX   = xStepAmount * Float(x) - 1
-                let cubeRightX1  = xStepAmount * Float(x + 1) - 1
-                let cubeRightX  = cubeRightX1
-                
-                let cubeTopY    = yStepAmount * Float(y) - 1 - Float(yStartingPoint)
-                let cubeBottomY1 = yStepAmount * Float(y + 1) - 1
-                let cubeBottomY = cubeBottomY1 - Float(yStartingPoint)
+                let cubeTopY     = yStepAmount  * Float(y) - 1 - Float(yStartingPoint)
+                let cubeBottomY1 = yStepAmount  * Float(y + 1) - 1
+                let cubeBottomY  = cubeBottomY1 - Float(yStartingPoint)
                 
                 vertexData.append(cubeLeftX)
                 vertexData.append(cubeTopY)
@@ -272,8 +273,8 @@ class Test3View: UIView {
                 vertexData.append(cubeBottomY)
             }
         }
-        yGridHeight = yCellsRequired
-        return (vertexData, vertexData.count / 2, yCellsRequired * defaultGridWidth)
+        self.gridHeight = gridHeight
+        return (vertexData, vertexData.count / 2, gridHeight * gridWidth)
     }
     
     // Get Color Data
@@ -282,7 +283,6 @@ class Test3View: UIView {
         var colors: [Float] = []
         
         for _ in 0..<cubeCount {
-            
             switch Int.random(in: 0..<7) {
             case 0:
                 let red = Float(UIColor.systemPink.redValue)
@@ -348,15 +348,13 @@ class Test3View: UIView {
         
         let dataSize = vertexData.0.count * MemoryLayout.size(ofValue: vertexData.0[0])
         vertexBuffer = device.makeBuffer(bytes: vertexData.0, length: dataSize, options: [])
-
+    
         let dataSize2 = vertexColors.count * MemoryLayout.size(ofValue: vertexColors[0])
         vertexColorBuffer = device.makeBuffer(bytes: vertexColors, length: dataSize2, options: [])
         
-        print("Data Size: \((dataSize + dataSize2) / 1000) KB")
-
         let defaultLibrary = device.makeDefaultLibrary()!
-        let fragmentProgram = defaultLibrary.makeFunction(name: "test3_fragment")
-        let vertexProgram = defaultLibrary.makeFunction(name: "test3_vertex")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "test4_fragment")
+        let vertexProgram = defaultLibrary.makeFunction(name: "test4_vertex")
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
