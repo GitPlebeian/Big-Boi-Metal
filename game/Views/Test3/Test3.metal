@@ -21,7 +21,7 @@ vertex Test3ColoredVertex test3_vertex(constant packed_float2 *position [[buffer
 {
     Test3ColoredVertex vert;
     vert.position = float4(position[vid].x + transform.x * scale, position[vid].y - transform.y * scale, 0, scale);
-    vert.color = float4(color[vid], 1);
+    vert.color = float4(color[vid / 6], 1);
     return vert;
 }
  

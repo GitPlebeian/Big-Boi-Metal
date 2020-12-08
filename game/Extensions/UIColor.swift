@@ -17,6 +17,14 @@ extension UIColor {
 //    static let primary     = UIColor(named: "primary")
 //    static let systemRed = UIColor(named: "background1")!
     
+    var allValues: [Float] {
+        var colors: [Float] = []
+        colors.append(Float(CIColor(color: self).red))
+        colors.append(Float(CIColor(color: self).green))
+        colors.append(Float(CIColor(color: self).blue))
+        return colors
+    }
+    
     var redValue: CGFloat{ return CIColor(color: self).red }
     var greenValue: CGFloat{ return CIColor(color: self).green }
     var blueValue: CGFloat{ return CIColor(color: self).blue }

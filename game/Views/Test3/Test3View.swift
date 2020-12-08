@@ -62,7 +62,7 @@ class Test3View: UIView {
             }
         }
     }
-    let defaultGridWidth: Int = 100
+    let defaultGridWidth: Int = 300
     var yGridHeight: Int!
     
     // Vertex Stuff
@@ -165,6 +165,7 @@ class Test3View: UIView {
     
     func newGrid() {
         // Vertex
+        let start = CFAbsoluteTimeGetCurrent()
         let vertexData = getVertexData()
         vertexCount = vertexData.1
         
@@ -177,7 +178,9 @@ class Test3View: UIView {
         let dataSize2 = vertexColors.count * MemoryLayout.size(ofValue: vertexColors[0])
         vertexColorBuffer = device.makeBuffer(bytes: vertexColors, length: dataSize2, options: [])
         print("Total Cells: \(vertexData.2)")
-        print("Data Size: \((dataSize + dataSize2) / 1000) KB")
+        print("Data Size: \((dataSize + dataSize2))")
+        let diff = CFAbsoluteTimeGetCurrent() - start
+        print("Time: \(diff)")
     }
     
     func test() {
@@ -288,37 +291,37 @@ class Test3View: UIView {
                 let red = Float(UIColor.systemPink.redValue)
                 let green = Float(UIColor.systemPink.greenValue)
                 let blue = Float(UIColor.systemPink.blueValue)
-                colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
+                colors.append(contentsOf: [red, green, blue])
             case 1:
                 let red = Float(UIColor.systemGreen.redValue)
                 let green = Float(UIColor.systemGreen.greenValue)
                 let blue = Float(UIColor.systemGreen.blueValue)
-                colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
+                colors.append(contentsOf: [red, green, blue])
             case 2:
                 let red = Float(UIColor.systemBlue.redValue)
                 let green = Float(UIColor.systemBlue.greenValue)
                 let blue = Float(UIColor.systemBlue.blueValue)
-                colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
+                colors.append(contentsOf: [red, green, blue])
             case 3:
                 let red = Float(UIColor.systemTeal.redValue)
                 let green = Float(UIColor.systemTeal.greenValue)
                 let blue = Float(UIColor.systemTeal.blueValue)
-                colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
+                colors.append(contentsOf: [red, green, blue])
             case 4:
                 let red = Float(UIColor.systemYellow.redValue)
                 let green = Float(UIColor.systemYellow.greenValue)
                 let blue = Float(UIColor.systemYellow.blueValue)
-                colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
+                colors.append(contentsOf: [red, green, blue])
             case 5:
                 let red = Float(UIColor.systemOrange.redValue)
                 let green = Float(UIColor.systemOrange.greenValue)
                 let blue = Float(UIColor.systemOrange.blueValue)
-                colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
+                colors.append(contentsOf: [red, green, blue])
             case 6:
                 let red = Float(UIColor.systemIndigo.redValue)
                 let green = Float(UIColor.systemIndigo.greenValue)
                 let blue = Float(UIColor.systemIndigo.blueValue)
-                colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
+                colors.append(contentsOf: [red, green, blue])
             default: break
             }
         }
@@ -352,7 +355,7 @@ class Test3View: UIView {
         let dataSize2 = vertexColors.count * MemoryLayout.size(ofValue: vertexColors[0])
         vertexColorBuffer = device.makeBuffer(bytes: vertexColors, length: dataSize2, options: [])
         
-        print("Data Size: \((dataSize + dataSize2) / 1000) KB")
+        print("Data Size: \((dataSize + dataSize2))")
 
         let defaultLibrary = device.makeDefaultLibrary()!
         let fragmentProgram = defaultLibrary.makeFunction(name: "test3_fragment")
