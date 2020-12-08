@@ -10,16 +10,6 @@ import Metal
 
 // MARK: Structures
 
-struct FloatPoint {
-    var x: Float
-    var y: Float
-    
-    init(_ point: CGPoint = .zero) {
-        x = Float(point.x)
-        y = Float(point.y)
-    }
-}
-
 class Test3View: UIView {
     
     // MARK: Properties
