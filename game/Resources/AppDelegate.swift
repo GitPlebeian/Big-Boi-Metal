@@ -20,11 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Present Initial View Controller
     func presentInitialViewController() {
-        let navigationController = UINavigationController()
-        let initialViewController = InitialViewController()
-        navigationController.viewControllers = [initialViewController]
+//        let navigationController = UINavigationController()
+        let initialViewController = GameViewController()
+//        navigationController.viewControllers = [initialViewController]
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = navigationController
+        self.window?.rootViewController = initialViewController
         self.window?.makeKeyAndVisible()
     }
 }

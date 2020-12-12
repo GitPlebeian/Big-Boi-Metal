@@ -7,6 +7,11 @@
 
 import UIKit
 
+struct Shape {
+    var vertices: [Float] = []
+    var colors:   [Float] = []
+}
+
 struct FloatPoint {
     var x: Float
     var y: Float
