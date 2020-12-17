@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8607379225856D5F005E32AA /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8607379125856D5F005E32AA /* Engine.swift */; };
 		8613A7B425802DE20004425B /* Data Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613A7B325802DE20004425B /* Data Structures.swift */; };
 		86ADAFA2256074D600A252A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ADAFA1256074D600A252A5 /* AppDelegate.swift */; };
 		86ADAFAB256074D800A252A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFAA256074D800A252A5 /* Assets.xcassets */; };
@@ -21,12 +22,12 @@
 		86D81C322584609D00A51870 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C312584609D00A51870 /* Renderer.swift */; };
 		86D81C35258460B000A51870 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C34258460B000A51870 /* GameView.swift */; };
 		86D81C382584615C00A51870 /* RendererShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C372584615C00A51870 /* RendererShaders.metal */; };
-		86D81C49258475CE00A51870 /* ShapeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C48258475CE00A51870 /* ShapeHelper.swift */; };
 		86D81C6D2584871500A51870 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C6C2584871500A51870 /* Float.swift */; };
 		86EDD3EE258043EA00B8FAD2 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD3ED258043EA00B8FAD2 /* GameViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8607379125856D5F005E32AA /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		8613A7B325802DE20004425B /* Data Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Structures.swift"; sourceTree = "<group>"; };
 		86ADAF9E256074D600A252A5 /* game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86ADAFA1256074D600A252A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -43,7 +44,6 @@
 		86D81C312584609D00A51870 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		86D81C34258460B000A51870 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		86D81C372584615C00A51870 /* RendererShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RendererShaders.metal; sourceTree = "<group>"; };
-		86D81C48258475CE00A51870 /* ShapeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeHelper.swift; sourceTree = "<group>"; };
 		86D81C6C2584871500A51870 /* Float.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
 		86EDD3ED258043EA00B8FAD2 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -183,7 +183,7 @@
 				86D81C312584609D00A51870 /* Renderer.swift */,
 				86D81C34258460B000A51870 /* GameView.swift */,
 				86D81C372584615C00A51870 /* RendererShaders.metal */,
-				86D81C48258475CE00A51870 /* ShapeHelper.swift */,
+				8607379125856D5F005E32AA /* Engine.swift */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -270,8 +270,8 @@
 				8613A7B425802DE20004425B /* Data Structures.swift in Sources */,
 				86D81C6D2584871500A51870 /* Float.swift in Sources */,
 				86D81C322584609D00A51870 /* Renderer.swift in Sources */,
+				8607379225856D5F005E32AA /* Engine.swift in Sources */,
 				86D81C382584615C00A51870 /* RendererShaders.metal in Sources */,
-				86D81C49258475CE00A51870 /* ShapeHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,13 +11,8 @@ class GameView: UIView {
     
     // MARK: Properties
     
-    // Vertex
-    var vertices:        [Float]    = []
-    var colors:          [Float]    = []
-    var transforms:      [Float]    = []
-    var rotations:       [Float]    = []
-    var globalTransform: FloatPoint = FloatPoint()
-    var scale:           Float      = 1
+    var engine:          Engine!
+    var objects:         [Object] = []
     
     // Window
     var height:          Float      = 0
@@ -29,15 +24,12 @@ class GameView: UIView {
                 height = Float(bounds.height)
                 width  = Float(bounds.width)
                 didSetBounds = true
-                
+                engine = Engine(height: height, width: width)
+                engine.delegate = self
                 setupViews()
             }
         }
     }
-    
-    // MARK: Subviews
-    
-    weak var render:     Renderer!
     
     // MARK: Gesture
     
@@ -51,54 +43,36 @@ class GameView: UIView {
     @objc private func tapped() {
         let selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.selectionChanged()
-        let position = FloatPoint(tapGesture.location(in: self))
-        addTriangle(at: position)
+//        let position = FloatPoint(tapGesture.location(in: self))
+        
     }
     
     // MARK: Helpers
     
-    // Add Triangle
-    func addTriangle(at position: FloatPoint) {
-        var triangle = ShapeHelper.getTriangle()
-        scaleShape(shape: &triangle, metric: .width, scale: Float.random(in: 50...200))
-        vertices.append(contentsOf: triangle.vertices)
-        colors.append(contentsOf: triangle.colors)
-        transforms.append(position.x)
-        transforms.append(position.y)
-        rotations.append(Float.random(in: 0..<360))
-    }
-    
-    // Scale Shape
-    func scaleShape(shape: inout Shape, metric: ShapeScalingMetric, scale: Float) {
-        for index in 0..<shape.vertices.count {
-            shape.vertices[index] *= scale / 2
-        }
+    func addObject(_ object: Object, layer: Int) {
+        objects.append(object)
+        engine.updateData()
     }
     
     // MARK: Setup Views
     
     private func setupViews() {
         
-        // Render
-        let render = Renderer()
-        render.delegate = self
-        render.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(render)
-        NSLayoutConstraint.activate([
-            render.topAnchor.constraint(equalTo: topAnchor),
-            render.leadingAnchor.constraint(equalTo: leadingAnchor),
-            render.trailingAnchor.constraint(equalTo: trailingAnchor),
-            render.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-        self.render = render
+        engine.layoutRenderer(superView: self)
         
         // Tap Gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapped))
         addGestureRecognizer(tapGesture)
         self.tapGesture = tapGesture
+        
+        var playerShip = PlayerShip()
+        playerShip.transform.x = 100
+        playerShip.transform.y = height / 2
+        playerShip.scaleShape(scale: 50)
+        addObject(playerShip, layer: 0)
     }
 }
 
-extension GameView: RendererDelegate {
+extension GameView: EngineDelegate {
     
 }

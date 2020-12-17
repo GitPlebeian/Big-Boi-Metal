@@ -14,14 +14,14 @@ struct ColoredVertex{
 };
  
 vertex ColoredVertex vertex_shader(constant packed_float2 *position [[buffer(0)]],
-                                        constant packed_float3 *color [[buffer(1)]],
-                                        constant packed_float2 *transform [[buffer(2)]],
-                                        constant float         *rotation [[buffer(3)]],
-                                        constant packed_float2 &globalTransform [[buffer(4)]],
-                                        constant float         &scale [[buffer(5)]],
-                                        constant float         &screenHeight [[buffer(6)]],
-                                        constant float         &screenWidth [[buffer(7)]],
-                                        uint                   vid [[vertex_id]])
+                                   constant packed_float3 *color [[buffer(1)]],
+                                   constant packed_float2 *transform [[buffer(2)]],
+                                   constant float         *rotation [[buffer(3)]],
+                                   constant packed_float2 &globalTransform [[buffer(4)]],
+                                   constant float         &scale [[buffer(5)]],
+                                   constant float         &screenHeight [[buffer(6)]],
+                                   constant float         &screenWidth [[buffer(7)]],
+                                   uint                   vid [[vertex_id]])
 {
     ColoredVertex vert;
 
