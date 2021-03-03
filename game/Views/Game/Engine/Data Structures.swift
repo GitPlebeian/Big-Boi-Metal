@@ -55,15 +55,36 @@ protocol Object: ShapeProtocol {
 
 protocol Ship: Object {
     var velocity: FloatPoint {get set}
-    
+    var maxVelocity: FloatPoint {get}
 }
 
 struct PlayerShip: Ship {
     
-    var vertices: [Float]     = [0,1,1,-1,-1,-1]
-    var colors: [Float]       = [1,0,0,1,1,1,1,1,1]
-    var transform: FloatPoint = FloatPoint()
-    var rotation: Float       = 0
+    var vertices:    [Float]    = [0,1,1,-1,-1,-1]
+    var colors:      [Float]    = [0,1,0,0.404,0.082,0.922,0.404,0.082,0.922]
+    var transform:   FloatPoint = FloatPoint()
+    var rotation:    Float      = 0
     
-    var velocity: FloatPoint  = FloatPoint()
+    var velocity:    FloatPoint = FloatPoint()
+    var maxVelocity: FloatPoint = FloatPoint(5, 5)
+    
+    mutating func update(velocity: FloatPoint) {
+        self.velocity.x += velocity.x / 10
+        self.velocity.y += velocity.y / 10
+        if self.velocity.x > maxVelocity.x {
+            self.velocity.x = maxVelocity.x
+        }
+        if self.velocity.x < -maxVelocity.x {
+            self.velocity.x = -maxVelocity.x
+        }
+        if self.velocity.y > maxVelocity.y {
+            self.velocity.y = maxVelocity.y
+        }
+        if self.velocity.y < -maxVelocity.y {
+            self.velocity.y = -maxVelocity.y
+        }
+        
+        transform.x += self.velocity.x
+        transform.y += self.velocity.y
+    }
 }

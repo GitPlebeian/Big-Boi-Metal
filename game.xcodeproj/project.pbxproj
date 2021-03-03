@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8607379225856D5F005E32AA /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8607379125856D5F005E32AA /* Engine.swift */; };
 		8613A7B425802DE20004425B /* Data Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613A7B325802DE20004425B /* Data Structures.swift */; };
+		8653D94A258BF55000D9286F /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D949258BF55000D9286F /* DebugView.swift */; };
+		8653D94D258C3F4200D9286F /* Global Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D94C258C3F4200D9286F /* Global Enums.swift */; };
+		869CAA7525EF08C6001BABC8 /* GameViewDebugTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CAA7425EF08C6001BABC8 /* GameViewDebugTest.swift */; };
 		86ADAFA2256074D600A252A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ADAFA1256074D600A252A5 /* AppDelegate.swift */; };
 		86ADAFAB256074D800A252A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFAA256074D800A252A5 /* Assets.xcassets */; };
 		86ADAFAE256074D800A252A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFAC256074D800A252A5 /* LaunchScreen.storyboard */; };
@@ -19,16 +22,19 @@
 		86ADAFDA2560893900A252A5 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFD52560893900A252A5 /* Roboto-Medium.ttf */; };
 		86ADAFDB2560893900A252A5 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFD62560893900A252A5 /* Roboto-Regular.ttf */; };
 		86ADAFDC2560893900A252A5 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86ADAFD72560893900A252A5 /* Roboto-Bold.ttf */; };
-		86D81C322584609D00A51870 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C312584609D00A51870 /* Renderer.swift */; };
 		86D81C35258460B000A51870 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C34258460B000A51870 /* GameView.swift */; };
 		86D81C382584615C00A51870 /* RendererShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C372584615C00A51870 /* RendererShaders.metal */; };
 		86D81C6D2584871500A51870 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D81C6C2584871500A51870 /* Float.swift */; };
 		86EDD3EE258043EA00B8FAD2 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86EDD3ED258043EA00B8FAD2 /* GameViewController.swift */; };
+		86F0706B258C7A1700ACEA14 /* Test1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F0706A258C7A1700ACEA14 /* Test1.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8607379125856D5F005E32AA /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		8613A7B325802DE20004425B /* Data Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Structures.swift"; sourceTree = "<group>"; };
+		8653D949258BF55000D9286F /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
+		8653D94C258C3F4200D9286F /* Global Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Enums.swift"; sourceTree = "<group>"; };
+		869CAA7425EF08C6001BABC8 /* GameViewDebugTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewDebugTest.swift; sourceTree = "<group>"; };
 		86ADAF9E256074D600A252A5 /* game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86ADAFA1256074D600A252A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86ADAFAA256074D800A252A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -41,11 +47,11 @@
 		86ADAFD52560893900A252A5 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		86ADAFD62560893900A252A5 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		86ADAFD72560893900A252A5 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
-		86D81C312584609D00A51870 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		86D81C34258460B000A51870 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		86D81C372584615C00A51870 /* RendererShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RendererShaders.metal; sourceTree = "<group>"; };
 		86D81C6C2584871500A51870 /* Float.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
 		86EDD3ED258043EA00B8FAD2 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		86F0706A258C7A1700ACEA14 /* Test1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test1.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +71,24 @@
 				86EDD3E82580437B00B8FAD2 /* Engine */,
 			);
 			path = Game;
+			sourceTree = "<group>";
+		};
+		8653D946258BF52800D9286F /* Game View */ = {
+			isa = PBXGroup;
+			children = (
+				8653D948258BF53100D9286F /* Debug */,
+				86D81C34258460B000A51870 /* GameView.swift */,
+			);
+			path = "Game View";
+			sourceTree = "<group>";
+		};
+		8653D948258BF53100D9286F /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				86F07069258C7A0400ACEA14 /* Test1 */,
+				8653D949258BF55000D9286F /* DebugView.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		86ADAF95256074D600A252A5 = {
@@ -113,6 +137,7 @@
 			children = (
 				86ADAFBC2560757C00A252A5 /* View Controllers */,
 				8613A7B025802D900004425B /* Game */,
+				869CAA7425EF08C6001BABC8 /* GameViewDebugTest.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -151,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				86ADAFCF256088C500A252A5 /* Text.swift */,
+				8653D94C258C3F4200D9286F /* Global Enums.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -180,12 +206,19 @@
 			isa = PBXGroup;
 			children = (
 				8613A7B325802DE20004425B /* Data Structures.swift */,
-				86D81C312584609D00A51870 /* Renderer.swift */,
-				86D81C34258460B000A51870 /* GameView.swift */,
+				8653D946258BF52800D9286F /* Game View */,
 				86D81C372584615C00A51870 /* RendererShaders.metal */,
 				8607379125856D5F005E32AA /* Engine.swift */,
 			);
 			path = Engine;
+			sourceTree = "<group>";
+		};
+		86F07069258C7A0400ACEA14 /* Test1 */ = {
+			isa = PBXGroup;
+			children = (
+				86F0706A258C7A1700ACEA14 /* Test1.swift */,
+			);
+			path = Test1;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,10 +301,13 @@
 				86EDD3EE258043EA00B8FAD2 /* GameViewController.swift in Sources */,
 				86D81C35258460B000A51870 /* GameView.swift in Sources */,
 				8613A7B425802DE20004425B /* Data Structures.swift in Sources */,
+				8653D94D258C3F4200D9286F /* Global Enums.swift in Sources */,
 				86D81C6D2584871500A51870 /* Float.swift in Sources */,
-				86D81C322584609D00A51870 /* Renderer.swift in Sources */,
+				86F0706B258C7A1700ACEA14 /* Test1.swift in Sources */,
 				8607379225856D5F005E32AA /* Engine.swift in Sources */,
+				869CAA7525EF08C6001BABC8 /* GameViewDebugTest.swift in Sources */,
 				86D81C382584615C00A51870 /* RendererShaders.metal in Sources */,
+				8653D94A258BF55000D9286F /* DebugView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

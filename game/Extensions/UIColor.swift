@@ -14,7 +14,7 @@ extension UIColor {
     static let background4 = UIColor(named: "background4")!
     static let background5 = UIColor(named: "background5")!
     static let background6 = UIColor(named: "background6")!
-//    static let primary     = UIColor(named: "primary")
+    static let primary     = UIColor(named: "primary")
 //    static let systemRed = UIColor(named: "background1")!
     
     var allValues: [Float] {
