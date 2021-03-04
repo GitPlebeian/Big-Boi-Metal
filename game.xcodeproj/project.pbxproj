@@ -13,6 +13,7 @@
 		864E267925F05DE6003F02E5 /* Test3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864E267825F05DE6003F02E5 /* Test3.swift */; };
 		864E267C25F05DFE003F02E5 /* Test3.metal in Sources */ = {isa = PBXBuildFile; fileRef = 864E267B25F05DFE003F02E5 /* Test3.metal */; };
 		864E267F25F05E08003F02E5 /* Engine3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864E267E25F05E08003F02E5 /* Engine3.swift */; };
+		864E268825F06D96003F02E5 /* Test3Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864E268725F06D96003F02E5 /* Test3Map.swift */; };
 		8650B10C25F0383B00B211E1 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8650B10B25F0383B00B211E1 /* Types.swift */; };
 		8650B10F25F0386700B211E1 /* Engine2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8650B10E25F0386700B211E1 /* Engine2.swift */; };
 		8650B11225F0388D00B211E1 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8650B11125F0388D00B211E1 /* Preferences.swift */; };
@@ -34,6 +35,8 @@
 		8650B14725F03A8E00B211E1 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8650B14425F03A8E00B211E1 /* Renderer.swift */; };
 		8653D94A258BF55000D9286F /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D949258BF55000D9286F /* DebugView.swift */; };
 		8653D94D258C3F4200D9286F /* Global Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D94C258C3F4200D9286F /* Global Enums.swift */; };
+		869CA4C225F176BC00CADC2F /* Test3Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CA4C125F176BC00CADC2F /* Test3Type.swift */; };
+		869CA4C525F17A1600CADC2F /* Test3GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CA4C425F17A1600CADC2F /* Test3GameController.swift */; };
 		869CAA7525EF08C6001BABC8 /* GameViewDebugTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CAA7425EF08C6001BABC8 /* GameViewDebugTest.swift */; };
 		869CAA8325F03680001BABC8 /* Test2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CAA8225F03680001BABC8 /* Test2.swift */; };
 		86ADAFA2256074D600A252A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ADAFA1256074D600A252A5 /* AppDelegate.swift */; };
@@ -60,6 +63,7 @@
 		864E267825F05DE6003F02E5 /* Test3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3.swift; sourceTree = "<group>"; };
 		864E267B25F05DFE003F02E5 /* Test3.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Test3.metal; sourceTree = "<group>"; };
 		864E267E25F05E08003F02E5 /* Engine3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine3.swift; sourceTree = "<group>"; };
+		864E268725F06D96003F02E5 /* Test3Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3Map.swift; sourceTree = "<group>"; };
 		8650B10B25F0383B00B211E1 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		8650B10E25F0386700B211E1 /* Engine2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine2.swift; sourceTree = "<group>"; };
 		8650B11125F0388D00B211E1 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
@@ -81,6 +85,8 @@
 		8650B14425F03A8E00B211E1 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		8653D949258BF55000D9286F /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		8653D94C258C3F4200D9286F /* Global Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Enums.swift"; sourceTree = "<group>"; };
+		869CA4C125F176BC00CADC2F /* Test3Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3Type.swift; sourceTree = "<group>"; };
+		869CA4C425F17A1600CADC2F /* Test3GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3GameController.swift; sourceTree = "<group>"; };
 		869CAA7425EF08C6001BABC8 /* GameViewDebugTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewDebugTest.swift; sourceTree = "<group>"; };
 		869CAA8225F03680001BABC8 /* Test2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test2.swift; sourceTree = "<group>"; };
 		86ADAF9E256074D600A252A5 /* game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = game.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +126,9 @@
 				864E267825F05DE6003F02E5 /* Test3.swift */,
 				864E267B25F05DFE003F02E5 /* Test3.metal */,
 				864E267E25F05E08003F02E5 /* Engine3.swift */,
+				864E268725F06D96003F02E5 /* Test3Map.swift */,
+				869CA4C125F176BC00CADC2F /* Test3Type.swift */,
+				869CA4C425F17A1600CADC2F /* Test3GameController.swift */,
 			);
 			path = Test3;
 			sourceTree = "<group>";
@@ -176,6 +185,7 @@
 				8650B13325F03A0F00B211E1 /* Game Objects */,
 				8650B13625F03A0F00B211E1 /* Protocols */,
 				8650B13825F03A0F00B211E1 /* Node.swift */,
+				8650B12A25F039F900B211E1 /* Shaders */,
 			);
 			path = "Game Shizz";
 			sourceTree = "<group>";
@@ -232,7 +242,6 @@
 			children = (
 				8650B14025F03A8E00B211E1 /* Display */,
 				8650B12F25F03A0F00B211E1 /* Game Shizz */,
-				8650B12A25F039F900B211E1 /* Shaders */,
 				8650B12425F0399400B211E1 /* Managers */,
 				8650B11725F0394A00B211E1 /* Libraries */,
 				869CAA8225F03680001BABC8 /* Test2.swift */,
@@ -470,15 +479,18 @@
 				8650B13B25F03A0F00B211E1 /* GameObject.swift in Sources */,
 				864E267625F05DDD003F02E5 /* GameView3.swift in Sources */,
 				86D81C6D2584871500A51870 /* Float.swift in Sources */,
+				869CA4C225F176BC00CADC2F /* Test3Type.swift in Sources */,
 				8650B11525F038A900B211E1 /* Math.swift in Sources */,
 				864E267F25F05E08003F02E5 /* Engine3.swift in Sources */,
 				869CAA8325F03680001BABC8 /* Test2.swift in Sources */,
 				86F0706B258C7A1700ACEA14 /* Test1.swift in Sources */,
 				8607379225856D5F005E32AA /* Engine1.swift in Sources */,
+				869CA4C525F17A1600CADC2F /* Test3GameController.swift in Sources */,
 				8650B13E25F03A0F00B211E1 /* Node.swift in Sources */,
 				869CAA7525EF08C6001BABC8 /* GameViewDebugTest.swift in Sources */,
 				8650B11F25F0395E00B211E1 /* MeshLibrary.swift in Sources */,
 				86D81C382584615C00A51870 /* RendererShaders1.metal in Sources */,
+				864E268825F06D96003F02E5 /* Test3Map.swift in Sources */,
 				8650B12125F0395E00B211E1 /* RenderPipelineStateLibrary.swift in Sources */,
 				8650B12725F0399400B211E1 /* SceneManager.swift in Sources */,
 				8650B14525F03A8E00B211E1 /* GameView2.swift in Sources */,

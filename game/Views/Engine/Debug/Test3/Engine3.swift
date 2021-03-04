@@ -8,8 +8,8 @@
 import UIKit
 
 protocol EngineDelegate3: class {
-    var  objects:        [Object] {get set}
-    var  updateComplete: Bool     {get set}
+    var  objects:    [Test3GameObject] {get set}
+    var  updateComplete: Bool              {get set}
     
     func update()
 }
