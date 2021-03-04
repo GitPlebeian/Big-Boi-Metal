@@ -17,14 +17,12 @@ class GameViewDebugTest {
     // MARK: Views
     
     // Parent Views
-    var gameView:              GameView
     var debugView:             DebugView
     // Debug View
     weak var scrollView:       UIScrollView!
     weak var testToggleButton: UIButton!
     
-    init(gameView: GameView, debugView: DebugView) {
-        self.gameView = gameView
+    init(debugView: DebugView) {
         self.debugView = debugView
         setup()
     }
@@ -51,12 +49,11 @@ class GameViewDebugTest {
     
     // Start Test
     func startTest() {
-        bringDebugToFront()
+        debugView.superview!.bringSubviewToFront(debugView)
     }
     
     // End Test
     func endTest() {
-        gameView.wipeData()
         hideContentView()
     }
     
@@ -83,11 +80,6 @@ class GameViewDebugTest {
             self.animationState = .closed
             self.debugView.showDebugList()
         }
-    }
-    
-    // Bring Debug To Front
-    private func bringDebugToFront() {
-        gameView.bringSubviewToFront(debugView)
     }
     
     // MARK: Setup

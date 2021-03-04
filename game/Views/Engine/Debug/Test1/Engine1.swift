@@ -1,5 +1,5 @@
 //
-//  Engine.swift
+//  Engine1.swift
 //  game
 //
 //  Created by Jackson Tubbs on 12/12/20.
@@ -7,19 +7,19 @@
 
 import UIKit
 
-protocol EngineDelegate {
+protocol EngineDelegate1: class {
     var  objects:        [Object] {get set}
     var  updateComplete: Bool     {get set}
     
     func update()
 }
 
-class Engine: UIView {
+class Engine1: UIView {
     
     // MARK: Properties
     
     // Delegate
-    var delegate:        EngineDelegate!
+    weak var delegate:           EngineDelegate1?
     
     // Updating
     private var ups:             Int            = 60
@@ -64,6 +64,9 @@ class Engine: UIView {
     // Game Loop
     @objc func gameloop() {
         autoreleasepool {
+            if delegate == nil {
+                timer.invalidate()
+            }
             self.render()
         }
     }
@@ -133,10 +136,10 @@ class Engine: UIView {
     }
     
     private func update() {
-        if delegate.updateComplete == false {
+        if delegate?.updateComplete == false {
             return
         }
-        delegate.update()
+        delegate?.update()
     }
     
     // MARK: API
@@ -147,7 +150,8 @@ class Engine: UIView {
         colors = []
         transforms = []
         rotations = []
-        for object in delegate.objects {
+        guard let objects = delegate?.objects else {return}
+        for object in objects {
             vertices.append(contentsOf: object.vertices)
             colors.append(contentsOf: object.colors)
             transforms.append(contentsOf: [object.transform.x, object.transform.y])
@@ -170,8 +174,8 @@ class Engine: UIView {
         layer.addSublayer(metalLayer)
 
         let defaultLibrary = device.makeDefaultLibrary()!
-        let fragmentProgram = defaultLibrary.makeFunction(name: "fragment_shader")
-        let vertexProgram = defaultLibrary.makeFunction(name: "vertex_shader")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "fragment_shader1")
+        let vertexProgram = defaultLibrary.makeFunction(name: "vertex_shader1")
 
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
@@ -185,7 +189,11 @@ class Engine: UIView {
         timer = CADisplayLink(target: self, selector: #selector(gameloop))
         timer.add(to: RunLoop.main, forMode: .default)
         
-        let upsTimer = Timer(timeInterval: 1 / TimeInterval(ups), repeats: true) { (timer) in
+        let upsTimer = Timer(timeInterval: 1 / TimeInterval(ups), repeats: true) { [weak self] (timer) in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
             self.update()
         }
         RunLoop.main.add(upsTimer, forMode: .common)

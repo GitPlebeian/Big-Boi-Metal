@@ -1,5 +1,5 @@
 //
-//  GameView.swift
+//  GameView1.swift
 //  game
 //
 //  Created by Jackson Tubbs on 12/11/20.
@@ -7,11 +7,18 @@
 
 import UIKit
 
-class GameView: UIView {
+protocol GameViewDelegate1: class {
+    func update(_ completion: @escaping () -> Void)
+}
+
+class GameView1: UIView {
     
     // MARK: Properties
     
-    var engine:          Engine!
+    // Delegate
+    weak var delegate:   GameViewDelegate1?
+    
+    var engine:          Engine1!
     var objects:         [Object]   = []
     
     // Updates
@@ -20,26 +27,30 @@ class GameView: UIView {
     // Window
     var height:          Float      = 0
     var width:           Float      = 0
-    var didSetBounds:    Bool       = false
-    override var bounds: CGRect {
-        didSet {
-            if didSetBounds == false {
-                height = Float(bounds.height)
-                width  = Float(bounds.width)
-                didSetBounds = true
-                self.engine = Engine()
-                engine.clearColor = [Double(UIColor.background1.redValue),
-                                     Double(UIColor.background1.greenValue),
-                                     Double(UIColor.background1.blueValue)]
-                engine.delegate = self
-                setupViews()
-            }
-        }
+    
+    // MARK: Init
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        height = Float(frame.height)
+        width  = Float(frame.width)
+        self.engine = Engine1()
+        engine.clearColor = [Double(UIColor.background1.redValue),
+                             Double(UIColor.background1.greenValue),
+                             Double(UIColor.background1.blueValue)]
+        engine.delegate = self
+        setupViews()
     }
     
-    // MARK: Views
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    weak var debugView: DebugView!
+    // MARK: Deinit
+    
+    deinit {
+        print("Deinit Game View 1")
+    }
     
     // MARK: Style Guide
     
@@ -72,26 +83,17 @@ class GameView: UIView {
             engine.trailingAnchor.constraint(equalTo: trailingAnchor),
             engine.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        
-        // Debug
-        let debugView = DebugView()
-        debugView.addSuperView(view: self)
-        self.debugView = debugView
     }
 }
 
-extension GameView: EngineDelegate {
+extension GameView1: EngineDelegate1 {
     
     // Update
     func update() {
         updateComplete = false
-//        let start = DispatchTime.now()
-        debugView.update {
+        
+        delegate?.update {
             DispatchQueue.main.async {
-//                let end = DispatchTime.now()
-//                let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
-//                let timeInterval = 1_000_000_000 / Double(nanoTime)
-//                print("UPS: \(timeInterval)")
                 self.engine.updateData()
                 self.updateComplete = true
             }

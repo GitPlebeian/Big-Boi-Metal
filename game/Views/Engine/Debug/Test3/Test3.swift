@@ -1,14 +1,14 @@
 //
-//  Test1.swift
+//  Test3.swift
 //  game
 //
-//  Created by Jackson Tubbs on 12/17/20.
+//  Created by Jackson Tubbs on 3/3/21.
 //
 
 import UIKit
 
-// Flight Test
-class Test1: GameViewDebugTest {
+// Perlin Test
+class Test3: GameViewDebugTest {
     
     
     // Controls
@@ -19,7 +19,8 @@ class Test1: GameViewDebugTest {
     var rightControl:          CGPoint        = .zero
     
     // MARK: Views
-
+    
+    weak var gameView:         GameView3!
     
     // Controls
     weak var leftView:         UIView!
@@ -31,22 +32,7 @@ class Test1: GameViewDebugTest {
     
     var leftPan:               UIPanGestureRecognizer!
     var rightPan:              UIPanGestureRecognizer!
-    
-    // MARK: Init
-    
-    // MARK: API
-    
-    // Update
-    func update() {
-        for (index, object) in gameView.objects.enumerated() {
-            if var playerShip = object as? PlayerShip {
-                playerShip.update(velocity: FloatPoint(leftControl))
-                gameView.objects[index] = playerShip
-                
-            }
-        }
-    }
-    
+
     // MARK: Actions
     
     // Left Pan
@@ -148,12 +134,21 @@ class Test1: GameViewDebugTest {
     
     // Start Test
     override func startTest() {
+        
+        let gameView = GameView3(frame: UIScreen.main.bounds)
+        gameView.delegate = self
+        let gameViewSuperView = debugView.superview!
+        gameViewSuperView.addSubview(gameView)
+        self.gameView = gameView
+        
+        
         var playerShip = PlayerShip()
         playerShip.scaleShape(scale: 20)
         playerShip.transform = FloatPoint(gameView.width / 2,
                                           gameView.height / 2)
         gameView.addObject(playerShip, layer: 0)
         addControls()
+        
         super.startTest()
     }
     
@@ -166,6 +161,7 @@ class Test1: GameViewDebugTest {
         rightView.removeFromSuperview()
         leftControl = .zero
         rightControl = .zero
+        gameView.removeFromSuperview()
     }
     
     // Add Controls
@@ -202,5 +198,19 @@ class Test1: GameViewDebugTest {
         let rightPan = UIPanGestureRecognizer(target: self, action: #selector(rightPanMoved))
         rightView.addGestureRecognizer(rightPan)
         self.rightPan = rightPan
+    }
+}
+
+extension Test3: GameViewDelegate3 {
+    
+    // Update
+    func update(_ completion: @escaping () -> Void) {
+        for (index, object) in gameView.objects.enumerated() {
+            if var playerShip = object as? PlayerShip {
+                playerShip.update(velocity: FloatPoint(leftControl))
+                gameView.objects[index] = playerShip
+            }
+        }
+        completion()
     }
 }

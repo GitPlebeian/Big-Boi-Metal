@@ -17,6 +17,8 @@ class DebugView: UIView {
     
     // Tests
     var      test1:                            Test1!
+    var      test2:                            Test2!
+    var      test3:                            Test3!
     
     // MARK: Style Guide
     
@@ -38,6 +40,8 @@ class DebugView: UIView {
     weak var titleLabel:                       UILabel!
     weak var scrollView:                       UIScrollView!
     weak var startTestButton1:                 UIButton!
+    weak var startTestButton2:                 UIButton!
+    weak var startTestButton3:                 UIButton!
     
     // MARK: Constraints
     
@@ -74,25 +78,37 @@ class DebugView: UIView {
         }
     }
     
+    // Start Test 2
+    @objc private func startTestButton2Tapped() {
+        selectionFeedback.selectionChanged()
+        if debugListAnimationState == .open {
+            hideDebugList {
+                self.test2.showContentView()
+            }
+        }
+    }
+    
+    // Start Test 3
+    @objc private func startTestButton3Tapped() {
+        selectionFeedback.selectionChanged()
+        if debugListAnimationState == .open {
+            hideDebugList {
+                self.test3.showContentView()
+            }
+        }
+    }
+    
     // MARK: API
     
     // Add Superver
-    func addSuperView(view: UIView) {
+    func addSuperView(_ view: UIView) {
         let window = UIApplication.shared.windows[0]
         topPadding = window.safeAreaInsets.top
         bottomPadding = window.safeAreaInsets.bottom
         setupViews(view: view)
-        test1 = Test1(gameView: view as! GameView, debugView: self)
-    }
-    
-    // Update
-    func update(_ completion: @escaping () -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            if self.test1.testing {
-                self.test1.update()
-            }
-            completion()
-        }
+        test1 = Test1(debugView: self)
+        test2 = Test2(debugView: self)
+        test3 = Test3(debugView: self)
     }
     
     // MARK: Helpers
@@ -110,20 +126,25 @@ class DebugView: UIView {
             self.widthConstraint.isActive = true
             self.heightConstraint.isActive = false
             self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.toggleButtonSize)
+            self.heightConstraint.priority = .defaultHigh
             self.heightConstraint.isActive = true
             
             // Toggle Button
             self.toggleButtonVerticalConstraint.isActive = false
             self.toggleButtonVerticalConstraint = self.toggleButton.topAnchor.constraint(equalTo: self.topAnchor)
+            self.toggleButtonVerticalConstraint.priority = .defaultHigh
             self.toggleButtonVerticalConstraint.isActive = true
             self.toggleButtonHorizontalConstraint.isActive = false
             self.toggleButtonHorizontalConstraint = self.toggleButton.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            self.toggleButtonHorizontalConstraint.priority = .defaultHigh
             self.toggleButtonHorizontalConstraint.isActive = true
             self.toggleButtonHeightConstraint.isActive = false
             self.toggleButtonHeightConstraint = self.toggleButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            self.toggleButtonHeightConstraint.priority = .defaultHigh
             self.toggleButtonHeightConstraint.isActive = true
             self.toggleButtonWidthConstraint.isActive = false
             self.toggleButtonWidthConstraint = self.toggleButton.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+            self.toggleButtonWidthConstraint.priority = .defaultHigh
             self.toggleButtonWidthConstraint.isActive = true
             
             let animation2 = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1) {
@@ -252,6 +273,7 @@ class DebugView: UIView {
         toggleButtonHorizontalConstraint = toggleButton.trailingAnchor.constraint(equalTo: trailingAnchor)
         toggleButtonHeightConstraint = toggleButton.bottomAnchor.constraint(equalTo: bottomAnchor)
         toggleButtonWidthConstraint = toggleButton.leadingAnchor.constraint(equalTo: leadingAnchor)
+        toggleButtonHeightConstraint.priority = .defaultHigh
         NSLayoutConstraint.activate([
             toggleButtonVerticalConstraint,
             toggleButtonHorizontalConstraint,
@@ -303,10 +325,46 @@ class DebugView: UIView {
             startTestButton1.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: contentSpacing),
             startTestButton1.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: contentSpacing),
             startTestButton1.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -contentSpacing),
-            startTestButton1.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             startTestButton1.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -contentSpacing * 2),
             startTestButton1.heightAnchor.constraint(equalToConstant: 44)
         ])
         self.startTestButton1 = startTestButton1
+        
+        // Start Test Button 2
+        let startTestButton2 = UIButton()
+        startTestButton2.addTarget(self, action: #selector(startTestButton2Tapped), for: .touchUpInside)
+        startTestButton2.layer.cornerRadius = elementCornerRadius
+        startTestButton2.titleLabel?.font = UIFont(name: UIFont.robotoBlack, size: 16)
+        startTestButton2.backgroundColor = buttonBackgroundColor
+        startTestButton2.setTitle("Graphics Test", for: .normal)
+        startTestButton2.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(startTestButton2)
+        NSLayoutConstraint.activate([
+            startTestButton2.topAnchor.constraint(equalTo: startTestButton1.bottomAnchor, constant: contentSpacing),
+            startTestButton2.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: contentSpacing),
+            startTestButton2.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -contentSpacing),
+            startTestButton2.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -contentSpacing * 2),
+            startTestButton2.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        self.startTestButton2 = startTestButton2
+        
+        // Start Test Button 3
+        let startTestButton3 = UIButton()
+        startTestButton3.addTarget(self, action: #selector(startTestButton3Tapped), for: .touchUpInside)
+        startTestButton3.layer.cornerRadius = elementCornerRadius
+        startTestButton3.titleLabel?.font = UIFont(name: UIFont.robotoBlack, size: 16)
+        startTestButton3.backgroundColor = buttonBackgroundColor
+        startTestButton3.setTitle("Perlin", for: .normal)
+        startTestButton3.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(startTestButton3)
+        NSLayoutConstraint.activate([
+            startTestButton3.topAnchor.constraint(equalTo: startTestButton2.bottomAnchor, constant: contentSpacing),
+            startTestButton3.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: contentSpacing),
+            startTestButton3.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -contentSpacing),
+            startTestButton3.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            startTestButton3.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -contentSpacing * 2),
+            startTestButton3.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        self.startTestButton3 = startTestButton3
     }
 }

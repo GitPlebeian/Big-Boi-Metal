@@ -13,7 +13,7 @@ struct ColoredVertex{
     float4 color;
 };
  
-vertex ColoredVertex vertex_shader(constant packed_float2 *position [[buffer(0)]],
+vertex ColoredVertex vertex_shader1(constant packed_float2 *position [[buffer(0)]],
                                    constant packed_float3 *color [[buffer(1)]],
                                    constant packed_float2 *transform [[buffer(2)]],
                                    constant float         *rotation [[buffer(3)]],
@@ -37,7 +37,7 @@ vertex ColoredVertex vertex_shader(constant packed_float2 *position [[buffer(0)]
     return vert;
 }
  
-fragment float4 fragment_shader(ColoredVertex vert [[stage_in]])
+fragment float4 fragment_shader1(ColoredVertex vert [[stage_in]])
 {
     return vert.color;
 }

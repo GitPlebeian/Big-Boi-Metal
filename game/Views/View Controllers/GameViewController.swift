@@ -13,7 +13,11 @@ class GameViewController: UIViewController {
     
     // MARK: Views
     
-    weak var gameView: GameView!
+    weak var debugView: DebugView!
+    
+    // MARK: Style Guide
+    
+    var insetSpacing: CGFloat = 16
     
     // MARK: Lifecycle
     
@@ -24,21 +28,16 @@ class GameViewController: UIViewController {
         setupViews()
     }
     
+    // MARK: Actions
+    
     // MARK: Setup Views
     
     func setupViews() {
         
         view.backgroundColor = .background1
         
-        let gameView = GameView()
-        gameView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(gameView)
-        NSLayoutConstraint.activate([
-            gameView.topAnchor.constraint(equalTo: view.topAnchor),
-            gameView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            gameView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            gameView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        self.gameView = gameView
+        let debugView = DebugView()
+        debugView.addSuperView(view)
+        self.debugView = debugView
     }
 }
