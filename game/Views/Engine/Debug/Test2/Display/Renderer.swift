@@ -22,5 +22,4 @@ extension Renderer: MTKViewDelegate {
         commandBuffer?.present(drawable)
         commandBuffer?.commit()
     }
-    
 }

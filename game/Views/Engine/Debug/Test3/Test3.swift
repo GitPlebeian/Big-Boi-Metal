@@ -39,12 +39,5 @@ class Test3: GameViewDebugTest {
 }
 
 extension Test3: GameViewDelegate3 {
-    
-    // Update
-    func update(_ completion: @escaping () -> Void) {
-        for (index, object) in gameView.objects.enumerated() {
-            
-        }
-        completion()
-    }
+
 }

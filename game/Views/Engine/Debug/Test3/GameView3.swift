@@ -8,7 +8,7 @@
 import UIKit
 
 protocol GameViewDelegate3: class {
-    func update(_ completion: @escaping () -> Void)
+    
 }
 
 class GameView3: UIView {
@@ -19,7 +19,6 @@ class GameView3: UIView {
     weak var delegate:   GameViewDelegate3?
     
     var engine:              Engine3!
-    var objects:             [Test3GameObject]   = []
     var test3GameController: Test3GameController!
     
     // Updates
@@ -50,12 +49,14 @@ class GameView3: UIView {
         super.init(frame: frame)
         height = Float(frame.height)
         width  = Float(frame.width)
-        self.engine = Engine3()
-        engine.clearColor = [Double(UIColor.background1.redValue),
-                             Double(UIColor.background1.greenValue),
-                             Double(UIColor.background1.blueValue)]
-        engine.delegate = self
-        
+        engine = Engine3(frame: CGRect(x: 0,
+                                            y: 0,
+                                            width: frame.width,
+                                            height: frame.height),
+                              clearColor: [Double(UIColor.background1.redValue),
+                                           Double(UIColor.background1.greenValue),
+                                           Double(UIColor.background1.blueValue)])
+        addSubview(engine)
         test3GameController = Test3GameController(view: self)
         
         setupViews()
@@ -74,6 +75,7 @@ class GameView3: UIView {
     
     // Panned
     @objc func panned() {
+        
         var location = getPointInCordinateSpace(point: FloatPoint(panGesture.location(in: self)))
         if panGesture.state == .began {
             startPanLocation = location
@@ -132,15 +134,13 @@ class GameView3: UIView {
     // MARK: Helpers
     
     // Add Object
-    func addObject(_ object: Test3GameObject, layer: Int) {
-        objects.append(object)
-        engine.updateData()
+    func addLyaer(_ layer: Test3RenderLayer, atLayer: Int) {
+        engine.addLayer(layer, atLayer: atLayer)
     }
     
     // Wipe Data
     func wipeData() {
-        objects = []
-        engine.updateData()
+        engine.wipeData()
     }
     
     // Reset
@@ -170,30 +170,16 @@ class GameView3: UIView {
     // MARK: Setup Views
     
     private func setupViews() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapped))
+        addGestureRecognizer(tapGesture)
+        self.tapGesture = tapGesture
         
-        // Engine
-        addSubview(engine)
-        engine.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            engine.topAnchor.constraint(equalTo: topAnchor),
-            engine.leadingAnchor.constraint(equalTo: leadingAnchor),
-            engine.trailingAnchor.constraint(equalTo: trailingAnchor),
-            engine.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-    }
-}
-
-extension GameView3: EngineDelegate3 {
-    
-    // Update
-    func update() {
-        updateComplete = false
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned))
+        addGestureRecognizer(panGesture)
+        self.panGesture = panGesture
         
-        delegate?.update {
-            DispatchQueue.main.async {
-                self.engine.updateData()
-                self.updateComplete = true
-            }
-        }
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(scaled))
+        addGestureRecognizer(pinchGesture)
+        self.pinchGesture = pinchGesture
     }
 }

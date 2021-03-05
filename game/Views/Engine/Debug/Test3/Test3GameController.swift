@@ -13,18 +13,18 @@ class Test3GameController {
     
     weak var view: GameView3!
     
-    var map: Test3Map = Test3Map()
+    var map: Test3MapLayer = Test3MapLayer()
     
     // MARK: Init
     
     init(view: GameView3) {
         self.view = view
         
-        map.transform = FloatPoint(view.width / 2,
-                                   view.height / 2)
+        map.controller = self
         map.addChunk(0, 0)
         
-        view.addObject(map, layer: 0)
+        view.addLyaer(map, atLayer: 0)
+        
     }
     
     // MARK: Public

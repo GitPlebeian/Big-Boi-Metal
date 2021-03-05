@@ -1,106 +1,121 @@
 //
-//  Test3Map.swift
+//  Test3MapLayer.swift
 //  game
 //
-//  Created by Jackson Tubbs on 3/3/21.
+//  Created by Jackson Tubbs on 3/4/21.
 //
 
 import UIKit
+import Metal
 
-class Test3Map: Test3GameObject {
+struct ChunkData {
+    var cells: [Float] = []
+    var colors: [Float] = []
+}
+
+class Test3MapLayer: Test3RenderLayer {
+    
+    // MARK: Properties
+    
+    weak var controller: Test3GameController?
     
     let chunkSize:   Int   = 8
-    let gridSize:    Float = 50
-//    var chunks:      [[]] = []
+    let cellSize:    Float = 44
+    
+    var cells: [Float] = []
+    var colors: [Float] = []
+    
+    
+    // MARK: Rendering
+    
+    override func setPipelineState() {
+        self.pipelineState = Test3RenderPipelineStateLibrary.shared.pipelineState(.Map)
+    }
+    
+    override func render(_ encoder: MTLRenderCommandEncoder) {
+        
+        guard let controller = controller else {return}
+        
+        encoder.setRenderPipelineState(pipelineState)
+        
+        let cellBuffer = GraphicsDevice.Device.makeBuffer(bytes: cells, length: cells.count * 4, options: [])
+        let colorBuffer = GraphicsDevice.Device.makeBuffer(bytes: colors, length: colors.count * 4, options: [])
+        
+        var transform = controller.view.vertexTransform
+        var scale     = controller.view.vertexScale
+        var width     = controller.view.width
+        var height    = controller.view.height
+        var gridSize  = self.cellSize
+        
+        encoder.setVertexBuffer(cellBuffer, offset: 0, index: 0)
+        encoder.setVertexBuffer(colorBuffer, offset: 0, index: 1)
+        encoder.setVertexBytes(&transform, length: 8, index: 2)
+        encoder.setVertexBytes(&scale, length: 4, index: 3)
+        encoder.setVertexBytes(&width, length: 4, index: 4)
+        encoder.setVertexBytes(&height, length: 4, index: 5)
+        encoder.setVertexBytes(&gridSize, length: 4, index: 6)
+        encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: cells.count * 3)
+    }
+    
+    // MARK: Public
     
     // Add Chunk
     func addChunk(_ x: Int, _ y: Int) {
             
         let chunk = getChunkData(x, y)
-        vertices.append(contentsOf: chunk.vertices)
+        cells.append(contentsOf: chunk.cells)
         colors.append(contentsOf: chunk.colors)
-        print(chunk.vertices.count / 12)
     }
     
+    // MARK: Helpers
+    
     // Get Chunk Data
-    func getChunkData(_ chunkX: Int, _ chunkY: Int) -> Test3Shape {
-        let chunk = Test3Shape()
+    func getChunkData(_ chunkX: Int, _ chunkY: Int) -> ChunkData {
+        var chunk = ChunkData()
         for x in 0..<chunkSize {
             for y in 0..<chunkSize {
-                
-                let left   = gridSize * Float(x)
-                let right  = gridSize * Float(x + 1)
-                let top    = gridSize * Float(y)
-                let bottom = gridSize * Float(y + 1)
-                
-                
-                
-//                chunk.vertices.append(left)
-//                chunk.vertices.append(top)
-//                chunk.vertices.append(left)
-//                chunk.vertices.append(bottom)
-//                chunk.vertices.append(right)
-//                chunk.vertices.append(bottom)
-                
-//                chunk.vertices.append(left)
-//                chunk.vertices.append(top)
-//                chunk.vertices.append(right)
-//                chunk.vertices.append(top)
-//                chunk.vertices.append(right)
-//                chunk.vertices.append(bottom)
-                
-//                chunk.colors.append(contentsOf: [1,0.2,0.2,0.2,1,0.2,0.2,0.2,1])
-//                chunk.colors.append(contentsOf: [1,0.2,0.2,0.2,1,0.2,0.2,0.2,1])
-                
-//                switch Int.random(in: 0..<2) {
-//                case 0:
-//                    let red = Float(UIColor.systemPink.redValue)
-//                    let green = Float(UIColor.systemPink.greenValue)
-//                    let blue = Float(UIColor.systemPink.blueValue)
-//                    chunk.colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
-//                case 1:
-//                    let red = Float(UIColor.systemGreen.redValue)
-//                    let green = Float(UIColor.systemGreen.greenValue)
-//                    let blue = Float(UIColor.systemGreen.blueValue)
-//                    chunk.colors.append(contentsOf: [red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue, red, green, blue])
-////                case 2:
-////                    let red = Float(UIColor.systemBlue.redValue)
-////                    let green = Float(UIColor.systemBlue.greenValue)
-////                    let blue = Float(UIColor.systemBlue.blueValue)
-////                    chunk.colors.append(contentsOf: [red, green, blue])
-////                case 3:
-////                    let red = Float(UIColor.systemTeal.redValue)
-////                    let green = Float(UIColor.systemTeal.greenValue)
-////                    let blue = Float(UIColor.systemTeal.blueValue)
-////                    chunk.colors.append(contentsOf: [red, green, blue])
-////                case 4:
-////                    let red = Float(UIColor.systemYellow.redValue)
-////                    let green = Float(UIColor.systemYellow.greenValue)
-////                    let blue = Float(UIColor.systemYellow.blueValue)
-////                    chunk.colors.append(contentsOf: [red, green, blue])
-////                case 5:
-////                    let red = Float(UIColor.systemOrange.redValue)
-////                    let green = Float(UIColor.systemOrange.greenValue)
-////                    let blue = Float(UIColor.systemOrange.blueValue)
-////                    chunk.colors.append(contentsOf: [red, green, blue])
-////                case 6:
-////                    let red = Float(UIColor.systemIndigo.redValue)
-////                    let green = Float(UIColor.systemIndigo.greenValue)
-////                    let blue = Float(UIColor.systemIndigo.blueValue)
-////                    chunk.colors.append(contentsOf: [red, green, blue])
-//                default: break
-//                }
+                chunk.cells.append(Float(x))
+                chunk.cells.append(Float(y))
+                switch Int.random(in: 0..<7) {
+                case 0:
+                    let red = Float(UIColor.systemPink.redValue)
+                    let green = Float(UIColor.systemPink.greenValue)
+                    let blue = Float(UIColor.systemPink.blueValue)
+                    chunk.colors.append(contentsOf: [red, green, blue])
+                case 1:
+                    let red = Float(UIColor.systemGreen.redValue)
+                    let green = Float(UIColor.systemGreen.greenValue)
+                    let blue = Float(UIColor.systemGreen.blueValue)
+                    chunk.colors.append(contentsOf: [red, green, blue])
+                case 2:
+                    let red = Float(UIColor.systemBlue.redValue)
+                    let green = Float(UIColor.systemBlue.greenValue)
+                    let blue = Float(UIColor.systemBlue.blueValue)
+                    chunk.colors.append(contentsOf: [red, green, blue])
+                case 3:
+                    let red = Float(UIColor.systemTeal.redValue)
+                    let green = Float(UIColor.systemTeal.greenValue)
+                    let blue = Float(UIColor.systemTeal.blueValue)
+                    chunk.colors.append(contentsOf: [red, green, blue])
+                case 4:
+                    let red = Float(UIColor.systemYellow.redValue)
+                    let green = Float(UIColor.systemYellow.greenValue)
+                    let blue = Float(UIColor.systemYellow.blueValue)
+                    chunk.colors.append(contentsOf: [red, green, blue])
+                case 5:
+                    let red = Float(UIColor.systemOrange.redValue)
+                    let green = Float(UIColor.systemOrange.greenValue)
+                    let blue = Float(UIColor.systemOrange.blueValue)
+                    chunk.colors.append(contentsOf: [red, green, blue])
+                case 6:
+                    let red = Float(UIColor.systemIndigo.redValue)
+                    let green = Float(UIColor.systemIndigo.greenValue)
+                    let blue = Float(UIColor.systemIndigo.blueValue)
+                    chunk.colors.append(contentsOf: [red, green, blue])
+                default: break
+                }
             }
         }
-        chunk.vertices = [0, 0, 0, 50, 50, 0,
-                          50, 0, 50, 50, 100, 0]
-        
-        for index in 0..<chunk.vertices.count / 2 {
-            chunk.colors.append(Float.random(in: 0...1))
-            chunk.colors.append(Float.random(in: 0...1))
-            chunk.colors.append(Float.random(in: 0...1))
-        }
-        
         return chunk
     }
     
@@ -218,4 +233,3 @@ class Test3Map: Test3GameObject {
 //        return colors
 //    }
 }
-

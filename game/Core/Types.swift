@@ -28,6 +28,9 @@ extension sizeable{
 
 extension Float: sizeable { }
 extension Float3: sizeable { }
+extension Int: sizeable {}
+
+
 
 struct Vertex: sizeable{
     var position: Float3
