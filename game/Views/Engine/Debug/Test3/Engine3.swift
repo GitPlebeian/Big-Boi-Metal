@@ -56,11 +56,25 @@ class Engine3: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Engine 3 Deinit")
+    }
+    
+    // MARK: Override
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        timer.invalidate()
+    }
+    
     // MARK: OJBC
     
     // Game Loop
     @objc func gameloop() {
-        autoreleasepool {
+        autoreleasepool { [weak self] in
+            guard let self = self else {return}
             self.render()
         }
     }
@@ -76,6 +90,8 @@ class Engine3: UIView {
     func wipeData() {
         renderLayers = []
     }
+    
+    // MARK: Helpers
     
     // MARK: Render
     

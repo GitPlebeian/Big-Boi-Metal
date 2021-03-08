@@ -66,6 +66,12 @@ class GameView3: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Deinit
+    
+    deinit {
+        print("GameView3 Deinit")
+    }
+    
     // MARK: Actions
     
     // Tapped
@@ -134,7 +140,7 @@ class GameView3: UIView {
     // MARK: Helpers
     
     // Add Object
-    func addLyaer(_ layer: Test3RenderLayer, atLayer: Int) {
+    func addLayer(_ layer: Test3RenderLayer, atLayer: Int) {
         engine.addLayer(layer, atLayer: atLayer)
     }
     
@@ -160,10 +166,13 @@ class GameView3: UIView {
     }
 
     // Get Touch In Adjusted Cordinate Space
-    func getAdjustedPointInCordinateSpace(point: FloatPoint) -> FloatPoint {
+    func getAdjustedPointInCordinateSpace(point: FloatPoint, realWorldY: Bool = false) -> FloatPoint {
         var floatPoint = getPointInCordinateSpace(point: point)
         floatPoint.x = floatPoint.x * vertexScale + -vertexTransform.0 * vertexScale
         floatPoint.y = floatPoint.y * vertexScale + -vertexTransform.1 * vertexScale
+        if realWorldY {
+            floatPoint.y *= -1
+        }
         return floatPoint
     }
     

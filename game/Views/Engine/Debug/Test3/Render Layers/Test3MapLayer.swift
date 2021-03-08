@@ -7,10 +7,21 @@
 
 import UIKit
 import Metal
+import GameKit
 
 struct ChunkData {
     var cells: [Float] = []
     var colors: [Float] = []
+}
+
+struct Chunk {
+    var x: Int
+    var y: Int
+}
+
+struct Cell {
+    var x: Int
+    var y: Int
 }
 
 class Test3MapLayer: Test3RenderLayer {
@@ -19,12 +30,33 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 8
+    let chunkSize:   Int   = 16
     let cellSize:    Float = 44
     
     var cells: [Float] = []
     var colors: [Float] = []
     
+    // Perlin
+    var volatility: Double = 6.51
+    var noiseSource: GKNoiseSource
+    
+    // Debug Stuff
+    
+    // MARK: Init
+    
+    override init() {
+        let noiseSource = GKPerlinNoiseSource()
+        noiseSource.seed = 0
+        noiseSource.persistence = 0.05
+        self.noiseSource = noiseSource
+        super.init()
+    }
+    
+    // MARK: Deinit
+    
+    deinit {
+        print("Test3Map Layer Deinit")
+    }
     
     // MARK: Rendering
     
@@ -33,6 +65,8 @@ class Test3MapLayer: Test3RenderLayer {
     }
     
     override func render(_ encoder: MTLRenderCommandEncoder) {
+        
+        if cells.count == 0 {return}
         
         guard let controller = controller else {return}
         
@@ -60,176 +94,74 @@ class Test3MapLayer: Test3RenderLayer {
     // MARK: Public
     
     // Add Chunk
-    func addChunk(_ x: Int, _ y: Int) {
+    func addChunk(_ chunk: Chunk) {
             
-        let chunk = getChunkData(x, y)
-        cells.append(contentsOf: chunk.cells)
-        colors.append(contentsOf: chunk.colors)
+        let chunk = self.getChunkData(chunk)
+        self.cells.append(contentsOf: chunk.cells)
+        self.colors.append(contentsOf: chunk.colors)
+//        Timer.scheduledTimer(withTimeInterval: TimeInterval.random(in: (0)..<(7)), repeats: false) { [weak self] (timer) in
+//            timer.invalidate()
+//            guard let self = self else {return}
+//        }
+    }
+    
+    // Clear Chunks
+    func clearChunks() {
+        cells = []
+        colors = []
     }
     
     // MARK: Helpers
     
     // Get Chunk Data
-    func getChunkData(_ chunkX: Int, _ chunkY: Int) -> ChunkData {
-        var chunk = ChunkData()
+    private func getChunkData(_ chunk: Chunk) -> ChunkData {
+        
+        let noise = GKNoise(noiseSource)
+        noise.move(by: SIMD3<Double>(Double(chunk.x), 0, Double(chunk.y)))
+        
+        let noiseMap = GKNoiseMap(noise,
+                                  size: SIMD2<Double>(arrayLiteral: 1, 1),
+                                  origin: SIMD2(arrayLiteral: 0, 0),
+                                  sampleCount: SIMD2<Int32>(Int32(Int(chunkSize + 1)), Int32(chunkSize + 1)),
+                                  seamless: true)
+        
+        var chunkData = ChunkData()
         for x in 0..<chunkSize {
             for y in 0..<chunkSize {
-                chunk.cells.append(Float(x))
-                chunk.cells.append(Float(y))
-                switch Int.random(in: 0..<7) {
-                case 0:
-                    let red = Float(UIColor.systemPink.redValue)
-                    let green = Float(UIColor.systemPink.greenValue)
-                    let blue = Float(UIColor.systemPink.blueValue)
-                    chunk.colors.append(contentsOf: [red, green, blue])
-                case 1:
-                    let red = Float(UIColor.systemGreen.redValue)
-                    let green = Float(UIColor.systemGreen.greenValue)
-                    let blue = Float(UIColor.systemGreen.blueValue)
-                    chunk.colors.append(contentsOf: [red, green, blue])
-                case 2:
-                    let red = Float(UIColor.systemBlue.redValue)
-                    let green = Float(UIColor.systemBlue.greenValue)
-                    let blue = Float(UIColor.systemBlue.blueValue)
-                    chunk.colors.append(contentsOf: [red, green, blue])
-                case 3:
-                    let red = Float(UIColor.systemTeal.redValue)
-                    let green = Float(UIColor.systemTeal.greenValue)
-                    let blue = Float(UIColor.systemTeal.blueValue)
-                    chunk.colors.append(contentsOf: [red, green, blue])
-                case 4:
-                    let red = Float(UIColor.systemYellow.redValue)
-                    let green = Float(UIColor.systemYellow.greenValue)
-                    let blue = Float(UIColor.systemYellow.blueValue)
-                    chunk.colors.append(contentsOf: [red, green, blue])
-                case 5:
-                    let red = Float(UIColor.systemOrange.redValue)
-                    let green = Float(UIColor.systemOrange.greenValue)
-                    let blue = Float(UIColor.systemOrange.blueValue)
-                    chunk.colors.append(contentsOf: [red, green, blue])
-                case 6:
-                    let red = Float(UIColor.systemIndigo.redValue)
-                    let green = Float(UIColor.systemIndigo.greenValue)
-                    let blue = Float(UIColor.systemIndigo.blueValue)
-                    chunk.colors.append(contentsOf: [red, green, blue])
-                default: break
-                }
+                chunkData.cells.append(Float(x + chunk.x * chunkSize))
+                chunkData.cells.append(Float(y + chunk.y * chunkSize))
+                
+                let value = noiseMap.value(at: SIMD2<Int32>(Int32(x), Int32(y)))
+                let color = getColorForFloat(number: value)
+                
+                chunkData.colors.append(contentsOf: [Float(color.redValue),
+                                                     Float(color.greenValue),
+                                                     Float(color.blueValue)])
             }
         }
-        return chunk
+        return chunkData
     }
     
-    func newGrid() {
-        // Vertex
-//        let start = CFAbsoluteTimeGetCurrent()
-//        let vertexData = getVertexData()
-//        vertexCount = vertexData.1
-//
-//        // Color
-//        let vertexColors = getColorData(cubeCount: vertexData.2)
-//
-//        print("Total Cells: \(vertexData.2)")
-//        print("Data Size: \((dataSize + dataSize2))")
-//        let diff = CFAbsoluteTimeGetCurrent() - start
-//        print("Time: \(diff)")
+    // Get Color For Float
+    func getColorForFloat(number: Float) -> UIColor {
+        if number <= -0.5 {
+            return .mapDeepWater
+        } else if number <= -0.25 {
+            return .mapWater
+        } else if number <= -0.15 {
+            return .mapBeach
+        } else if number <= 0.1 {
+            return .mapGrass
+        } else if number <= 0.4 {
+            return .mapForest
+        } else if number <= 0.65 {
+            return .mapDirt
+        } else if number <= 0.95 {
+            return .mapMountain
+        } else if number <= 0.95 {
+            return .mapSnow
+        } else {
+            return .mapSnow
+        }
     }
-    
-    // Get Vertex Data (Vertexs, Vertex Count, Cube Count)
-//    func getVertexData() -> ([Float], Int, Int) {
-//
-//        let cellSize: CGFloat = bounds.width / CGFloat(defaultGridWidth)
-//
-//        // Get Starting Point For Starting Y
-//        var yCellsRequired = Int((bounds.height / cellSize).rounded(.up))
-//        if yCellsRequired % 2 == 1 {
-//            yCellsRequired += 1
-//        }
-//
-//        let xStepAmount = 2 / Float(bounds.width  / cellSize)
-//        let yStepAmount = 2 / Float(bounds.height / cellSize)
-//
-//        let yStartingPoint1 = CGFloat(yCellsRequired) * CGFloat(yStepAmount)
-//        let yStartingPoint2 = yStartingPoint1 - 2
-//        let yStartingPoint =  yStartingPoint2 / 2
-//
-//        var vertexData: [Float] = []
-//
-//        for y in 0..<yCellsRequired {
-//            for x in 0..<defaultGridWidth {
-//
-//                let cubeLeftX   = xStepAmount * Float(x) - 1
-//                let cubeRightX1  = xStepAmount * Float(x + 1) - 1
-//                let cubeRightX  = cubeRightX1
-//
-//                let cubeTopY    = yStepAmount * Float(y) - 1 - Float(yStartingPoint)
-//                let cubeBottomY1 = yStepAmount * Float(y + 1) - 1
-//                let cubeBottomY = cubeBottomY1 - Float(yStartingPoint)
-//
-//                vertexData.append(cubeLeftX)
-//                vertexData.append(cubeTopY)
-//                vertexData.append(cubeRightX)
-//                vertexData.append(cubeTopY)
-//                vertexData.append(cubeLeftX)
-//                vertexData.append(cubeBottomY)
-//
-//                vertexData.append(cubeRightX)
-//                vertexData.append(cubeTopY)
-//                vertexData.append(cubeRightX)
-//                vertexData.append(cubeBottomY)
-//                vertexData.append(cubeLeftX)
-//                vertexData.append(cubeBottomY)
-//            }
-//        }
-//        yGridHeight = yCellsRequired
-//        return (vertexData, vertexData.count / 2, yCellsRequired * defaultGridWidth)
-//    }
-    
-//    // Get Color Data
-//    func getColorData(cubeCount: Int) -> [Float] {
-//
-//        var colors: [Float] = []
-//
-//        for _ in 0..<cubeCount {
-//
-//            switch Int.random(in: 0..<7) {
-//            case 0:
-//                let red = Float(UIColor.systemPink.redValue)
-//                let green = Float(UIColor.systemPink.greenValue)
-//                let blue = Float(UIColor.systemPink.blueValue)
-//                colors.append(contentsOf: [red, green, blue])
-//            case 1:
-//                let red = Float(UIColor.systemGreen.redValue)
-//                let green = Float(UIColor.systemGreen.greenValue)
-//                let blue = Float(UIColor.systemGreen.blueValue)
-//                colors.append(contentsOf: [red, green, blue])
-//            case 2:
-//                let red = Float(UIColor.systemBlue.redValue)
-//                let green = Float(UIColor.systemBlue.greenValue)
-//                let blue = Float(UIColor.systemBlue.blueValue)
-//                colors.append(contentsOf: [red, green, blue])
-//            case 3:
-//                let red = Float(UIColor.systemTeal.redValue)
-//                let green = Float(UIColor.systemTeal.greenValue)
-//                let blue = Float(UIColor.systemTeal.blueValue)
-//                colors.append(contentsOf: [red, green, blue])
-//            case 4:
-//                let red = Float(UIColor.systemYellow.redValue)
-//                let green = Float(UIColor.systemYellow.greenValue)
-//                let blue = Float(UIColor.systemYellow.blueValue)
-//                colors.append(contentsOf: [red, green, blue])
-//            case 5:
-//                let red = Float(UIColor.systemOrange.redValue)
-//                let green = Float(UIColor.systemOrange.greenValue)
-//                let blue = Float(UIColor.systemOrange.blueValue)
-//                colors.append(contentsOf: [red, green, blue])
-//            case 6:
-//                let red = Float(UIColor.systemIndigo.redValue)
-//                let green = Float(UIColor.systemIndigo.greenValue)
-//                let blue = Float(UIColor.systemIndigo.blueValue)
-//                colors.append(contentsOf: [red, green, blue])
-//            default: break
-//            }
-//        }
-//        return colors
-//    }
 }

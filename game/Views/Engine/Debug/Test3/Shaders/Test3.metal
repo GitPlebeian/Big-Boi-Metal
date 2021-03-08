@@ -68,9 +68,8 @@ vertex Test3ColoredVertex test3_vertex_map(constant packed_float2 *position [[bu
         positionX = (position[vid / 6].x + 1) * cellSize;
         positionY = (position[vid / 6].y + 1) * cellSize;
     }
-    
-    vert.position = float4(positionX / screenWidth * 2 - 1 + (globalTransform.x * scale / screenWidth * 2),
-                           positionY / screenHeight * 2 - 1 - (globalTransform.y * scale / screenHeight * 2),
+    vert.position = float4(positionX / screenWidth * 2 + (globalTransform.x * scale),
+                           positionY / screenHeight * 2 - (globalTransform.y * scale),
                            0,
                            scale);
     vert.color = float4(color[vid / 6], 1);
