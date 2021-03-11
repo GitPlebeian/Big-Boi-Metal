@@ -30,14 +30,14 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 16
+    let chunkSize:   Int   = 48
     let cellSize:    Float = 44
     
     var cells: [Float] = []
     var colors: [Float] = []
     
     // Perlin
-    var volatility: Double = 6.51
+    var volatility: Double = 2
     var noiseSource: GKNoiseSource
     
     // Debug Stuff
@@ -46,8 +46,8 @@ class Test3MapLayer: Test3RenderLayer {
     
     override init() {
         let noiseSource = GKPerlinNoiseSource()
-        noiseSource.seed = 0
-        noiseSource.persistence = 0.05
+        noiseSource.seed = 1
+        noiseSource.persistence = 0.2
         self.noiseSource = noiseSource
         super.init()
     }
@@ -117,7 +117,11 @@ class Test3MapLayer: Test3RenderLayer {
     private func getChunkData(_ chunk: Chunk) -> ChunkData {
         
         let noise = GKNoise(noiseSource)
-        noise.move(by: SIMD3<Double>(Double(chunk.x), 0, Double(chunk.y)))
+        
+        let modifier: Double = 1
+        
+        noise.applyTurbulence(frequency: 10, power: 2, roughness: 100, seed: 1)
+        noise.move(by: SIMD3<Double>(Double(chunk.x) * modifier, 0, Double(chunk.y) * modifier))
         
         let noiseMap = GKNoiseMap(noise,
                                   size: SIMD2<Double>(arrayLiteral: 1, 1),
@@ -134,9 +138,16 @@ class Test3MapLayer: Test3RenderLayer {
                 let value = noiseMap.value(at: SIMD2<Int32>(Int32(x), Int32(y)))
                 let color = getColorForFloat(number: value)
                 
-                chunkData.colors.append(contentsOf: [Float(color.redValue),
-                                                     Float(color.greenValue),
-                                                     Float(color.blueValue)])
+                
+                if (x == 0 || y == 0) && false {
+                    chunkData.colors.append(contentsOf: [Float(color.redValue) + 0.4,
+                                                         Float(color.greenValue) + 0.4,
+                                                         Float(color.blueValue) + 0.4])
+                } else {
+                    chunkData.colors.append(contentsOf: [Float(color.redValue),
+                                                         Float(color.greenValue),
+                                                         Float(color.blueValue)])
+                }
             }
         }
         return chunkData
