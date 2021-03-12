@@ -113,7 +113,6 @@ class Engine1: UIView {
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
         renderEncoder.setRenderPipelineState(pipelineState)
         
-        
         let vertexBuffer = device.makeBuffer(bytes: vertices, length: vertices.count * 4, options: [])
         let colorBuffer = device.makeBuffer(bytes: colors, length: colors.count * 4, options: [])
         let transformsBuffer = device.makeBuffer(bytes: transforms, length: transforms.count * 4, options: [])

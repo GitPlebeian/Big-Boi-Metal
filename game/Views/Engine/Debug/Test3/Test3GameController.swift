@@ -14,6 +14,7 @@ class Test3GameController {
     weak var view: GameView3!
     
     var map: Test3MapLayer = Test3MapLayer()
+    var testLayer: Test3TestLayer = Test3TestLayer()
     
     // MARK: Init
     
@@ -21,9 +22,9 @@ class Test3GameController {
         self.view = view
         
         map.controller = self
-        
+        testLayer.controller = self
         view.addLayer(map, atLayer: 0)
-        
+        view.addLayer(testLayer, atLayer: 0)
     }
     
     // MARK: Deinit
@@ -39,19 +40,19 @@ class Test3GameController {
         let selection = UISelectionFeedbackGenerator()
         selection.selectionChanged()
         
-        updateMap()
-    }
-    
-    // Update Map
-    func updateMap() {
-        let seeableChunks = getSeeableChunks()
+        var floatLocation = FloatPoint(location)
+        floatLocation = view.getAdjustedPointInCordinateSpace(point: floatLocation)
         
-        map.clearChunks()
-        for chunk in seeableChunks {
-            map.addChunk(chunk)
-        }
+        let chunk = getCurrentChunk(location: FloatPoint(location))
+        
+        map.addChunk(chunk)
+        
+        testLayer.vertex.append(contentsOf: [0,10,-10,-10,10,-10])
+        testLayer.colors.append(contentsOf: [1,1,1,1,1,1,1,1,1])
+        testLayer.transforms.append(contentsOf: [floatLocation.x, floatLocation.y,
+                                                 floatLocation.x, floatLocation.y,
+                                                 floatLocation.x, floatLocation.y])
     }
-    
     // MARK: Helpers
     
     // Get Seeable Chunks
@@ -87,10 +88,15 @@ class Test3GameController {
     }
     
     // Get Current Chunk
-    private func getCurrentChunk() -> Chunk {
-        let location = view.getAdjustedPointInCordinateSpace(point: FloatPoint(view.width / 2, view.height / 2), realWorldY: true)
-        let x = Int((location.x / 2 * view.width / Float(map.chunkSize) / map.cellSize))
-        let y = Int((location.y / 2 * view.height / Float(map.chunkSize) / map.cellSize))
+    private func getCurrentChunk(location: FloatPoint? = nil) -> Chunk {
+        var adjustedLocation: FloatPoint
+        if let location = location {
+            adjustedLocation = view.getAdjustedPointInCordinateSpace(point: FloatPoint(location.x, location.y), realWorldY: true)
+        } else {
+            adjustedLocation = view.getAdjustedPointInCordinateSpace(point: FloatPoint(view.width / 2, view.height / 2), realWorldY: true)
+        }
+        let x = Int((adjustedLocation.x / 2 * view.width / Float(map.chunkSize) / map.cellSize))
+        let y = Int((adjustedLocation.y / 2 * view.height / Float(map.chunkSize) / map.cellSize))
         return Chunk(x: x, y: y)
     }
     

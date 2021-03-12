@@ -53,7 +53,6 @@ public struct Test3Basic_RenderPipelineDescriptor: Test3RenderPipelineDescriptor
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.Basic)
         renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.Basic)
-//        renderPipelineDescriptor.vertexDescriptor = VertexDescriptorLibrary.Descriptor(.Basic)
     }
 }
 public struct Test3Map_RenderPipelineDescriptor: Test3RenderPipelineDescriptor{
@@ -65,6 +64,5 @@ public struct Test3Map_RenderPipelineDescriptor: Test3RenderPipelineDescriptor{
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.Map)
         renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.Map)
-//        renderPipelineDescriptor.vertexDescriptor = VertexDescriptorLibrary.Descriptor(.Basic)
     }
 }

@@ -34,6 +34,7 @@
 		8650B14725F03A8E00B211E1 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8650B14425F03A8E00B211E1 /* Renderer.swift */; };
 		8653D94A258BF55000D9286F /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D949258BF55000D9286F /* DebugView.swift */; };
 		8653D94D258C3F4200D9286F /* Global Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D94C258C3F4200D9286F /* Global Enums.swift */; };
+		869891A325FB438E0064F967 /* Test3TestLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869891A225FB438E0064F967 /* Test3TestLayer.swift */; };
 		869CA4C525F17A1600CADC2F /* Test3GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CA4C425F17A1600CADC2F /* Test3GameController.swift */; };
 		869CA4CA25F1B23100CADC2F /* Test3RenderLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CA4C925F1B23100CADC2F /* Test3RenderLayer.swift */; };
 		869CA4D625F1B9F100CADC2F /* Test3PipelineStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CA4D525F1B9F100CADC2F /* Test3PipelineStateLibrary.swift */; };
@@ -89,6 +90,7 @@
 		8650B14425F03A8E00B211E1 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		8653D949258BF55000D9286F /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		8653D94C258C3F4200D9286F /* Global Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Enums.swift"; sourceTree = "<group>"; };
+		869891A225FB438E0064F967 /* Test3TestLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3TestLayer.swift; sourceTree = "<group>"; };
 		869CA4C425F17A1600CADC2F /* Test3GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3GameController.swift; sourceTree = "<group>"; };
 		869CA4C925F1B23100CADC2F /* Test3RenderLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3RenderLayer.swift; sourceTree = "<group>"; };
 		869CA4D525F1B9F100CADC2F /* Test3PipelineStateLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3PipelineStateLibrary.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 			children = (
 				869CA4E825F1D22000CADC2F /* Test3MapLayer.swift */,
 				869CA4C925F1B23100CADC2F /* Test3RenderLayer.swift */,
+				869891A225FB438E0064F967 /* Test3TestLayer.swift */,
 			);
 			path = "Render Layers";
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 				8650B12C25F039F900B211E1 /* Test2.metal in Sources */,
 				8650B13A25F03A0F00B211E1 /* SandboxScene.swift in Sources */,
 				8650B13925F03A0F00B211E1 /* Scene.swift in Sources */,
+				869891A325FB438E0064F967 /* Test3TestLayer.swift in Sources */,
 				86ADAFD0256088C500A252A5 /* Text.swift in Sources */,
 				8650B12025F0395E00B211E1 /* VertexDescriptorLibrary.swift in Sources */,
 				8650B10C25F0383B00B211E1 /* Types.swift in Sources */,

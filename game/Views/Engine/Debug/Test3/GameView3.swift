@@ -53,9 +53,9 @@ class GameView3: UIView {
                                             y: 0,
                                             width: frame.width,
                                             height: frame.height),
-                              clearColor: [Double(UIColor.background1.redValue),
-                                           Double(UIColor.background1.greenValue),
-                                           Double(UIColor.background1.blueValue)])
+                              clearColor: [Double(UIColor.mapDeepWater.redValue),
+                                           Double(UIColor.mapDeepWater.greenValue),
+                                           Double(UIColor.mapDeepWater.blueValue)])
         addSubview(engine)
         test3GameController = Test3GameController(view: self)
         

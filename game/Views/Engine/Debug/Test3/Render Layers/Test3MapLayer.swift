@@ -19,6 +19,10 @@ struct Chunk {
     var y: Int
 }
 
+struct ChunkAddress {
+    
+}
+
 struct Cell {
     var x: Int
     var y: Int
@@ -36,12 +40,14 @@ class Test3MapLayer: Test3RenderLayer {
     var cells: [Float] = []
     var colors: [Float] = []
     
+    var chunks: [ChunkAddress] = []
+    
     // Perlin
     var noiseSource: GKNoiseSource
-    var frequency: Double = 1
-    var octaveCount:    Int = 1
-    var persistence:    Double = 1
-    var lacunarity:     Double = 1
+    var frequency:   Double = 1
+    var octaveCount: Int = 1
+    var persistence: Double = 1
+    var lacunarity:  Double = 1
     
     // Debug Stuff
     
@@ -154,7 +160,7 @@ class Test3MapLayer: Test3RenderLayer {
                 let color = getColorForFloat(number: value)
                 
                 
-                if (x == 0 || y == 0) && true {
+                if (x == 0 || y == 0) && false {
                     chunkData.colors.append(contentsOf: [Float(color.redValue) + 0.4,
                                                          Float(color.greenValue) + 0.4,
                                                          Float(color.blueValue) + 0.4])

@@ -42,7 +42,6 @@ class Test3: GameViewDebugTest {
         frequencySliderLabel.text = "Frequency: \(value)"
         gameView.test3GameController.map.frequency = Double(value)
         gameView.test3GameController.map.updateNoiseSource()
-        self.gameView.test3GameController.updateMap()
     }
     
     // Octave Changed
@@ -54,7 +53,6 @@ class Test3: GameViewDebugTest {
             previousOctavesValue = Int(value)
             gameView.test3GameController.map.octaveCount = Int(value)
             gameView.test3GameController.map.updateNoiseSource()
-            gameView.test3GameController.updateMap()
         }
         if Int(value) == previousOctavesValue {
             return
@@ -62,7 +60,6 @@ class Test3: GameViewDebugTest {
         previousOctavesValue = Int(value)
         gameView.test3GameController.map.octaveCount = Int(value)
         gameView.test3GameController.map.updateNoiseSource()
-        gameView.test3GameController.updateMap()
     }
     
     // Persistence Changed
@@ -71,7 +68,6 @@ class Test3: GameViewDebugTest {
         persistenceSliderLabel.text = "Persistence: \(value)"
         gameView.test3GameController.map.persistence = Double(value)
         gameView.test3GameController.map.updateNoiseSource()
-        gameView.test3GameController.updateMap()
     }
     
     // Lacunarity Change
@@ -80,8 +76,8 @@ class Test3: GameViewDebugTest {
         lacunaritySliderLabel.text = "Lacunarity: \(value)"
         gameView.test3GameController.map.lacunarity = Double(value)
         gameView.test3GameController.map.updateNoiseSource()
-        gameView.test3GameController.updateMap()
     }
+    
     
     // MARK: Helpers
     

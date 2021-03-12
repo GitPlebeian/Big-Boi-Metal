@@ -16,14 +16,23 @@ struct Test3ColoredVertex{
  
 vertex Test3ColoredVertex test3_vertex_basic(constant packed_float2 *position [[buffer(0)]],
                                              constant packed_float3 *color [[buffer(1)]],
+                                             constant packed_float2 *transform [[buffer(2)]],
+                                             constant float         &scale [[buffer(3)]],
+                                             constant float         &screenWidth [[buffer(4)]],
+                                             constant float         &screenHeight [[buffer(5)]],
+                                             constant packed_float2 &globalTransform [[buffer(6)]],
                                              uint                   vid [[vertex_id]])
 {
     Test3ColoredVertex vert;
     
-    vert.position = float4(position[vid].x,
-                           position[vid].y,
+    vert.position = float4(position[vid].x / screenWidth * 2 + globalTransform.x * scale / screenWidth * 2 + transform[vid].x * scale,
+                           position[vid].y / screenHeight * 2 - globalTransform.y * scale - transform[vid].y * scale,
                            0,
-                           1);
+                           scale);
+//    vert.position = float4(position[vid].x,
+//                           position[vid].y,
+//                           0,
+//                           1);
     vert.color = float4(color[vid], 1);
     
     return vert;
