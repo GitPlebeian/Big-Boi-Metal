@@ -37,17 +37,22 @@ class Test3MapLayer: Test3RenderLayer {
     var colors: [Float] = []
     
     // Perlin
-    var volatility: Double = 2
     var noiseSource: GKNoiseSource
+    var frequency: Double = 1
+    var octaveCount:    Int = 1
+    var persistence:    Double = 1
+    var lacunarity:     Double = 1
     
     // Debug Stuff
     
     // MARK: Init
     
     override init() {
-        let noiseSource = GKPerlinNoiseSource()
-        noiseSource.seed = 1
-        noiseSource.persistence = 0.2
+        let noiseSource = GKPerlinNoiseSource(frequency: frequency,
+                                              octaveCount: octaveCount,
+                                              persistence: persistence,
+                                              lacunarity: lacunarity,
+                                              seed: 1)
         self.noiseSource = noiseSource
         super.init()
     }
@@ -93,6 +98,16 @@ class Test3MapLayer: Test3RenderLayer {
     
     // MARK: Public
     
+    // Update Noise Source
+    func updateNoiseSource() {
+        let noiseSource = GKPerlinNoiseSource(frequency: frequency,
+                                              octaveCount: octaveCount,
+                                              persistence: persistence,
+                                              lacunarity: lacunarity,
+                                              seed: 1)
+        self.noiseSource = noiseSource
+    }
+    
     // Add Chunk
     func addChunk(_ chunk: Chunk) {
             
@@ -120,7 +135,7 @@ class Test3MapLayer: Test3RenderLayer {
         
         let modifier: Double = 1
         
-        noise.applyTurbulence(frequency: 10, power: 2, roughness: 100, seed: 1)
+//        noise.applyTurbulence(frequency: 10, power: 2, roughness: 100, seed: 1)
         noise.move(by: SIMD3<Double>(Double(chunk.x) * modifier, 0, Double(chunk.y) * modifier))
         
         let noiseMap = GKNoiseMap(noise,
@@ -139,7 +154,7 @@ class Test3MapLayer: Test3RenderLayer {
                 let color = getColorForFloat(number: value)
                 
                 
-                if (x == 0 || y == 0) && false {
+                if (x == 0 || y == 0) && true {
                     chunkData.colors.append(contentsOf: [Float(color.redValue) + 0.4,
                                                          Float(color.greenValue) + 0.4,
                                                          Float(color.blueValue) + 0.4])

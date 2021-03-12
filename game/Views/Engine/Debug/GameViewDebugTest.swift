@@ -17,9 +17,10 @@ class GameViewDebugTest {
     // MARK: Views
     
     // Parent Views
-    var debugView:             DebugView
+    weak var debugView:             DebugView!
     // Debug View
     weak var scrollView:       UIScrollView!
+    weak var scrollViewHeightConstraint: NSLayoutConstraint!
     weak var testToggleButton: UIButton!
     
     init(debugView: DebugView) {
@@ -66,6 +67,26 @@ class GameViewDebugTest {
         } completion: { (_) in
             self.animationState = .open
         }
+    }
+    
+    // Add View To ScrollView
+    func addViewToScrollView(view: UIView, below: UIView) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(view)
+        let leading = view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: debugView.contentSpacing)
+        leading.priority = .defaultLow
+        
+        let trailing = view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -debugView.contentSpacing)
+        trailing.priority = .defaultLow
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: below.bottomAnchor, constant: debugView.contentSpacing),
+            leading,
+            trailing
+        ])
+        scrollViewHeightConstraint.isActive = false
+        scrollViewHeightConstraint = view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -debugView.bottomPadding)
+        scrollViewHeightConstraint.priority = .defaultHigh
+        scrollViewHeightConstraint.isActive = true
     }
     
     // MARK: Helpers
@@ -116,10 +137,12 @@ class GameViewDebugTest {
             testToggleButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: debugView.contentSpacing),
             testToggleButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: debugView.contentSpacing),
             testToggleButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -debugView.contentSpacing),
-            testToggleButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             testToggleButton.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -debugView.contentSpacing * 2),
             testToggleButton.heightAnchor.constraint(equalToConstant: 44)
         ])
         self.testToggleButton = testToggleButton
+        
+        scrollViewHeightConstraint = testToggleButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -debugView.contentSpacing)
+        scrollViewHeightConstraint.isActive = true
     }
 }

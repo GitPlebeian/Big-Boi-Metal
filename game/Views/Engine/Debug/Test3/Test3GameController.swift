@@ -38,12 +38,12 @@ class Test3GameController {
     func tapped(_ location: CGPoint) {
         let selection = UISelectionFeedbackGenerator()
         selection.selectionChanged()
-//        let point = FloatPoint(location)
-//        let location = view.getAdjustedPointInCordinateSpace(point: point, realWorldY: true)
         
-        let currentChunk = getCurrentChunk()
-        print(currentChunk)
-        
+        updateMap()
+    }
+    
+    // Update Map
+    func updateMap() {
         let seeableChunks = getSeeableChunks()
         
         map.clearChunks()
@@ -51,8 +51,6 @@ class Test3GameController {
             map.addChunk(chunk)
         }
     }
-    
-    // Panned
     
     // MARK: Helpers
     
