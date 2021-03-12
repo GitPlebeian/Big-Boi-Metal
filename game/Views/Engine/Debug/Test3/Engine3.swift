@@ -132,11 +132,11 @@ class Engine3: UIView {
 
         let commandBuffer = commandQueue.makeCommandBuffer()!
         
+        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
         for layer in renderLayers {
-            let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
             layer.render(renderEncoder)
-            renderEncoder.endEncoding()
         }
+        renderEncoder.endEncoding()
         
         commandBuffer.present(drawable)
         commandBuffer.commit()

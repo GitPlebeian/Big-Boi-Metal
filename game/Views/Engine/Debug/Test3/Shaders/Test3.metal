@@ -25,14 +25,10 @@ vertex Test3ColoredVertex test3_vertex_basic(constant packed_float2 *position [[
 {
     Test3ColoredVertex vert;
     
-    vert.position = float4(position[vid].x / screenWidth * 2 + globalTransform.x * scale / screenWidth * 2 + transform[vid].x * scale,
-                           position[vid].y / screenHeight * 2 - globalTransform.y * scale - transform[vid].y * scale,
+    vert.position = float4((position[vid].x / screenWidth * 2) + (globalTransform.x * scale) + (transform[vid].x),
+                           (position[vid].y / screenHeight * 2) - (globalTransform.y * scale) - (transform[vid].y),
                            0,
                            scale);
-//    vert.position = float4(position[vid].x,
-//                           position[vid].y,
-//                           0,
-//                           1);
     vert.color = float4(color[vid], 1);
     
     return vert;

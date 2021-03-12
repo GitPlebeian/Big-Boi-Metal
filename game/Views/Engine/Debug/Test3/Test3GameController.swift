@@ -24,7 +24,7 @@ class Test3GameController {
         map.controller = self
         testLayer.controller = self
         view.addLayer(map, atLayer: 0)
-        view.addLayer(testLayer, atLayer: 0)
+        view.addLayer(testLayer, atLayer: 1)
     }
     
     // MARK: Deinit
@@ -44,7 +44,9 @@ class Test3GameController {
         floatLocation = view.getAdjustedPointInCordinateSpace(point: floatLocation)
         
         let chunk = getCurrentChunk(location: FloatPoint(location))
+        let cell = getCell(view.getAdjustedPointInCordinateSpace(point: FloatPoint(location), realWorldY: true))
         
+        print("Chunk: \(chunk) | \(cell)")
         map.addChunk(chunk)
         
         testLayer.vertex.append(contentsOf: [0,10,-10,-10,10,-10])
@@ -95,8 +97,8 @@ class Test3GameController {
         } else {
             adjustedLocation = view.getAdjustedPointInCordinateSpace(point: FloatPoint(view.width / 2, view.height / 2), realWorldY: true)
         }
-        let x = Int((adjustedLocation.x / 2 * view.width / Float(map.chunkSize) / map.cellSize))
-        let y = Int((adjustedLocation.y / 2 * view.height / Float(map.chunkSize) / map.cellSize))
+        let x = Int((adjustedLocation.x / 2 * view.width / map.cellSize / Float(map.chunkSize)).rounded(.down))
+        let y = Int((adjustedLocation.y / 2 * view.height / map.cellSize / Float(map.chunkSize)).rounded(.down))
         return Chunk(x: x, y: y)
     }
     
