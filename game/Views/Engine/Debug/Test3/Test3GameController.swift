@@ -22,9 +22,9 @@ class Test3GameController {
         self.view = view
         
         map.controller = self
-        testLayer.controller = self
+//        testLayer.controller = self
         view.addLayer(map, atLayer: 0)
-        view.addLayer(testLayer, atLayer: 1)
+//        view.addLayer(testLayer, atLayer: 1)
     }
     
     // MARK: Deinit
@@ -44,23 +44,21 @@ class Test3GameController {
         floatLocation = view.getAdjustedPointInCordinateSpace(point: floatLocation)
         
         let chunk = getCurrentChunk(location: FloatPoint(location))
-        let cell = getCell(view.getAdjustedPointInCordinateSpace(point: FloatPoint(location), realWorldY: true))
         
-        print("Chunk: \(chunk) | \(cell)")
         map.addChunk(chunk)
         
-        testLayer.vertex.append(contentsOf: [0,10,-10,-10,10,-10])
-        testLayer.colors.append(contentsOf: [1,1,1,1,1,1,1,1,1])
-        testLayer.transforms.append(contentsOf: [floatLocation.x, floatLocation.y,
-                                                 floatLocation.x, floatLocation.y,
-                                                 floatLocation.x, floatLocation.y])
+//        testLayer.vertex.append(contentsOf: [0,10,-10,-10,10,-10])
+//        testLayer.colors.append(contentsOf: [1,1,1,1,1,1,1,1,1])
+//        testLayer.transforms.append(contentsOf: [floatLocation.x, floatLocation.y,
+//                                                 floatLocation.x, floatLocation.y,
+//                                                 floatLocation.x, floatLocation.y])
     }
     // MARK: Helpers
     
     // Get Seeable Chunks
-    private func getSeeableChunks() -> [Chunk] {
+    private func getSeeableChunks() -> [IntCordinate] {
         
-        var chunksNeeded: [Chunk] = []
+        var chunksNeeded: [IntCordinate] = []
         
         let visibleCellsX = (view.width / map.cellSize * view.vertexScale).rounded(.up)
         let visibleCellsY = (view.height / map.cellSize * view.vertexScale).rounded(.up)
@@ -81,8 +79,8 @@ class Test3GameController {
         
         for xChunk in 0..<chunksNeededX + 1 {
             for yChunk in 0..<chunksNeededY + 1 {
-                let chunk = Chunk(x: currentChunk.x - chunksNeededX + xChunk,
-                                  y: currentChunk.y - chunksNeededY + yChunk)
+                let chunk = IntCordinate(currentChunk.x - chunksNeededX + xChunk,
+                                         currentChunk.y - chunksNeededY + yChunk)
                 chunksNeeded.append(chunk)
             }
         }
@@ -90,7 +88,7 @@ class Test3GameController {
     }
     
     // Get Current Chunk
-    private func getCurrentChunk(location: FloatPoint? = nil) -> Chunk {
+    private func getCurrentChunk(location: FloatPoint? = nil) -> IntCordinate {
         var adjustedLocation: FloatPoint
         if let location = location {
             adjustedLocation = view.getAdjustedPointInCordinateSpace(point: FloatPoint(location.x, location.y), realWorldY: true)
@@ -99,7 +97,7 @@ class Test3GameController {
         }
         let x = Int((adjustedLocation.x / 2 * view.width / map.cellSize / Float(map.chunkSize)).rounded(.down))
         let y = Int((adjustedLocation.y / 2 * view.height / map.cellSize / Float(map.chunkSize)).rounded(.down))
-        return Chunk(x: x, y: y)
+        return IntCordinate(x, y)
     }
     
     // Get Cell

@@ -12,3 +12,14 @@ enum AnimationState {
     case closed
     case animating
 }
+
+enum Direction {
+    case north
+    case west
+    case east
+    case south
+    case northWest
+    case northEast
+    case southEast
+    case southWest
+}

@@ -10,17 +10,28 @@ import Metal
 import GameKit
 
 struct ChunkData {
-    var cells: [Float] = []
+    var cells:  [Float] = []
     var colors: [Float] = []
 }
 
-struct Chunk {
-    var x: Int
-    var y: Int
-}
-
 struct ChunkAddress {
+    var chunk: IntCordinate
+    var index: Int
+    var neighbors: [IntCordinate : ChunkAddress] = [:]
     
+    // Has Neighbor
+    func hasNeighbor(_ direction: Direction) -> Bool {
+        switch direction {
+        case .north:     return neighbors[IntCordinate(chunk.x, chunk.y + 1)]     != nil
+        case .east:      return neighbors[IntCordinate(chunk.x + 1, chunk.y)]     != nil
+        case .south:     return neighbors[IntCordinate(chunk.x, chunk.y - 1)]     != nil
+        case .west:      return neighbors[IntCordinate(chunk.x - 1, chunk.y)]     != nil
+        case .northEast: return neighbors[IntCordinate(chunk.x + 1, chunk.y + 1)] != nil
+        case .southEast: return neighbors[IntCordinate(chunk.x + 1, chunk.y - 1)] != nil
+        case .southWest: return neighbors[IntCordinate(chunk.x - 1, chunk.y - 1)] != nil
+        case .northWest: return neighbors[IntCordinate(chunk.x - 1, chunk.y + 1)] != nil
+        }
+    }
 }
 
 struct Cell {
@@ -34,13 +45,15 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 48
+    let chunkSize:   Int   = 32
     let cellSize:    Float = 44
+    var fadeInset:   Int = 0
+    var fadeLength:  Int = 12
     
     var cells: [Float] = []
     var colors: [Float] = []
     
-    var chunks: [ChunkAddress] = []
+    var chunks: [IntCordinate : ChunkAddress] = [:]
     
     // Perlin
     var noiseSource: GKNoiseSource
@@ -115,33 +128,85 @@ class Test3MapLayer: Test3RenderLayer {
     }
     
     // Add Chunk
-    func addChunk(_ chunk: Chunk) {
-            
-        let chunk = self.getChunkData(chunk)
-        self.cells.append(contentsOf: chunk.cells)
-        self.colors.append(contentsOf: chunk.colors)
-//        Timer.scheduledTimer(withTimeInterval: TimeInterval.random(in: (0)..<(7)), repeats: false) { [weak self] (timer) in
-//            timer.invalidate()
-//            guard let self = self else {return}
-//        }
+    func addChunk(_ chunk: IntCordinate) {
+        
+        if chunks[chunk] != nil {
+            return
+        }
+        
+        let chunkAddress = ChunkAddress(chunk: chunk, index: chunks.count)
+                
+        print("Adding Chunk: \(chunk.x) | \(chunk.y)")
+        
+        chunks[chunk] = chunkAddress
+        
+        updateChunksForNewChunk(chunkAddress)
+        
+        print("Cunks Loaded: \(chunks.count)")
     }
     
     // Clear Chunks
     func clearChunks() {
         cells = []
         colors = []
+        chunks.removeAll()
+    }
+    
+    // Reload Map
+    func reloadMap() {
+        
+        for address in chunks {
+            updateChunksForNeighbor(address.value)
+        }
     }
     
     // MARK: Helpers
     
+    // Update Chunks For New Chunk
+    private func updateChunksForNewChunk(_ newChunk: ChunkAddress) {
+        
+        var x = -1
+        var y = 1
+        for _ in 0..<8 {
+            let cordinate = IntCordinate(newChunk.chunk.x + x, newChunk.chunk.y + y)
+            if chunks[cordinate] != nil {
+                chunks[newChunk.chunk]!.neighbors[cordinate] = chunks[cordinate]!
+                chunks[cordinate]!.neighbors[newChunk.chunk] = newChunk
+                updateChunksForNeighbor(chunks[cordinate]!)
+            }
+            
+            x += 1
+            if y == 0 && x == 0 {
+                x += 1
+            }
+            if x == 2 {
+                x = -1
+                y -= 1
+            }
+        }
+        
+        let chunkData = self.getChunkData(chunks[newChunk.chunk]!)
+        self.cells.append(contentsOf: chunkData.cells)
+        self.colors.append(contentsOf: chunkData.colors)
+    }
+    
+    // Update Chunk Directions For New Direction
+    
+    // Update Chunks For Neighbor
+    private func updateChunksForNeighbor(_ chunkAddress: ChunkAddress) {
+        let chunkData = self.getChunkData(chunkAddress)
+        colors.replaceSubrange((chunkAddress.index * chunkSize * chunkSize * 3)..<((chunkAddress.index + 1) * chunkSize * chunkSize * 3), with: chunkData.colors)
+    }
+    
     // Get Chunk Data
-    private func getChunkData(_ chunk: Chunk) -> ChunkData {
+    private func getChunkData(_ chunkAddress: ChunkAddress) -> ChunkData {
+        
+        let chunk = chunkAddress.chunk
         
         let noise = GKNoise(noiseSource)
         
         let modifier: Double = 1
         
-//        noise.applyTurbulence(frequency: 10, power: 2, roughness: 100, seed: 1)
         noise.move(by: SIMD3<Double>(Double(chunk.x) * modifier, 0, Double(chunk.y) * modifier))
         
         let noiseMap = GKNoiseMap(noise,
@@ -150,13 +215,132 @@ class Test3MapLayer: Test3RenderLayer {
                                   sampleCount: SIMD2<Int32>(Int32(Int(chunkSize + 1)), Int32(chunkSize + 1)),
                                   seamless: true)
         
+        let fadeLengthInset = fadeInset + fadeLength
+        
         var chunkData = ChunkData()
         for x in 0..<chunkSize {
             for y in 0..<chunkSize {
                 chunkData.cells.append(Float(x + chunk.x * chunkSize))
                 chunkData.cells.append(Float(y + chunk.y * chunkSize))
                 
-                let value = noiseMap.value(at: SIMD2<Int32>(Int32(x), Int32(y)))
+                var value = noiseMap.value(at: SIMD2<Int32>(Int32(x), Int32(y)))
+                
+                let inverseX = chunkSize - x
+                let inverseY = chunkSize - y
+                
+                // Top Left Corner
+                if x < fadeLengthInset && inverseY < fadeLengthInset {
+                    if chunkAddress.hasNeighbor(.west) && chunkAddress.hasNeighbor(.north) && !chunkAddress.hasNeighbor(.northWest) {
+                        let multiplierY = -2 * Float(fadeLength - inverseY - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - x + fadeInset) / Float(fadeLength)
+                        if multiplierX > multiplierY {
+                            value += multiplierX
+                        } else {
+                            value += multiplierY
+                        }
+                    } else if chunkAddress.hasNeighbor(.west) && !chunkAddress.hasNeighbor(.north) {
+                        let multiplier = -2 * Float(fadeLength - inverseY - fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.west) && chunkAddress.hasNeighbor(.north) {
+                        let multiplier = -2 * Float(fadeLength - x + fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.west) && !chunkAddress.hasNeighbor(.north) {
+                        let multiplierY = -2 * Float(fadeLength - inverseY - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - x + fadeInset) / Float(fadeLength)
+                        value += multiplierX
+                        value += multiplierY
+                    }
+                }
+                // Top Right Corner
+                else if inverseX < fadeLengthInset && inverseY < fadeLengthInset {
+                    if chunkAddress.hasNeighbor(.north) && chunkAddress.hasNeighbor(.east) && !chunkAddress.hasNeighbor(.northEast) {
+                        let multiplierY = -2 * Float(fadeLength - inverseY - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - inverseX + fadeInset) / Float(fadeLength)
+                        if multiplierX > multiplierY {
+                            value += multiplierX
+                        } else {
+                            value += multiplierY
+                        }
+                    } else if chunkAddress.hasNeighbor(.east) && !chunkAddress.hasNeighbor(.north) {
+                        let multiplier = -2 * Float(fadeLength - inverseY - fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.east) && chunkAddress.hasNeighbor(.north) {
+                        let multiplier = -2 * Float(fadeLength - inverseX + fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.east) && !chunkAddress.hasNeighbor(.north) {
+                        let multiplierY = -2 * Float(fadeLength - inverseY - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - inverseX + fadeInset) / Float(fadeLength)
+                        value += multiplierX
+                        value += multiplierY
+                    }
+                }
+                // Bottom Left Corner
+                else if x < fadeLengthInset && y < fadeLengthInset {
+                    if chunkAddress.hasNeighbor(.south) && chunkAddress.hasNeighbor(.west) && !chunkAddress.hasNeighbor(.southWest) {
+                        let multiplierY = -2 * Float(fadeLength - x - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - y + fadeInset) / Float(fadeLength)
+                        if multiplierX > multiplierY {
+                            value += multiplierX
+                        } else {
+                            value += multiplierY
+                        }
+                    } else if chunkAddress.hasNeighbor(.west) && !chunkAddress.hasNeighbor(.south) {
+                        let multiplier = -2 * Float(fadeLength - y - fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.west) && chunkAddress.hasNeighbor(.south) {
+                        let multiplier = -2 * Float(fadeLength - x + fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.west) && !chunkAddress.hasNeighbor(.south) {
+                        let multiplierY = -2 * Float(fadeLength - y - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - x + fadeInset) / Float(fadeLength)
+                        value += multiplierX
+                        value += multiplierY
+                    }
+                }
+                // Bottom Right Corner
+                else if inverseX < fadeLengthInset && y < fadeLengthInset {
+                    if chunkAddress.hasNeighbor(.south) && chunkAddress.hasNeighbor(.east) && !chunkAddress.hasNeighbor(.southEast) {
+                        let multiplierY = -2 * Float(fadeLength - inverseX - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - y + fadeInset) / Float(fadeLength)
+                        if multiplierX > multiplierY {
+                            value += multiplierX
+                        } else {
+                            value += multiplierY
+                        }
+                    } else if chunkAddress.hasNeighbor(.east) && !chunkAddress.hasNeighbor(.south) {
+                        let multiplier = -2 * Float(fadeLength - y - fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.east) && chunkAddress.hasNeighbor(.south) {
+                        let multiplier = -2 * Float(fadeLength - inverseX + fadeInset) / Float(fadeLength)
+                        value += multiplier
+                    } else if !chunkAddress.hasNeighbor(.east) && !chunkAddress.hasNeighbor(.south) {
+                        let multiplierY = -2 * Float(fadeLength - y - fadeInset) / Float(fadeLength)
+                        let multiplierX = -2 * Float(fadeLength - inverseX + fadeInset) / Float(fadeLength)
+                        value += multiplierX
+                        value += multiplierY
+                    }
+                }
+                // Top
+                else if x >= fadeLengthInset && inverseX >= fadeLengthInset && inverseY < fadeLengthInset && !chunkAddress.hasNeighbor(.north) {
+                    let multiplier = -2 * Float(fadeLength - inverseY - fadeInset) / Float(fadeLength)
+                    value += multiplier
+                }
+                // Bottom
+                else if x >= fadeLengthInset && inverseX >= fadeLengthInset && y < fadeLengthInset && !chunkAddress.hasNeighbor(.south) {
+                    let multiplier = -2 * Float(fadeLength - y - fadeInset) / Float(fadeLength)
+                    value += multiplier
+                }
+                // Left
+                else if y >= fadeLengthInset && inverseY >= fadeLengthInset && x < fadeLengthInset && !chunkAddress.hasNeighbor(.west) {
+                    let multiplier = -2 * Float(fadeLength - x - fadeInset) / Float(fadeLength)
+                    value += multiplier
+                }
+                // Right
+                else if y >= fadeLengthInset && inverseY >= fadeLengthInset && inverseX < fadeLengthInset && !chunkAddress.hasNeighbor(.east) {
+                    let multiplier = -2 * Float(fadeLength - inverseX - fadeInset) / Float(fadeLength)
+                    value += multiplier
+                }
+                
                 let color = getColorForFloat(number: value)
                 
                 
@@ -164,6 +348,8 @@ class Test3MapLayer: Test3RenderLayer {
                     chunkData.colors.append(contentsOf: [Float(color.redValue) + 0.4,
                                                          Float(color.greenValue) + 0.4,
                                                          Float(color.blueValue) + 0.4])
+                } else if false {
+                    
                 } else {
                     chunkData.colors.append(contentsOf: [Float(color.redValue),
                                                          Float(color.greenValue),

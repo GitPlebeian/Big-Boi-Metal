@@ -43,6 +43,16 @@ struct FloatPoint {
     }
 }
 
+struct IntCordinate: Hashable {
+    var x: Int
+    var y: Int
+    
+    init(_ x: Int = 0, _ y: Int = 0) {
+        self.x = x
+        self.y = y
+    }
+}
+
 struct Cordinate {
     var x:     Float = 0
     var y:     Float = 0
