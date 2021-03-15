@@ -10,6 +10,7 @@ import MetalKit
 enum Test3RenderPipelineDescriptorTypes {
     case Basic
     case Map
+    case MapMarchingSquares
 }
 
 class Test3RenderPipelineDescriptorLibrary {
@@ -31,6 +32,7 @@ class Test3RenderPipelineDescriptorLibrary {
     private func createDefaultRenderPipelineDescriptors() {
         renderPipelineDescriptors.updateValue(Test3Basic_RenderPipelineDescriptor(), forKey: .Basic)
         renderPipelineDescriptors.updateValue(Test3Map_RenderPipelineDescriptor(), forKey: .Map)
+        renderPipelineDescriptors.updateValue(Test3MapMarchingSquares_RenderPipelineDescriptor(), forKey: .MapMarchingSquares)
     }
     
     public func descriptor(_ renderPipelineDescriptorType: Test3RenderPipelineDescriptorTypes) -> MTLRenderPipelineDescriptor {
@@ -64,5 +66,17 @@ public struct Test3Map_RenderPipelineDescriptor: Test3RenderPipelineDescriptor{
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.Map)
         renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.Map)
+    }
+}
+
+public struct Test3MapMarchingSquares_RenderPipelineDescriptor: Test3RenderPipelineDescriptor {
+    var name: String = "Map Marching Squares Render Pipeline Descriptor"
+    var renderPipelineDescriptor: MTLRenderPipelineDescriptor!
+    init(){
+        renderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        
+        renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.MapMarchingSquares)
+        renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.MapMarchingSquares)
     }
 }

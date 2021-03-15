@@ -9,11 +9,13 @@ import MetalKit
 
 enum Test3VertexShaderTypes{
     case Map
+    case MapMarchingSquares
     case Basic
 }
 
 enum Test3FragmentShaderTypes {
     case Map
+    case MapMarchingSquares
     case Basic
 }
 
@@ -41,10 +43,12 @@ class Test3ShaderLibrary {
         //Vertex Shaders
         vertexShaders.updateValue(Test3Basic_VertexShader(library: defaultLibrary), forKey: .Basic)
         vertexShaders.updateValue(Test3Map_VertexShader(library: defaultLibrary), forKey: .Map)
+        vertexShaders.updateValue(Test3Map_VertexShaderMarchingSquares(library: defaultLibrary), forKey: .MapMarchingSquares)
         
         //Fragment Shaders
         fragmentShaders.updateValue(Test3Basic_FragmentShader(library: defaultLibrary), forKey: .Basic)
         fragmentShaders.updateValue(Test3Map_FragmentShader(library: defaultLibrary), forKey: .Map)
+        fragmentShaders.updateValue(Test3Map_FragmentShaderMarchingSquares(library: defaultLibrary), forKey: .MapMarchingSquares)
     }
     
     public func vertex(_ vertexShaderType: Test3VertexShaderTypes) -> MTLFunction {
@@ -96,6 +100,26 @@ public struct Test3Map_VertexShader: Test3Shader {
 public struct Test3Map_FragmentShader: Test3Shader {
     public var name: String = "Map Fragment Shader"
     public var functionName: String = "test3_fragment_map"
+    public var function: MTLFunction!
+    init(library: MTLLibrary){
+        function = library.makeFunction(name: functionName)
+        function?.label = name
+    }
+}
+
+public struct Test3Map_VertexShaderMarchingSquares: Test3Shader {
+    public var name: String = "Map Vertex Shader Marching Squares"
+    public var functionName: String = "test3_vertex_map_marching_squares"
+    public var function: MTLFunction!
+    init(library: MTLLibrary){
+        function = library.makeFunction(name: functionName)
+        function?.label = name
+    }
+}
+
+public struct Test3Map_FragmentShaderMarchingSquares: Test3Shader {
+    public var name: String = "Map Fragment Shader Marching Squares"
+    public var functionName: String = "test3_fragment_map_marching_squares"
     public var function: MTLFunction!
     init(library: MTLLibrary){
         function = library.makeFunction(name: functionName)

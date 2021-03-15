@@ -41,12 +41,15 @@ class Test3GameController {
         selection.selectionChanged()
         
         var floatLocation = FloatPoint(location)
-        floatLocation = view.getAdjustedPointInCordinateSpace(point: floatLocation)
+        floatLocation = view.getAdjustedPointInCordinateSpace(point: floatLocation, realWorldY: true)
         
-        let chunk = getCurrentChunk(location: FloatPoint(location))
+//        let chunk = getCurrentChunk(location: FloatPoint(location))
         
-        map.addChunk(chunk)
+        let cell = getCell(floatLocation)
+        print("\(cell.x) | \(cell.y)")
         
+//        map.addChunk(chunk)
+//
 //        testLayer.vertex.append(contentsOf: [0,10,-10,-10,10,-10])
 //        testLayer.colors.append(contentsOf: [1,1,1,1,1,1,1,1,1])
 //        testLayer.transforms.append(contentsOf: [floatLocation.x, floatLocation.y,

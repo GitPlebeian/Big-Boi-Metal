@@ -133,7 +133,7 @@ class Test3: GameViewDebugTest {
         let frequencySlider = UISlider()
         frequencySlider.minimumValue = 0
         frequencySlider.maximumValue = 4
-        frequencySlider.value = 1.4
+        frequencySlider.value = 1.0
         frequencySlider.addTarget(self, action: #selector(frequencySliderChanged), for: .valueChanged)
         frequencySlider.translatesAutoresizingMaskIntoConstraints = false
         frequencyView.addSubview(frequencySlider)
