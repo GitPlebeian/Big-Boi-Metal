@@ -43,12 +43,13 @@ class Test3GameController {
         var floatLocation = FloatPoint(location)
         floatLocation = view.getAdjustedPointInCordinateSpace(point: floatLocation, realWorldY: true)
         
-//        let chunk = getCurrentChunk(location: FloatPoint(location))
+        let chunk = getCurrentChunk(location: FloatPoint(location))
+//
+//        let cell = getCell(floatLocation)
+//        let type = map.getTypeForCell(chunkCordinate: chunk, cell: cell)
+//        print("\(cell.x) | \(cell.y) == \(type?.rawValue ?? 255)")
         
-        let cell = getCell(floatLocation)
-        print("\(cell.x) | \(cell.y)")
-        
-//        map.addChunk(chunk)
+        map.addChunk(chunk)
 //
 //        testLayer.vertex.append(contentsOf: [0,10,-10,-10,10,-10])
 //        testLayer.colors.append(contentsOf: [1,1,1,1,1,1,1,1,1])

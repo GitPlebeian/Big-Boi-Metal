@@ -40,9 +40,9 @@ class Test3: GameViewDebugTest {
     @objc private func frequencySliderChanged() {
         let value = (frequencySlider.value * 100).rounded() / 100
         frequencySliderLabel.text = "Frequency: \(value)"
-        gameView.test3GameController.map.frequency = Double(value)
-        gameView.test3GameController.map.updateNoiseSource()
-        gameView.test3GameController.map.reloadMap()
+//        gameView.test3GameController.map.frequency = Double(value)
+//        gameView.test3GameController.map.updateNoiseSource()
+//        gameView.test3GameController.map.reloadMap()
     }
     
     // Octave Changed
@@ -59,27 +59,27 @@ class Test3: GameViewDebugTest {
             return
         }
         previousOctavesValue = Int(value)
-        gameView.test3GameController.map.octaveCount = Int(value)
-        gameView.test3GameController.map.updateNoiseSource()
-        gameView.test3GameController.map.reloadMap()
+//        gameView.test3GameController.map.octaveCount = Int(value)
+//        gameView.test3GameController.map.updateNoiseSource()
+//        gameView.test3GameController.map.reloadMap()
     }
     
     // Persistence Changed
     @objc private func persistenceSliderChanged() {
         let value = (persistenceSlider.value * 100).rounded() / 100
         persistenceSliderLabel.text = "Persistence: \(value)"
-        gameView.test3GameController.map.persistence = Double(value)
-        gameView.test3GameController.map.updateNoiseSource()
-        gameView.test3GameController.map.reloadMap()
+//        gameView.test3GameController.map.persistence = Double(value)
+//        gameView.test3GameController.map.updateNoiseSource()
+//        gameView.test3GameController.map.reloadMap()
     }
     
     // Lacunarity Change
     @objc private func lacunaritySliderChanged() {
         let value = (lacunaritySlider.value * 100).rounded() / 100
         lacunaritySliderLabel.text = "Lacunarity: \(value)"
-        gameView.test3GameController.map.lacunarity = Double(value)
-        gameView.test3GameController.map.updateNoiseSource()
-        gameView.test3GameController.map.reloadMap()
+//        gameView.test3GameController.map.lacunarity = Double(value)
+//        gameView.test3GameController.map.updateNoiseSource()
+//        gameView.test3GameController.map.reloadMap()
     }
     
     
