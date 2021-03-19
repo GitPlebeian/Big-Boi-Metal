@@ -11,6 +11,7 @@ enum Test3RenderPipelineStateTypes {
     case Map
     case Basic
     case MapMarchingSquares
+    case Grid
 }
 
 class Test3RenderPipelineStateLibrary {
@@ -35,10 +36,11 @@ class Test3RenderPipelineStateLibrary {
     
     // MARK: Helpers
     
-    private func createDefaultRenderPipelineStates(){
+    private func createDefaultRenderPipelineStates() {
         renderPipelineStates.updateValue(Test3MapPiplineState(), forKey: .Map)
         renderPipelineStates.updateValue(Test3BasicPiplineState(), forKey: .Basic)
         renderPipelineStates.updateValue(Test3MapMarchingSquaresPiplineState(), forKey: .MapMarchingSquares)
+        renderPipelineStates.updateValue(Test3GridPiplineState(), forKey: .Grid)
     }
 }
 
@@ -77,6 +79,18 @@ public struct Test3BasicPiplineState: Test3RenderPipelineState {
     init() {
         do{
             renderPipelineState = try GraphicsDevice.Device.makeRenderPipelineState(descriptor: Test3RenderPipelineDescriptorLibrary.shared.descriptor(.Basic))
+        }catch let error as NSError {
+            print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
+        }
+    }
+}
+
+public struct Test3GridPiplineState: Test3RenderPipelineState {
+    var name: String = "Grid Pipeline State"
+    var renderPipelineState: MTLRenderPipelineState!
+    init() {
+        do{
+            renderPipelineState = try GraphicsDevice.Device.makeRenderPipelineState(descriptor: Test3RenderPipelineDescriptorLibrary.shared.descriptor(.Grid))
         }catch let error as NSError {
             print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
         }

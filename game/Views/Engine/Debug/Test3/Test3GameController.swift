@@ -15,6 +15,9 @@ class Test3GameController {
     
     var map: Test3MapLayer = Test3MapLayer()
     var testLayer: Test3TestLayer = Test3TestLayer()
+    var grid: Test3GridLayer = Test3GridLayer()
+    
+    var gridOn: Bool = false
     
     // MARK: Init
     
@@ -22,9 +25,9 @@ class Test3GameController {
         self.view = view
         
         map.controller = self
-//        testLayer.controller = self
+        grid.controller = self
         view.addLayer(map, atLayer: 0)
-//        view.addLayer(testLayer, atLayer: 1)
+        view.addLayer(grid, atLayer: 1)
     }
     
     // MARK: Deinit
@@ -44,18 +47,8 @@ class Test3GameController {
         floatLocation = view.getAdjustedPointInCordinateSpace(point: floatLocation, realWorldY: true)
         
         let chunk = getCurrentChunk(location: FloatPoint(location))
-//
-//        let cell = getCell(floatLocation)
-//        let type = map.getTypeForCell(chunkCordinate: chunk, cell: cell)
-//        print("\(cell.x) | \(cell.y) == \(type?.rawValue ?? 255)")
         
         map.addChunk(chunk)
-//
-//        testLayer.vertex.append(contentsOf: [0,10,-10,-10,10,-10])
-//        testLayer.colors.append(contentsOf: [1,1,1,1,1,1,1,1,1])
-//        testLayer.transforms.append(contentsOf: [floatLocation.x, floatLocation.y,
-//                                                 floatLocation.x, floatLocation.y,
-//                                                 floatLocation.x, floatLocation.y])
     }
     // MARK: Helpers
     

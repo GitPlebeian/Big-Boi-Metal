@@ -117,3 +117,28 @@ fragment float4 test3_fragment_map_marching_squares(Test3ColoredVertex vert [[st
 {
     return vert.color;
 }
+
+vertex Test3ColoredVertex test3_vertex_grid(constant packed_float2 *position [[buffer(0)]],
+                                            constant packed_float2 &globalTransform [[buffer(1)]],
+                                            constant float         &scale [[buffer(2)]],
+                                            constant float         &screenWidth [[buffer(3)]],
+                                            constant float         &screenHeight [[buffer(4)]],
+                                            constant float         &cellSize [[buffer(5)]],
+                                            constant packed_float4 &color [[buffer(6)]],
+                                            uint                   vid [[vertex_id]])
+{
+    Test3ColoredVertex vert;
+
+    vert.position = float4(position[vid].x,
+                           position[vid].y,
+                           0,
+                           1);
+    vert.color = color;
+    
+    return vert;
+}
+
+fragment float4 test3_fragment_grid(Test3ColoredVertex vert [[stage_in]])
+{
+    return vert.color;
+}

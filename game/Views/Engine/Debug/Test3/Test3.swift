@@ -18,6 +18,8 @@ class Test3: GameViewDebugTest {
     
     weak var gameView:         GameView3!
     
+    weak var gridButton:             UIButton!
+    
     weak var frequencyView:          UIView!
     weak var frequencySliderLabel:   UILabel!
     weak var frequencySlider:        UISlider!
@@ -36,13 +38,20 @@ class Test3: GameViewDebugTest {
 
     // MARK: Actions
 
+    // Toggle Grid
+    @objc private func toggleGrid() {
+        let selectionFeedback = UISelectionFeedbackGenerator()
+        selectionFeedback.selectionChanged()
+        gameView.test3GameController.gridOn = !gameView.test3GameController.gridOn
+    }
+    
     // Frequency Changed
     @objc private func frequencySliderChanged() {
         let value = (frequencySlider.value * 100).rounded() / 100
         frequencySliderLabel.text = "Frequency: \(value)"
-//        gameView.test3GameController.map.frequency = Double(value)
-//        gameView.test3GameController.map.updateNoiseSource()
-//        gameView.test3GameController.map.reloadMap()
+        gameView.test3GameController.map.frequency = Double(value)
+        gameView.test3GameController.map.updateNoiseSource()
+        gameView.test3GameController.map.reloadMap()
     }
     
     // Octave Changed
@@ -59,27 +68,27 @@ class Test3: GameViewDebugTest {
             return
         }
         previousOctavesValue = Int(value)
-//        gameView.test3GameController.map.octaveCount = Int(value)
-//        gameView.test3GameController.map.updateNoiseSource()
-//        gameView.test3GameController.map.reloadMap()
+        gameView.test3GameController.map.octaveCount = Int(value)
+        gameView.test3GameController.map.updateNoiseSource()
+        gameView.test3GameController.map.reloadMap()
     }
     
     // Persistence Changed
     @objc private func persistenceSliderChanged() {
         let value = (persistenceSlider.value * 100).rounded() / 100
         persistenceSliderLabel.text = "Persistence: \(value)"
-//        gameView.test3GameController.map.persistence = Double(value)
-//        gameView.test3GameController.map.updateNoiseSource()
-//        gameView.test3GameController.map.reloadMap()
+        gameView.test3GameController.map.persistence = Double(value)
+        gameView.test3GameController.map.updateNoiseSource()
+        gameView.test3GameController.map.reloadMap()
     }
     
     // Lacunarity Change
     @objc private func lacunaritySliderChanged() {
         let value = (lacunaritySlider.value * 100).rounded() / 100
         lacunaritySliderLabel.text = "Lacunarity: \(value)"
-//        gameView.test3GameController.map.lacunarity = Double(value)
-//        gameView.test3GameController.map.updateNoiseSource()
-//        gameView.test3GameController.map.reloadMap()
+        gameView.test3GameController.map.lacunarity = Double(value)
+        gameView.test3GameController.map.updateNoiseSource()
+        gameView.test3GameController.map.reloadMap()
     }
     
     
@@ -110,11 +119,22 @@ class Test3: GameViewDebugTest {
     
     private func setupViews() {
         
+        // Grid Button
+        let gridButton = UIButton()
+        gridButton.setTitle("Toggle Grid", for: .normal)
+        gridButton.titleLabel?.font = UIFont(name: UIFont.robotoBold, size: 12)
+        gridButton.addTarget(self, action: #selector(toggleGrid), for: .touchUpInside)
+        gridButton.layer.cornerRadius = debugView.elementCornerRadius
+        gridButton.backgroundColor = .primary
+        addViewToScrollView(view: gridButton, below: testToggleButton)
+        gridButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        self.gridButton = gridButton
+        
         // Frequency View
         let frequencyView = UIView()
         frequencyView.backgroundColor = .primary
         frequencyView.layer.cornerRadius = debugView.elementCornerRadius
-        addViewToScrollView(view: frequencyView, below: testToggleButton)
+        addViewToScrollView(view: frequencyView, below: gridButton)
         self.frequencyView = frequencyView
         
         // Frequency Slider Label

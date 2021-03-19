@@ -11,6 +11,7 @@ enum Test3RenderPipelineDescriptorTypes {
     case Basic
     case Map
     case MapMarchingSquares
+    case Grid
 }
 
 class Test3RenderPipelineDescriptorLibrary {
@@ -33,6 +34,7 @@ class Test3RenderPipelineDescriptorLibrary {
         renderPipelineDescriptors.updateValue(Test3Basic_RenderPipelineDescriptor(), forKey: .Basic)
         renderPipelineDescriptors.updateValue(Test3Map_RenderPipelineDescriptor(), forKey: .Map)
         renderPipelineDescriptors.updateValue(Test3MapMarchingSquares_RenderPipelineDescriptor(), forKey: .MapMarchingSquares)
+        renderPipelineDescriptors.updateValue(Test3Grid_RenderPipelineDescriptor(), forKey: .Grid)
     }
     
     public func descriptor(_ renderPipelineDescriptorType: Test3RenderPipelineDescriptorTypes) -> MTLRenderPipelineDescriptor {
@@ -78,5 +80,17 @@ public struct Test3MapMarchingSquares_RenderPipelineDescriptor: Test3RenderPipel
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.MapMarchingSquares)
         renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.MapMarchingSquares)
+    }
+}
+
+public struct Test3Grid_RenderPipelineDescriptor: Test3RenderPipelineDescriptor {
+    var name: String = "Grid Render Pipeline Descriptor"
+    var renderPipelineDescriptor: MTLRenderPipelineDescriptor!
+    init(){
+        renderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        
+        renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.Grid)
+        renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.Grid)
     }
 }

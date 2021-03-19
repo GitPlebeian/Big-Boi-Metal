@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8607379225856D5F005E32AA /* Engine1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8607379125856D5F005E32AA /* Engine1.swift */; };
 		8613A7B425802DE20004425B /* Data Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613A7B325802DE20004425B /* Data Structures.swift */; };
+		862C153526042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862C153426042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift */; };
+		862C153C26042EF700D9D610 /* Test3GridLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862C153B26042EF700D9D610 /* Test3GridLayer.swift */; };
 		864E267625F05DDD003F02E5 /* GameView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864E267525F05DDD003F02E5 /* GameView3.swift */; };
 		864E267925F05DE6003F02E5 /* Test3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864E267825F05DE6003F02E5 /* Test3.swift */; };
 		864E267C25F05DFE003F02E5 /* Test3.metal in Sources */ = {isa = PBXBuildFile; fileRef = 864E267B25F05DFE003F02E5 /* Test3.metal */; };
@@ -65,6 +67,8 @@
 /* Begin PBXFileReference section */
 		8607379125856D5F005E32AA /* Engine1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine1.swift; sourceTree = "<group>"; };
 		8613A7B325802DE20004425B /* Data Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Structures.swift"; sourceTree = "<group>"; };
+		862C153426042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3MapLayerMapTerrianGeneration.swift; sourceTree = "<group>"; };
+		862C153B26042EF700D9D610 /* Test3GridLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3GridLayer.swift; sourceTree = "<group>"; };
 		864E267525F05DDD003F02E5 /* GameView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView3.swift; sourceTree = "<group>"; };
 		864E267825F05DE6003F02E5 /* Test3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3.swift; sourceTree = "<group>"; };
 		864E267B25F05DFE003F02E5 /* Test3.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Test3.metal; sourceTree = "<group>"; };
@@ -131,6 +135,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		862C153226042B6000D9D610 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				869CA4E825F1D22000CADC2F /* Test3MapLayer.swift */,
+				862C153426042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		864E267425F05DBE003F02E5 /* Test3 */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,9 +285,10 @@
 		869CA4EF25F1DB7C00CADC2F /* Render Layers */ = {
 			isa = PBXGroup;
 			children = (
-				869CA4E825F1D22000CADC2F /* Test3MapLayer.swift */,
+				862C153226042B6000D9D610 /* Map */,
 				869CA4C925F1B23100CADC2F /* Test3RenderLayer.swift */,
 				869891A225FB438E0064F967 /* Test3TestLayer.swift */,
+				862C153B26042EF700D9D610 /* Test3GridLayer.swift */,
 			);
 			path = "Render Layers";
 			sourceTree = "<group>";
@@ -528,7 +542,9 @@
 				86D81C35258460B000A51870 /* GameView1.swift in Sources */,
 				8650B11D25F0395E00B211E1 /* RenderPipelineDescriptorLibrary.swift in Sources */,
 				8613A7B425802DE20004425B /* Data Structures.swift in Sources */,
+				862C153C26042EF700D9D610 /* Test3GridLayer.swift in Sources */,
 				869CA4CA25F1B23100CADC2F /* Test3RenderLayer.swift in Sources */,
+				862C153526042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift in Sources */,
 				8650B11E25F0395E00B211E1 /* ShaderLibrary.swift in Sources */,
 				8653D94D258C3F4200D9286F /* Global Enums.swift in Sources */,
 				8650B13B25F03A0F00B211E1 /* GameObject.swift in Sources */,
