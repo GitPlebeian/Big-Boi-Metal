@@ -88,10 +88,10 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 32
+    let chunkSize:   Int   = 16
     let cellSize:    Float = 44
     var fadeInset:   Int = 0
-    var fadeLength:  Int = 14
+    var fadeLength:  Int = 0
     
     var cells: [Float] = []
     var colors: [Float] = []
@@ -179,7 +179,7 @@ class Test3MapLayer: Test3RenderLayer {
     func addChunk(_ chunk: IntCordinate) {
         
         if chunks[chunk] != nil {
-            // Increment The Chunk Type
+//             Increment The Chunk Type
             if (chunks[chunk]!.type.rawValue + 1) >= ChunkType.allCases.count {
                 chunks[chunk]!.type = .normal
             } else {
@@ -195,26 +195,26 @@ class Test3MapLayer: Test3RenderLayer {
         }
 
         
-        let afterChunksCount = Float(chunks.count)
-        let afterVertexCount = Float(vertexs.count)
-        let afterVertexSizeKB = Float(vertexs.count * 4) / 1024
-        let afterVertexSizeMB = Float(vertexs.count * 4) / 1024 / 1024
-        let afterColorsSizeKB = Float(newColors.count * 4) / 1024
-        let afterColorsSizeMB = Float(newColors.count * 4) / 1024 / 1024
+//        let afterChunksCount = Float(chunks.count)
+//        let afterVertexCount = Float(vertexs.count)
+//        let afterVertexSizeKB = Float(vertexs.count * 4) / 1024
+//        let afterVertexSizeMB = Float(vertexs.count * 4) / 1024 / 1024
+//        let afterColorsSizeKB = Float(newColors.count * 4) / 1024
+//        let afterColorsSizeMB = Float(newColors.count * 4) / 1024 / 1024
         
-        print("""
-\n\nTotal Chunks:        \(afterChunksCount)
-Chunk / Vertex Ratio:    \(afterVertexCount / afterChunksCount)
-Chunk / Vertex Ratio KB: \(afterVertexSizeKB / afterChunksCount)
-Chunk / Vertex Ratio MB: \(afterVertexSizeMB / afterChunksCount)
-Chunk / Color  Ratio KB: \(afterColorsSizeKB / afterChunksCount)
-Chunk / Color  Ratio MB: \(afterColorsSizeMB / afterChunksCount)
-Chunk Vertex Count:      \(vertexs.count)
-Chunk Triangle Count:    \(vertexs.count / 6)
-Chunk Vertex Size KB:    \(afterVertexSizeKB)
-Chunk Vertex Size MB:    \(afterVertexSizeMB)
-Chunk Color Size MB:     \(afterColorsSizeMB)
-""")
+//        print("""
+//\n\nTotal Chunks:        \(afterChunksCount)
+//Chunk / Vertex Ratio:    \(afterVertexCount / afterChunksCount)
+//Chunk / Vertex Ratio KB: \(afterVertexSizeKB / afterChunksCount)
+//Chunk / Vertex Ratio MB: \(afterVertexSizeMB / afterChunksCount)
+//Chunk / Color  Ratio KB: \(afterColorsSizeKB / afterChunksCount)
+//Chunk / Color  Ratio MB: \(afterColorsSizeMB / afterChunksCount)
+//Chunk Vertex Count:      \(vertexs.count)
+//Chunk Triangle Count:    \(vertexs.count / 6)
+//Chunk Vertex Size KB:    \(afterVertexSizeKB)
+//Chunk Vertex Size MB:    \(afterVertexSizeMB)
+//Chunk Color Size MB:     \(afterColorsSizeMB)
+//""")
     }
     
     // Clear Chunks

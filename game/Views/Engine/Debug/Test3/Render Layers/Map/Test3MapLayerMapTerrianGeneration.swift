@@ -297,6 +297,7 @@ extension Test3MapLayer {
                         config += 4
                     }
                     if materials.count > 2 {
+                        
                         var lowestLevel = CellType.allCases.last!
                         var highestLevel = CellType.allCases.first!
                         for material in materials {
@@ -307,8 +308,23 @@ extension Test3MapLayer {
                                 highestLevel = material
                             }
                         }
-                        if mapLevel == lowestLevel {
-                            config = 15
+                        var middleLevel: CellType = highestLevel
+                        for material in materials {
+                            if material != lowestLevel && material != highestLevel && material.rawValue < middleLevel.rawValue {
+                                middleLevel = material
+                            }
+                        }
+                        if mapLevel == middleLevel {
+                            let filler = getFillerForMultipleMaterials(fill: mapLevel,
+                                                                       corners: [address.types[index + chunkSize + y + 1],
+                                                                                 address.types[index + chunkSize + y + 2],
+                                                                                 address.types[index + 1 + y],
+                                                                                 address.types[index + y]],
+                                                                       chunk: address.chunk,
+                                                                       index: index,
+                                                                       layerColor: layerColor)
+                            chunkVertices.append(contentsOf: filler.0)
+                            chunkColors.append(contentsOf: filler.1)
                         }
                     }
                     let vertexAndColors = getVertexAndColorsForConfig(config, index: index, chunk: address.chunk, color: layerColor)
@@ -317,7 +333,6 @@ extension Test3MapLayer {
                     chunkColors.append(contentsOf: vertexAndColors.1)
                 }
             }
-            
 
             var vertexStartIndex: Int = 0
             var colorStartIndex: Int = 0
@@ -334,8 +349,119 @@ extension Test3MapLayer {
             
             chunks[chunkCordinate]!.vertexCount = chunkVertices.count
             chunks[chunkCordinate]!.colorCount = chunkColors.count
-            
         }
+    }
+    
+    // Get Config For Multiple Materials
+    func getFillerForMultipleMaterials(fill:        CellType,
+                                       corners:     [CellType],
+                                       chunk:       IntCordinate,
+                                       index:       Int,
+                                       layerColor:  UIColor) -> ([Float], [Float]) {
+
+        let x = Float(index % chunkSize + chunkSize * chunk.x)
+        let y = Float(index / chunkSize + chunkSize * chunk.y)
+        
+        if y == 7 {
+            print("\(x)")
+        }
+        
+        if chunk == IntCordinate(0, 0) && index % chunkSize + chunkSize * chunk.x == 6 && index / chunkSize + chunkSize * chunk.y == 7 {
+            print(corners)
+        }
+        
+        let tmx = x + 0.5 // Top M
+        let tmy = y + 1
+        let mlx = x // Middle L
+        let mly = y + 0.5
+        let mrx = x + 1 // Middle R
+        let mry = y + 0.5
+        let bmx = x + 0.5 // Bottom Middle
+        let bmy = y + 0
+        
+        // Top Left And Right
+        if corners[0] == corners[2] {
+            return ([], [])
+        } else if corners[1] == corners[3] {
+            return ([], [])
+        }
+        // Whole Empty
+        var accountedTypes: [CellType] = []
+        for cellType in corners {
+            if !accountedTypes.contains(cellType) {
+                accountedTypes.append(cellType)
+            }
+        }
+        if accountedTypes.count == 4 {
+            let vertices: [Float] = [tmx, tmy,
+                                     mrx, mry,
+                                     bmx, bmy,
+                                     tmx, tmy,
+                                     bmx, bmy,
+                                     mlx, mly]
+            var colors: [Float] = []
+            
+            for _ in 0..<vertices.count / 2 {
+                colors.append(contentsOf: [Float(layerColor.redValue),
+                                           Float(layerColor.greenValue),
+                                           Float(layerColor.blueValue)])
+            }
+            return (vertices,
+                    colors)
+        }
+        var vertices: [Float] = []
+        var colors: [Float] = []
+        for (index, cellType) in corners.enumerated() {
+            var forwardIndex = index + 1
+            if forwardIndex == corners.count {
+                forwardIndex = 0
+            }
+            if cellType == corners[forwardIndex] && index == 0 {
+                vertices.append(contentsOf: [mlx, mly, mrx, mry, bmx, bmy])
+//                for _ in 0..<vertices.count / 2 {
+//                    colors.append(contentsOf: [Float(UIColor.blue.redValue),
+//                                               Float(UIColor.blue.greenValue),
+//                                               Float(UIColor.blue.blueValue)])
+//                }
+//                return (vertices,
+//                        colors)
+            } else if cellType == corners[forwardIndex] && index == 1 {
+                vertices.append(contentsOf: [tmx, tmy, bmx, bmy, mlx, mly])
+//                for _ in 0..<vertices.count / 2 {
+//                    colors.append(contentsOf: [Float(UIColor.green.redValue),
+//                                               Float(UIColor.green.greenValue),
+//                                               Float(UIColor.green.blueValue)])
+//                }
+//                return (vertices,
+//                        colors)
+            } else if cellType == corners[forwardIndex] && index == 2 {
+                vertices.append(contentsOf: [tmx, tmy, mrx, mry, mlx, mly])
+//                for _ in 0..<vertices.count / 2 {
+//                    colors.append(contentsOf: [Float(UIColor.red.redValue),
+//                                               Float(UIColor.red.greenValue),
+//                                               Float(UIColor.red.blueValue)])
+//                }
+//                return (vertices,
+//                        colors)
+            } else if cellType == corners[forwardIndex] && index == 3 {
+                vertices.append(contentsOf: [tmx, tmy, mrx, mry, bmx, bmy])
+//                for _ in 0..<vertices.count / 2 {
+//                    colors.append(contentsOf: [Float(UIColor.black.redValue),
+//                                               Float(UIColor.black.greenValue),
+//                                               Float(UIColor.black.blueValue)])
+//                }
+//                return (vertices,
+//                        colors)
+            }
+        }
+        
+        for _ in 0..<vertices.count / 2 {
+            colors.append(contentsOf: [Float(layerColor.redValue),
+                                       Float(layerColor.greenValue),
+                                       Float(layerColor.blueValue)])
+        }
+        return (vertices,
+                colors)
     }
     
     // Get Vertex And Colors For Config
@@ -409,15 +535,15 @@ extension Test3MapLayer {
             return .beach
         } else if number <= 0.3 {
             return .grass
-        } else if number <= 0.6 {
+        } else if number <= 0.55 {
             return .forest
-        } else if number <= 0.7 {
+        } else if number <= 0.65 {
             return .mountain1
-        } else if number <= 0.8 {
+        } else if number <= 0.75 {
             return .mountain2
         } else if number <= 0.85 {
             return .mountain3
-        } else if number <= 0.9 {
+        } else if number <= 0.95 {
             return .mountain4
         } else {
             return .snow

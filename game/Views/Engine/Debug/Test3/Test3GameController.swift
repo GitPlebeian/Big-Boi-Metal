@@ -49,6 +49,8 @@ class Test3GameController {
         let chunk = getCurrentChunk(location: FloatPoint(location))
         
         map.addChunk(chunk)
+        
+        printCellCordinates(FloatPoint(location))
     }
     // MARK: Helpers
     
@@ -99,8 +101,26 @@ class Test3GameController {
     
     // Get Cell
     private func getCell(_ location: FloatPoint) -> Cell {
-        let xCell = Int((location.x / 2 * view.width / map.cellSize).rounded(.down))
-        let yCell = Int((location.y / 2 * view.height / map.cellSize).rounded(.down))
+        let adjustedPoint = view.getAdjustedPointInCordinateSpace(point: location, realWorldY: true)
+        let xCell = Int((adjustedPoint.x / 2 * view.width / map.cellSize).rounded(.down))
+        let yCell = Int((adjustedPoint.y / 2 * view.height / map.cellSize).rounded(.down))
         return Cell(x: xCell, y: yCell)
+    }
+    
+    // Print Cordinate
+    private func printCellCordinates(_ location: FloatPoint) {
+        var cell = getCell(location)
+        if cell.x < 0 {
+            cell.x = map.chunkSize - (abs(cell.x) % map.chunkSize)
+        } else {
+            cell.x = cell.x % map.chunkSize
+        }
+        if cell.y < 0 {
+            cell.y = map.chunkSize - (abs(cell.y) % map.chunkSize)
+        } else {
+            cell.y = cell.y % map.chunkSize
+        }
+        let chunk = getCurrentChunk(location: location)
+        print("Chunk: \(chunk.x) | \(chunk.y) :: Cell: \(cell.x) | \(cell.y)")
     }
 }
