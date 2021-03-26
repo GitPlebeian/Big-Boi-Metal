@@ -153,7 +153,7 @@ class Test3: GameViewDebugTest {
         let frequencySlider = UISlider()
         frequencySlider.minimumValue = 0
         frequencySlider.maximumValue = 4
-        frequencySlider.value = 1.0
+        frequencySlider.value = 1
         frequencySlider.addTarget(self, action: #selector(frequencySliderChanged), for: .valueChanged)
         frequencySlider.translatesAutoresizingMaskIntoConstraints = false
         frequencyView.addSubview(frequencySlider)
@@ -187,8 +187,8 @@ class Test3: GameViewDebugTest {
         // Octave Slider
         let octaveSlider = UISlider()
         octaveSlider.minimumValue = 1
-        octaveSlider.maximumValue = 6
-        octaveSlider.value = 6
+        octaveSlider.maximumValue = 9
+        octaveSlider.value = 8
         octaveSlider.addTarget(self, action: #selector(octaveSliderChanged), for: .valueChanged)
         octaveSlider.translatesAutoresizingMaskIntoConstraints = false
         octaveView.addSubview(octaveSlider)
@@ -258,7 +258,7 @@ class Test3: GameViewDebugTest {
         let lacunaritySlider = UISlider()
         lacunaritySlider.minimumValue = 0
         lacunaritySlider.maximumValue = 3
-        lacunaritySlider.value = 1.91
+        lacunaritySlider.value = 1.89
         lacunaritySlider.addTarget(self, action: #selector(lacunaritySliderChanged), for: .valueChanged)
         lacunaritySlider.translatesAutoresizingMaskIntoConstraints = false
         lacunarityView.addSubview(lacunaritySlider)

@@ -15,8 +15,8 @@ extension UIColor {
     static let background5 = UIColor(named: "background5")!
     static let background6 = UIColor(named: "background6")!
     static let primary     = UIColor(named: "primary")
-//    static let systemRed = UIColor(named: "background1")!
     
+    static let mapDarkSea        = UIColor(displayP3Red: 14/255,  green: 24/255,  blue: 43/255,  alpha: 1)
     static let mapSuperDeepWater = UIColor(displayP3Red: 16/255,  green: 31/255,  blue: 60/255,  alpha: 1)
     static let mapDeepWater      = UIColor(displayP3Red: 21/255,  green: 39/255,  blue: 76/255,  alpha: 1)
     static let mapWater          = UIColor(displayP3Red: 27/255,  green: 52/255,  blue: 97/255,  alpha: 1)

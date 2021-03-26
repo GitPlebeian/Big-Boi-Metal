@@ -14,6 +14,8 @@ struct Test3ColoredVertex{
     float4 color;
 };
  
+// MARK: Basic
+
 vertex Test3ColoredVertex test3_vertex_basic(constant packed_float2 *position [[buffer(0)]],
                                              constant packed_float3 *color [[buffer(1)]],
                                              constant packed_float2 *transform [[buffer(2)]],
@@ -39,6 +41,8 @@ fragment float4 test3_fragment_basic(Test3ColoredVertex vert [[stage_in]])
     return vert.color;
 }
 
+
+// MARK: Cube Map
 
 vertex Test3ColoredVertex test3_vertex_map(constant packed_float2 *position [[buffer(0)]],
                                            constant packed_float3 *color [[buffer(1)]],
@@ -88,6 +92,8 @@ fragment float4 test3_fragment_map(Test3ColoredVertex vert [[stage_in]])
 }
 
 
+// MARK: Marching Squares
+
 vertex Test3ColoredVertex test3_vertex_map_marching_squares(constant packed_float2 *position [[buffer(0)]],
                                            constant packed_float3 *color [[buffer(1)]],
                                            constant packed_float2 &globalTransform [[buffer(2)]],
@@ -117,6 +123,8 @@ fragment float4 test3_fragment_map_marching_squares(Test3ColoredVertex vert [[st
 {
     return vert.color;
 }
+
+// MARK: Grid
 
 vertex Test3ColoredVertex test3_vertex_grid(constant packed_float2 *position [[buffer(0)]],
                                             constant packed_float2 &globalTransform [[buffer(1)]],

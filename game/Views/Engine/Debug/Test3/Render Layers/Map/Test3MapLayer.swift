@@ -10,18 +10,19 @@ import Metal
 import GameKit
 
 enum CellType: UInt8, CaseIterable {
-    case superDeepWater = 0
-    case deepWater = 1
-    case water = 2
-    case shallowWater = 3
-    case beach = 4
-    case grass = 5
-    case forest = 6
-    case mountain1 = 7
-    case mountain2 = 8
-    case mountain3 = 9
-    case mountain4 = 10
-    case snow = 11
+    case darkSea = 0
+    case superDeepWater = 1
+    case deepWater = 2
+    case water = 3
+    case shallowWater = 4
+    case beach = 5
+    case grass = 6
+    case forest = 7
+    case mountain1 = 8
+    case mountain2 = 9
+    case mountain3 = 10
+    case mountain4 = 11
+    case snow = 12
 }
 
 enum ChunkType: Int, CaseIterable {
@@ -38,19 +39,12 @@ enum ChunkType: Int, CaseIterable {
     case fadeWest = 10
     case fadeNorthWest = 11
     case fadeNorthWestBig = 12
-    case ignoreNeighbors = 13
 }
 
 enum CellGraphicType: UInt8 {
     case whole = 0
     
     case other = 255
-}
-
-struct ChunkData {
-    var cells:  [Float] = []
-    var colors: [Float] = []
-    var types: [CellType] = []
 }
 
 struct ChunkAddress {
@@ -61,6 +55,7 @@ struct ChunkAddress {
     var vertexCount: Int = 0
     var colorCount: Int = 0
     var type: ChunkType = .normal
+    var valueOffset: Float = 0
     
     // Has Neighbor
     func hasNeighbor(_ direction: Direction) -> Bool {
@@ -88,7 +83,7 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 16
+    let chunkSize:   Int   = 48
     let cellSize:    Float = 44
     var fadeInset:   Int = 0
     var fadeLength:  Int = 0
@@ -99,13 +94,18 @@ class Test3MapLayer: Test3RenderLayer {
     var newColors: [Float] = []
     
     var chunks: [IntCordinate : ChunkAddress] = [:]
+    var selectedChunks: [IntCordinate] = []
+    
+    var vertexBuffer: MTLBuffer!
+    var colorBuffer: MTLBuffer!
     
     // Perlin
     var noiseSource: GKNoiseSource
     var frequency:   Double = 1
-    var octaveCount: Int = 6
+    var octaveCount: Int = 8
     var persistence: Double = 0.52
-    var lacunarity:  Double = 1.92
+    var lacunarity:  Double = 1.89
+    var seed: Int32 = 0
     
     // Debug Stuff
     
@@ -116,7 +116,7 @@ class Test3MapLayer: Test3RenderLayer {
                                               octaveCount: octaveCount,
                                               persistence: persistence,
                                               lacunarity: lacunarity,
-                                              seed: 1)
+                                              seed: seed)
         self.noiseSource = noiseSource
         super.init()
     }
@@ -143,9 +143,6 @@ class Test3MapLayer: Test3RenderLayer {
             
             encoder.setRenderPipelineState(pipelineState)
             
-            let vertexBuffer = GraphicsDevice.Device.makeBuffer(bytes: vertexs, length: vertexs.count * 4, options: [])
-            let newColorBuffer = GraphicsDevice.Device.makeBuffer(bytes: newColors, length: newColors.count * 4, options: [])
-            
             var transform = controller.view.vertexTransform
             var scale     = controller.view.vertexScale
             var width     = controller.view.width
@@ -153,7 +150,7 @@ class Test3MapLayer: Test3RenderLayer {
             var gridSize  = self.cellSize
             
             encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
-            encoder.setVertexBuffer(newColorBuffer, offset: 0, index: 1)
+            encoder.setVertexBuffer(colorBuffer, offset: 0, index: 1)
             encoder.setVertexBytes(&transform, length: 8, index: 2)
             encoder.setVertexBytes(&scale, length: 4, index: 3)
             encoder.setVertexBytes(&width, length: 4, index: 4)
@@ -171,7 +168,7 @@ class Test3MapLayer: Test3RenderLayer {
                                               octaveCount: octaveCount,
                                               persistence: persistence,
                                               lacunarity: lacunarity,
-                                              seed: 1)
+                                              seed: seed)
         self.noiseSource = noiseSource
     }
     
@@ -179,13 +176,13 @@ class Test3MapLayer: Test3RenderLayer {
     func addChunk(_ chunk: IntCordinate) {
         
         if chunks[chunk] != nil {
-//             Increment The Chunk Type
-            if (chunks[chunk]!.type.rawValue + 1) >= ChunkType.allCases.count {
-                chunks[chunk]!.type = .normal
+            if let indexOfChunk = selectedChunks.firstIndex(of: chunk) {
+                selectedChunks.remove(at: indexOfChunk)
+                tintChunkColors(color: UIColor.white, strength: 0.12, cordinate: chunk)
             } else {
-                chunks[chunk]!.type = ChunkType.init(rawValue: chunks[chunk]!.type.rawValue + 1)!
+                selectedChunks.append(chunk)
+                tintChunkColors(color: UIColor.white, strength: -0.12, cordinate: chunk)
             }
-            updateChunksForNewChunk(chunks[chunk]!)
         } else {
             let chunkAddress = ChunkAddress(chunk: chunk, index: chunks.count)
             
@@ -193,28 +190,49 @@ class Test3MapLayer: Test3RenderLayer {
             
             updateChunksForNewChunk(chunkAddress)
         }
+        updateMapBuffer()
+        
+        let afterChunksCount = Float(chunks.count)
+        let afterVertexCount = Float(vertexs.count)
+        let afterVertexSizeKB = Float(vertexs.count * 4) / 1024
+        let afterVertexSizeMB = Float(vertexs.count * 4) / 1024 / 1024
+        let afterColorsSizeKB = Float(newColors.count * 4) / 1024
+        let afterColorsSizeMB = Float(newColors.count * 4) / 1024 / 1024
 
-        
-//        let afterChunksCount = Float(chunks.count)
-//        let afterVertexCount = Float(vertexs.count)
-//        let afterVertexSizeKB = Float(vertexs.count * 4) / 1024
-//        let afterVertexSizeMB = Float(vertexs.count * 4) / 1024 / 1024
-//        let afterColorsSizeKB = Float(newColors.count * 4) / 1024
-//        let afterColorsSizeMB = Float(newColors.count * 4) / 1024 / 1024
-        
-//        print("""
-//\n\nTotal Chunks:        \(afterChunksCount)
-//Chunk / Vertex Ratio:    \(afterVertexCount / afterChunksCount)
-//Chunk / Vertex Ratio KB: \(afterVertexSizeKB / afterChunksCount)
-//Chunk / Vertex Ratio MB: \(afterVertexSizeMB / afterChunksCount)
-//Chunk / Color  Ratio KB: \(afterColorsSizeKB / afterChunksCount)
-//Chunk / Color  Ratio MB: \(afterColorsSizeMB / afterChunksCount)
-//Chunk Vertex Count:      \(vertexs.count)
-//Chunk Triangle Count:    \(vertexs.count / 6)
-//Chunk Vertex Size KB:    \(afterVertexSizeKB)
-//Chunk Vertex Size MB:    \(afterVertexSizeMB)
-//Chunk Color Size MB:     \(afterColorsSizeMB)
-//""")
+        print("""
+\n\nTotal Chunks:        \(afterChunksCount)
+Chunk / Vertex Ratio:    \(afterVertexCount / afterChunksCount)
+Chunk / Vertex Ratio KB: \(afterVertexSizeKB / afterChunksCount)
+Chunk / Vertex Ratio MB: \(afterVertexSizeMB / afterChunksCount)
+Chunk / Color  Ratio KB: \(afterColorsSizeKB / afterChunksCount)
+Chunk / Color  Ratio MB: \(afterColorsSizeMB / afterChunksCount)
+Chunk Vertex Count:      \(vertexs.count)
+Chunk Triangle Count:    \(vertexs.count / 6)
+Chunk Vertex Size KB:    \(afterVertexSizeKB)
+Chunk Vertex Size MB:    \(afterVertexSizeMB)
+Chunk Color Size MB:     \(afterColorsSizeMB)
+""")
+    }
+    
+    // Update Selected Chunks For Config
+    func updateSelectedChunksForConfig(_ config: ChunkType) {
+        for selectedChunk in selectedChunks {
+            chunks[selectedChunk]!.type = config
+        }
+        updateChunks(selectedChunks)
+        for selectedChunk in selectedChunks {
+            tintChunkColors(color: UIColor.white, strength: -0.12, cordinate: selectedChunk)
+        }
+        updateMapBuffer()
+    }
+    
+    // Clear Selected Chunks
+    func clearSelectedChunks() {
+        for selectedChunk in selectedChunks {
+            tintChunkColors(color: UIColor.white, strength: 0.12, cordinate: selectedChunk)
+        }
+        selectedChunks = []
+        updateMapBuffer()
     }
     
     // Clear Chunks
@@ -222,6 +240,7 @@ class Test3MapLayer: Test3RenderLayer {
         cells = []
         colors = []
         chunks.removeAll()
+        updateMapBuffer()
     }
     
     // Reload Map
@@ -233,6 +252,7 @@ class Test3MapLayer: Test3RenderLayer {
             toUpdate.append(address.value.chunk)
         }
         updateCellGraphics(toUpdate)
+        updateMapBuffer()
     }
     
     // Get Type For Cell
@@ -240,40 +260,58 @@ class Test3MapLayer: Test3RenderLayer {
         guard let chunk = chunks[chunkCordinate] else {return nil}
         let cellX = cell.x % chunkSize
         let cellY = cell.y % chunkSize
-        print("\nCellX: \(cellX) | CellY: \(cellY)")
         return chunk.types[chunkSize * cellY + cellX]
     }
     
     // MARK: Helpers
+    
+    // Update Map Buffers
+    private func updateMapBuffer() {
+        if vertexs.count == 0 {
+            return
+        }
+        vertexBuffer = GraphicsDevice.Device.makeBuffer(bytes: vertexs, length: vertexs.count * 4, options: [])
+        colorBuffer = GraphicsDevice.Device.makeBuffer(bytes: newColors, length: newColors.count * 4, options: [])
+    }
+    
+    // Update Chunks
+    private func updateChunks(_ chunks: [IntCordinate]) {
+        for chunk in chunks {
+            let types = getChunkData(self.chunks[chunk]!)
+            self.chunks[chunk]!.types = types
+        }
+        updateCellGraphics(chunks)
+        updateMapBuffer()
+    }
     
     // Update Chunks For New Chunk
     private func updateChunksForNewChunk(_ newChunk: ChunkAddress) {
         
         var chunksNeededUpdates: [IntCordinate] = []
         
-        var x = -1
-        var y = 1
-        for _ in 0..<8 {
-            let cordinate = IntCordinate(newChunk.chunk.x + x, newChunk.chunk.y + y)
-            if chunks[cordinate] != nil {
-                chunks[newChunk.chunk]!.neighbors[cordinate] = chunks[cordinate]!
-                chunks[cordinate]!.neighbors[newChunk.chunk] = newChunk
-                updateChunksForNeighbor(chunks[cordinate]!)
-                chunksNeededUpdates.append(cordinate)
-            }
-            
-            x += 1
-            if y == 0 && x == 0 {
-                x += 1
-            }
-            if x == 2 {
-                x = -1
-                y -= 1
-            }
-        }
+//        var x = -1
+//        var y = 1
+//        for _ in 0..<8 {
+//            let cordinate = IntCordinate(newChunk.chunk.x + x, newChunk.chunk.y + y)
+//            if chunks[cordinate] != nil {
+//                chunks[newChunk.chunk]!.neighbors[cordinate] = chunks[cordinate]!
+//                chunks[cordinate]!.neighbors[newChunk.chunk] = newChunk
+//                updateChunksForNeighbor(chunks[cordinate]!)
+//                chunksNeededUpdates.append(cordinate)
+//            }
+//
+//            x += 1
+//            if y == 0 && x == 0 {
+//                x += 1
+//            }
+//            if x == 2 {
+//                x = -1
+//                y -= 1
+//            }
+//        }
         
-        let chunkData = self.getChunkData(chunks[newChunk.chunk]!)
-        chunks[newChunk.chunk]!.types = chunkData.types
+        let types = self.getChunkData(chunks[newChunk.chunk]!)
+        chunks[newChunk.chunk]!.types = types
         chunksNeededUpdates.append(newChunk.chunk)
         
         // Update Other Graphics
@@ -284,7 +322,7 @@ class Test3MapLayer: Test3RenderLayer {
     
     // Update Chunks For Neighbor
     private func updateChunksForNeighbor(_ chunkAddress: ChunkAddress) {
-        let chunkData = self.getChunkData(chunkAddress)
-        chunks[chunkAddress.chunk]!.types = chunkData.types
+        let types = self.getChunkData(chunkAddress)
+        chunks[chunkAddress.chunk]!.types = types
     }
 }

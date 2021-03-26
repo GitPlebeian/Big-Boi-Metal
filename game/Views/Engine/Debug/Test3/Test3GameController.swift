@@ -49,9 +49,9 @@ class Test3GameController {
         let chunk = getCurrentChunk(location: FloatPoint(location))
         
         map.addChunk(chunk)
-        
-        printCellCordinates(FloatPoint(location))
     }
+    
+    
     // MARK: Helpers
     
     // Get Seeable Chunks

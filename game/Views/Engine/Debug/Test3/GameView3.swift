@@ -37,6 +37,15 @@ class GameView3: UIView {
     var scaleStartLocationAjusted: FloatPoint = FloatPoint()
     var scaleStartLocation: FloatPoint = FloatPoint()
     
+    // MARK: Views
+    
+    weak var chunkEditor: Test3ChunkEditorView!
+    
+    // MARK: Constraints
+    
+    var chunkEditorWidthConstraint: NSLayoutConstraint!
+    var chunkEditorHeightConstraint: NSLayoutConstraint!
+    
     // MARK: Gestures
     
     weak var panGesture:   UIPanGestureRecognizer!
@@ -53,9 +62,9 @@ class GameView3: UIView {
                                             y: 0,
                                             width: frame.width,
                                             height: frame.height),
-                         clearColor: [Double(UIColor.mapSuperDeepWater.redValue),
-                                      Double(UIColor.mapSuperDeepWater.greenValue),
-                                      Double(UIColor.mapSuperDeepWater.blueValue)])
+                         clearColor: [Double(UIColor.mapDarkSea.redValue),
+                                      Double(UIColor.mapDarkSea.greenValue),
+                                      Double(UIColor.mapDarkSea.blueValue)])
         addSubview(engine)
         test3GameController = Test3GameController(view: self)
         
@@ -176,19 +185,65 @@ class GameView3: UIView {
         return floatPoint
     }
     
+    // Toggle Chunk Editor
+    func toggleChunkEditor() {
+        if chunkEditor.open { // Close it
+            
+            chunkEditorWidthConstraint.isActive = false
+            chunkEditorWidthConstraint = chunkEditor.widthAnchor.constraint(equalToConstant: 44)
+            chunkEditorWidthConstraint.priority = .defaultHigh
+            chunkEditorWidthConstraint.isActive = true
+            
+            chunkEditorHeightConstraint.isActive = false
+            chunkEditorHeightConstraint = chunkEditor.heightAnchor.constraint(equalToConstant: 44)
+            chunkEditorHeightConstraint.priority = .defaultHigh
+            chunkEditorHeightConstraint.isActive = true
+            
+            chunkEditor.closeView()
+        } else { // Open It
+            chunkEditorWidthConstraint.isActive = false
+            chunkEditorWidthConstraint = chunkEditor.widthAnchor.constraint(equalToConstant: 250)
+            chunkEditorWidthConstraint.isActive = true
+            
+            chunkEditorHeightConstraint.isActive = false
+            chunkEditorHeightConstraint = chunkEditor.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            chunkEditorHeightConstraint.isActive = true
+            
+            chunkEditor.openView()
+        }
+        chunkEditor.open = !chunkEditor.open
+    }
+    
     // MARK: Setup Views
     
     private func setupViews() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapped))
-        addGestureRecognizer(tapGesture)
+        engine.addGestureRecognizer(tapGesture)
         self.tapGesture = tapGesture
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned))
-        addGestureRecognizer(panGesture)
+        engine.addGestureRecognizer(panGesture)
         self.panGesture = panGesture
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(scaled))
-        addGestureRecognizer(pinchGesture)
+        engine.addGestureRecognizer(pinchGesture)
         self.pinchGesture = pinchGesture
+        
+        // Chunk Editor
+        let chunkEditor = Test3ChunkEditorView(controller: test3GameController, gameView: self)
+        chunkEditor.backgroundColor = .background2
+        chunkEditor.layer.cornerRadius = 16
+        chunkEditor.layer.masksToBounds = true
+        chunkEditor.translatesAutoresizingMaskIntoConstraints = false
+        self.chunkEditorWidthConstraint = chunkEditor.widthAnchor.constraint(equalToConstant: 44)
+        self.chunkEditorHeightConstraint = chunkEditor.heightAnchor.constraint(equalToConstant: 44)
+        addSubview(chunkEditor)
+        NSLayoutConstraint.activate([
+            chunkEditor.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            chunkEditor.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            chunkEditorWidthConstraint,
+            chunkEditorHeightConstraint
+        ])
+        self.chunkEditor = chunkEditor
     }
 }
