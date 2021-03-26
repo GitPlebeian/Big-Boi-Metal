@@ -15,13 +15,11 @@ class Test3ChunkFadeEditor: UIView {
     
     // MARK: Views
     
-    weak var buttonParentView: UIView!
-    var configButtons: [UIButton] = []
+    weak var buttonParentView:     UIView!
+    var      configButtons:        [UIButton] = []
     weak var clearSelectionButton: UIButton!
-    weak var fadeControlView: UIView!
-    weak var fadeLengthDecrementButton: UIButton!
-    weak var fadeLengthIncrementButton: UIButton!
-    weak var fadeLengthValueLabel: UILabel!
+    weak var fadeControlView:      UIView!
+    weak var deleteAllButton:      UIButton!
     
     
     // MARK: Init
@@ -39,16 +37,11 @@ class Test3ChunkFadeEditor: UIView {
     
     // MARK: Actions
     
-    // Fade Length Decrement
-    @objc private func fadeLengthDecrement() {
+    // Delete All Tapped
+    @objc private func deleteAllTapped() {
         let selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.selectionChanged()
-    }
-    
-    // Fade Length Increment
-    @objc private func fadeLengthIncrement() {
-        let selectionFeedback = UISelectionFeedbackGenerator()
-        selectionFeedback.selectionChanged()
+        gameController.map.deleteChunks()
     }
     
     // Clear Selection Button Tapped
@@ -96,9 +89,15 @@ class Test3ChunkFadeEditor: UIView {
             dontChangeButtonColor = tag
             gameController.map.updateSelectedChunksForConfig(.fadeWest)
         case 4:
-            sender.backgroundColor = .primary
-            dontChangeButtonColor = tag
-            gameController.map.updateSelectedChunksForConfig(.normal)
+            if sender.backgroundColor == .primary {
+                sender.backgroundColor = self.tintColor
+                dontChangeButtonColor = tag
+                gameController.map.updateSelectedChunksForConfig(.ignoreNeighbors)
+            } else {
+                sender.backgroundColor = .primary
+                dontChangeButtonColor = tag
+                gameController.map.updateSelectedChunksForConfig(.normal)
+            }
         case 5:
             sender.backgroundColor = .primary
             dontChangeButtonColor = tag
@@ -199,10 +198,28 @@ class Test3ChunkFadeEditor: UIView {
             clearSelectionButton.topAnchor.constraint(equalTo: buttonParentView.bottomAnchor, constant: 8),
             clearSelectionButton.leadingAnchor.constraint(equalTo: buttonParentView.leadingAnchor),
             clearSelectionButton.trailingAnchor.constraint(equalTo: buttonParentView.trailingAnchor),
-            clearSelectionButton.heightAnchor.constraint(equalToConstant: 44),
-            clearSelectionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+            clearSelectionButton.heightAnchor.constraint(equalToConstant: 44)
         ])
         self.clearSelectionButton = clearSelectionButton
+        
+        // Clear Selection Button Tapped
+        let deleteAllButton = UIButton()
+        deleteAllButton.layer.cornerRadius = 8
+        deleteAllButton.backgroundColor = .systemRed
+        deleteAllButton.titleLabel?.font = UIFont(name: UIFont.robotoBold, size: 14)
+        deleteAllButton.titleLabel?.textColor = .white
+        deleteAllButton.setTitle("Delete All", for: .normal)
+        deleteAllButton.addTarget(self, action: #selector(deleteAllTapped), for: .touchUpInside)
+        deleteAllButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(deleteAllButton)
+        NSLayoutConstraint.activate([
+            deleteAllButton.topAnchor.constraint(equalTo: clearSelectionButton.bottomAnchor, constant: 8),
+            deleteAllButton.leadingAnchor.constraint(equalTo: buttonParentView.leadingAnchor),
+            deleteAllButton.trailingAnchor.constraint(equalTo: buttonParentView.trailingAnchor),
+            deleteAllButton.heightAnchor.constraint(equalToConstant: 44),
+            deleteAllButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+        ])
+        self.deleteAllButton = deleteAllButton
         
 //        // Let Fade Control View
 //        let fadeControlView = UIView()

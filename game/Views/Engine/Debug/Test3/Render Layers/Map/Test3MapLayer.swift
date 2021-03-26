@@ -39,12 +39,7 @@ enum ChunkType: Int, CaseIterable {
     case fadeWest = 10
     case fadeNorthWest = 11
     case fadeNorthWestBig = 12
-}
-
-enum CellGraphicType: UInt8 {
-    case whole = 0
-    
-    case other = 255
+    case ignoreNeighbors = 13
 }
 
 struct ChunkAddress {
@@ -83,15 +78,13 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 48
+    let chunkSize:   Int   = 64
     let cellSize:    Float = 44
     var fadeInset:   Int = 0
-    var fadeLength:  Int = 0
+    var fadeLength:  Int = 26
     
-    var cells: [Float] = []
+    var vertices: [Float] = []
     var colors: [Float] = []
-    var vertexs: [Float] = []
-    var newColors: [Float] = []
     
     var chunks: [IntCordinate : ChunkAddress] = [:]
     var selectedChunks: [IntCordinate] = []
@@ -106,8 +99,6 @@ class Test3MapLayer: Test3RenderLayer {
     var persistence: Double = 0.52
     var lacunarity:  Double = 1.89
     var seed: Int32 = 0
-    
-    // Debug Stuff
     
     // MARK: Init
     
@@ -138,7 +129,7 @@ class Test3MapLayer: Test3RenderLayer {
         
         guard let controller = controller else {return}
         
-        if vertexs.count != 0 {
+        if vertices.count != 0 {
             // Render Marching Squares Map
             
             encoder.setRenderPipelineState(pipelineState)
@@ -156,7 +147,7 @@ class Test3MapLayer: Test3RenderLayer {
             encoder.setVertexBytes(&width, length: 4, index: 4)
             encoder.setVertexBytes(&height, length: 4, index: 5)
             encoder.setVertexBytes(&gridSize, length: 4, index: 6)
-            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexs.count / 2)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertices.count / 2)
         }
     }
     
@@ -192,26 +183,26 @@ class Test3MapLayer: Test3RenderLayer {
         }
         updateMapBuffer()
         
-        let afterChunksCount = Float(chunks.count)
-        let afterVertexCount = Float(vertexs.count)
-        let afterVertexSizeKB = Float(vertexs.count * 4) / 1024
-        let afterVertexSizeMB = Float(vertexs.count * 4) / 1024 / 1024
-        let afterColorsSizeKB = Float(newColors.count * 4) / 1024
-        let afterColorsSizeMB = Float(newColors.count * 4) / 1024 / 1024
+//        let afterChunksCount = Float(chunks.count)
+//        let afterVertexCount = Float(vertexs.count)
+//        let afterVertexSizeKB = Float(vertexs.count * 4) / 1024
+//        let afterVertexSizeMB = Float(vertexs.count * 4) / 1024 / 1024
+//        let afterColorsSizeKB = Float(newColors.count * 4) / 1024
+//        let afterColorsSizeMB = Float(newColors.count * 4) / 1024 / 1024
 
-        print("""
-\n\nTotal Chunks:        \(afterChunksCount)
-Chunk / Vertex Ratio:    \(afterVertexCount / afterChunksCount)
-Chunk / Vertex Ratio KB: \(afterVertexSizeKB / afterChunksCount)
-Chunk / Vertex Ratio MB: \(afterVertexSizeMB / afterChunksCount)
-Chunk / Color  Ratio KB: \(afterColorsSizeKB / afterChunksCount)
-Chunk / Color  Ratio MB: \(afterColorsSizeMB / afterChunksCount)
-Chunk Vertex Count:      \(vertexs.count)
-Chunk Triangle Count:    \(vertexs.count / 6)
-Chunk Vertex Size KB:    \(afterVertexSizeKB)
-Chunk Vertex Size MB:    \(afterVertexSizeMB)
-Chunk Color Size MB:     \(afterColorsSizeMB)
-""")
+//        print("""
+//\n\nTotal Chunks:        \(afterChunksCount)
+//Chunk / Vertex Ratio:    \(afterVertexCount / afterChunksCount)
+//Chunk / Vertex Ratio KB: \(afterVertexSizeKB / afterChunksCount)
+//Chunk / Vertex Ratio MB: \(afterVertexSizeMB / afterChunksCount)
+//Chunk / Color  Ratio KB: \(afterColorsSizeKB / afterChunksCount)
+//Chunk / Color  Ratio MB: \(afterColorsSizeMB / afterChunksCount)
+//Chunk Vertex Count:      \(vertexs.count)
+//Chunk Triangle Count:    \(vertexs.count / 6)
+//Chunk Vertex Size KB:    \(afterVertexSizeKB)
+//Chunk Vertex Size MB:    \(afterVertexSizeMB)
+//Chunk Color Size MB:     \(afterColorsSizeMB)
+//""")
     }
     
     // Update Selected Chunks For Config
@@ -235,11 +226,12 @@ Chunk Color Size MB:     \(afterColorsSizeMB)
         updateMapBuffer()
     }
     
-    // Clear Chunks
-    func clearChunks() {
-        cells = []
+    // Delete Chunks
+    func deleteChunks() {
+        vertices = []
         colors = []
         chunks.removeAll()
+        selectedChunks = []
         updateMapBuffer()
     }
     
@@ -267,11 +259,11 @@ Chunk Color Size MB:     \(afterColorsSizeMB)
     
     // Update Map Buffers
     private func updateMapBuffer() {
-        if vertexs.count == 0 {
+        if vertices.count == 0 {
             return
         }
-        vertexBuffer = GraphicsDevice.Device.makeBuffer(bytes: vertexs, length: vertexs.count * 4, options: [])
-        colorBuffer = GraphicsDevice.Device.makeBuffer(bytes: newColors, length: newColors.count * 4, options: [])
+        vertexBuffer = GraphicsDevice.Device.makeBuffer(bytes: vertices, length: vertices.count * 4, options: [])
+        colorBuffer = GraphicsDevice.Device.makeBuffer(bytes: colors, length: colors.count * 4, options: [])
     }
     
     // Update Chunks
@@ -289,26 +281,26 @@ Chunk Color Size MB:     \(afterColorsSizeMB)
         
         var chunksNeededUpdates: [IntCordinate] = []
         
-//        var x = -1
-//        var y = 1
-//        for _ in 0..<8 {
-//            let cordinate = IntCordinate(newChunk.chunk.x + x, newChunk.chunk.y + y)
-//            if chunks[cordinate] != nil {
-//                chunks[newChunk.chunk]!.neighbors[cordinate] = chunks[cordinate]!
-//                chunks[cordinate]!.neighbors[newChunk.chunk] = newChunk
-//                updateChunksForNeighbor(chunks[cordinate]!)
-//                chunksNeededUpdates.append(cordinate)
-//            }
-//
-//            x += 1
-//            if y == 0 && x == 0 {
-//                x += 1
-//            }
-//            if x == 2 {
-//                x = -1
-//                y -= 1
-//            }
-//        }
+        var x = -1
+        var y = 1
+        for _ in 0..<8 {
+            let cordinate = IntCordinate(newChunk.chunk.x + x, newChunk.chunk.y + y)
+            if chunks[cordinate] != nil {
+                chunks[newChunk.chunk]!.neighbors[cordinate] = chunks[cordinate]!
+                chunks[cordinate]!.neighbors[newChunk.chunk] = newChunk
+                updateChunksForNeighbor(chunks[cordinate]!)
+                chunksNeededUpdates.append(cordinate)
+            }
+
+            x += 1
+            if y == 0 && x == 0 {
+                x += 1
+            }
+            if x == 2 {
+                x = -1
+                y -= 1
+            }
+        }
         
         let types = self.getChunkData(chunks[newChunk.chunk]!)
         chunks[newChunk.chunk]!.types = types
@@ -317,8 +309,6 @@ Chunk Color Size MB:     \(afterColorsSizeMB)
         // Update Other Graphics
         updateCellGraphics(chunksNeededUpdates)
     }
-    
-    // Update Chunk Directions For New Direction
     
     // Update Chunks For Neighbor
     private func updateChunksForNeighbor(_ chunkAddress: ChunkAddress) {
