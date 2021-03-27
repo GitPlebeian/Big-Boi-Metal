@@ -37,6 +37,7 @@
 		8653D94A258BF55000D9286F /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D949258BF55000D9286F /* DebugView.swift */; };
 		8653D94D258C3F4200D9286F /* Global Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653D94C258C3F4200D9286F /* Global Enums.swift */; };
 		86573120260BCD71005FA47C /* Test3ChunkSeedEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8657311F260BCD71005FA47C /* Test3ChunkSeedEditor.swift */; };
+		86573124260E2E2D005FA47C /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573123260E2E2D005FA47C /* FileManager.swift */; };
 		869891A325FB438E0064F967 /* Test3TestLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869891A225FB438E0064F967 /* Test3TestLayer.swift */; };
 		869CA4C525F17A1600CADC2F /* Test3GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CA4C425F17A1600CADC2F /* Test3GameController.swift */; };
 		869CA4CA25F1B23100CADC2F /* Test3RenderLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869CA4C925F1B23100CADC2F /* Test3RenderLayer.swift */; };
@@ -98,6 +99,7 @@
 		8653D949258BF55000D9286F /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		8653D94C258C3F4200D9286F /* Global Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Enums.swift"; sourceTree = "<group>"; };
 		8657311F260BCD71005FA47C /* Test3ChunkSeedEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3ChunkSeedEditor.swift; sourceTree = "<group>"; };
+		86573123260E2E2D005FA47C /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		869891A225FB438E0064F967 /* Test3TestLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3TestLayer.swift; sourceTree = "<group>"; };
 		869CA4C425F17A1600CADC2F /* Test3GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3GameController.swift; sourceTree = "<group>"; };
 		869CA4C925F1B23100CADC2F /* Test3RenderLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3RenderLayer.swift; sourceTree = "<group>"; };
@@ -417,6 +419,7 @@
 			children = (
 				86ADAFCB256083A800A252A5 /* UIColor.swift */,
 				86D81C6C2584871500A51870 /* Float.swift */,
+				86573123260E2E2D005FA47C /* FileManager.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				86D81C382584615C00A51870 /* RendererShaders1.metal in Sources */,
 				8650B12125F0395E00B211E1 /* RenderPipelineStateLibrary.swift in Sources */,
 				8650B12725F0399400B211E1 /* SceneManager.swift in Sources */,
+				86573124260E2E2D005FA47C /* FileManager.swift in Sources */,
 				8650B14525F03A8E00B211E1 /* GameView2.swift in Sources */,
 				869CA4D925F1BA4C00CADC2F /* Test3PipelineDescriptorLibrary.swift in Sources */,
 				8653D94A258BF55000D9286F /* DebugView.swift in Sources */,

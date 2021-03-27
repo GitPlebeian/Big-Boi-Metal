@@ -9,6 +9,12 @@ import UIKit
 import Metal
 import GameKit
 
+struct Map: Codable {
+    let width:  Int
+    let height: Int
+    let types:  [UInt8]
+}
+
 enum CellType: UInt8, CaseIterable {
     case darkSea = 0
     case superDeepWater = 1
@@ -78,10 +84,10 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 64
+    let chunkSize:   Int   = 48
     let cellSize:    Float = 44
     var fadeInset:   Int = 0
-    var fadeLength:  Int = 26
+    var fadeLength:  Int = 20
     
     var vertices: [Float] = []
     var colors: [Float] = []
@@ -253,6 +259,121 @@ class Test3MapLayer: Test3RenderLayer {
         let cellX = cell.x % chunkSize
         let cellY = cell.y % chunkSize
         return chunk.types[chunkSize * cellY + cellX]
+    }
+    
+    // Export Map
+    func exportMap() {
+        
+        if chunks.count == 0 {
+            print("No chunks, can't export data")
+            return
+        }
+        
+        var furthestLeftChunk: Int = Int.max
+        var furthestRightChunk: Int = Int.min
+        var lowestChunk: Int = Int.max
+        var highestChunk: Int = Int.min
+        
+        for keyValueChunk in chunks {
+            let cordinate = keyValueChunk.key
+            if cordinate.x < furthestLeftChunk {
+                furthestLeftChunk = cordinate.x
+            }
+            if cordinate.x > furthestRightChunk {
+                furthestRightChunk = cordinate.x
+            }
+            if cordinate.y < lowestChunk {
+                lowestChunk = cordinate.y
+            }
+            if cordinate.y > highestChunk {
+                highestChunk = cordinate.y
+            }
+        }
+        
+        let width = furthestRightChunk - furthestLeftChunk + 1
+        let height = highestChunk - lowestChunk + 1
+        
+        var types: [UInt8] = []
+        
+        print("MAP: \(width) | \(height)")
+        
+        let startingY = lowestChunk * chunkSize
+        let endingY = (highestChunk + 1) * chunkSize
+        
+        let startingX = furthestLeftChunk * chunkSize
+        let endingX = (furthestRightChunk + 1) * chunkSize
+        
+        print("Starting Y: \(startingY) | EndingY: \(endingY) | StartingX: \(startingX) | EndingX: \(endingX)")
+        
+        for y in startingY..<endingY {
+            for x in startingX..<endingX {
+                var chunkX: Int
+                var chunkY: Int
+                
+                if x >= 0 {
+                    chunkX = x / chunkSize
+                    chunkY = y / chunkSize
+                } else {
+                    chunkX = (x - chunkSize + 1) / chunkSize
+                    chunkY = (y - chunkSize + 1) / chunkSize
+                }
+                
+                var cellX = x
+                if cellX < 0 {
+                    cellX += 1
+                    cellX *= -1
+                    cellX %= chunkSize
+                    cellX = chunkSize - cellX
+                } else {
+                    cellX %= chunkSize
+                }
+                var cellY = y
+                if cellY < 0 {
+                    cellY += 1
+                    cellY *= -1
+                    cellY %= chunkSize
+                    cellY = chunkSize - cellY
+                } else {
+                    cellY %= chunkSize
+                }
+                
+                if let cellType = getTypeForCell(chunkCordinate: IntCordinate(chunkX, chunkY), cell: Cell(x: cellX, y: cellY)) {
+                    types.append(cellType.rawValue)
+                } else {
+                    types.append(CellType.superDeepWater.rawValue)
+                }
+            }
+        }
+        
+        let map = Map(width: width, height: height, types: types)
+        
+//        var pathOptional: URL?
+//        do {
+//            pathOptional = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//        } catch let e {
+//            print(e)
+//        }
+//
+//        guard let path = pathOptional else {return}
+        
+//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//        let documentDirectory = paths[0]
+//        let fileName = "map\(width)x\(height).json"
+//        let fullURL = documentDirectory.appendingPathComponent(fileName)
+//
+//        let jsonEncoder = JSONEncoder()
+//        do {
+//            let data = try jsonEncoder.encode(map)
+//            try data.write(to: fullURL)
+//        } catch let e {
+//            print(e)
+//        }
+        
+        guard let urls = FileManager.default.urls(for: .documentDirectory) else {return}
+        
+        for url in urls {
+            print(url.lastPathComponent)
+        }
     }
     
     // MARK: Helpers

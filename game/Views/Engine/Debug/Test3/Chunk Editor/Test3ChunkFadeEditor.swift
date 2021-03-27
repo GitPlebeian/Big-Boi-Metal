@@ -20,6 +20,7 @@ class Test3ChunkFadeEditor: UIView {
     weak var clearSelectionButton: UIButton!
     weak var fadeControlView:      UIView!
     weak var deleteAllButton:      UIButton!
+    weak var exportButton:         UIButton!
     
     
     // MARK: Init
@@ -36,6 +37,13 @@ class Test3ChunkFadeEditor: UIView {
     }
     
     // MARK: Actions
+    
+    // Export Button Tapped
+    @objc private func exportButtonTapped() {
+        let selectionFeedback = UISelectionFeedbackGenerator()
+        selectionFeedback.selectionChanged()
+        gameController.map.exportMap()
+    }
     
     // Delete All Tapped
     @objc private func deleteAllTapped() {
@@ -202,7 +210,7 @@ class Test3ChunkFadeEditor: UIView {
         ])
         self.clearSelectionButton = clearSelectionButton
         
-        // Clear Selection Button Tapped
+        // Delete All Button Tapped
         let deleteAllButton = UIButton()
         deleteAllButton.layer.cornerRadius = 8
         deleteAllButton.backgroundColor = .systemRed
@@ -216,10 +224,28 @@ class Test3ChunkFadeEditor: UIView {
             deleteAllButton.topAnchor.constraint(equalTo: clearSelectionButton.bottomAnchor, constant: 8),
             deleteAllButton.leadingAnchor.constraint(equalTo: buttonParentView.leadingAnchor),
             deleteAllButton.trailingAnchor.constraint(equalTo: buttonParentView.trailingAnchor),
-            deleteAllButton.heightAnchor.constraint(equalToConstant: 44),
-            deleteAllButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+            deleteAllButton.heightAnchor.constraint(equalToConstant: 44)
         ])
         self.deleteAllButton = deleteAllButton
+        
+        // Export Map Button Tapped
+        let exportButton = UIButton()
+        exportButton.layer.cornerRadius = 8
+        exportButton.backgroundColor = .primary
+        exportButton.titleLabel?.font = UIFont(name: UIFont.robotoBold, size: 14)
+        exportButton.titleLabel?.textColor = .white
+        exportButton.setTitle("Export Map", for: .normal)
+        exportButton.addTarget(self, action: #selector(exportButtonTapped), for: .touchUpInside)
+        exportButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(exportButton)
+        NSLayoutConstraint.activate([
+            exportButton.topAnchor.constraint(equalTo: deleteAllButton.bottomAnchor, constant: 8),
+            exportButton.leadingAnchor.constraint(equalTo: buttonParentView.leadingAnchor),
+            exportButton.trailingAnchor.constraint(equalTo: buttonParentView.trailingAnchor),
+            exportButton.heightAnchor.constraint(equalToConstant: 44),
+            exportButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+        ])
+        self.exportButton = exportButton
         
 //        // Let Fade Control View
 //        let fadeControlView = UIView()
