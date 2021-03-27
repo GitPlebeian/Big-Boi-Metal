@@ -16,6 +16,7 @@ class Test3GameController {
     var map: Test3MapLayer = Test3MapLayer()
     var testLayer: Test3TestLayer = Test3TestLayer()
     var grid: Test3GridLayer = Test3GridLayer()
+    var textureTest: Test3TextureTest = Test3TextureTest()
     
     var gridOn: Bool = false
     
@@ -28,6 +29,7 @@ class Test3GameController {
         grid.controller = self
         view.addLayer(map, atLayer: 0)
         view.addLayer(grid, atLayer: 1)
+        view.addLayer(textureTest, atLayer: 2)
     }
     
     // MARK: Deinit

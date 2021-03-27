@@ -116,6 +116,8 @@ class Test3MapLayer: Test3RenderLayer {
                                               seed: seed)
         self.noiseSource = noiseSource
         super.init()
+        
+        setupImageRendering()
     }
     
     // MARK: Deinit
@@ -377,6 +379,53 @@ class Test3MapLayer: Test3RenderLayer {
     }
     
     // MARK: Helpers
+    
+    // Setup Image Rendering
+    private func setupImageRendering() {
+//        let image = UIImage(named: "testSprite")!
+//
+//        let imageRef = image.cgImage!
+//        
+//        let width = imageRef.width
+//        let height = imageRef.height
+//        
+//        let bitsPerPixel = 4
+//        let bitsPerComponent = 8
+//        let bytesPerRow = width * bitsPerPixel
+//    
+//        let colorSpace = CGColorSpaceCreateDeviceRGB()
+//        
+//        let data = UnsafeMutableRawPointer.allocate(byteCount: height * width * 4, alignment: 0)
+//        
+//        let context = CGContext(data: data,
+//                                width: width,
+//                                height: height,
+//                                bitsPerComponent: bitsPerComponent,
+//                                bytesPerRow: bytesPerRow,
+//                                space: colorSpace,
+//                                bitmapInfo: CGImageAlphaInfo.last.rawValue)
+        
+        
+        
+//        CGColorSpaceRelease
+        
+        
+//        uint8_t *rawData = (uint8_t *)calloc(height * width * 4, sizeof(uint8_t));
+//        NSUInteger bytesPerPixel = 4;
+//        NSUInteger bytesPerRow = bytesPerPixel * width;
+//        NSUInteger bitsPerComponent = 8;
+//        CGContextRef context = CGBitmapContextCreate(rawData, width, height,
+//                                                     bitsPerComponent, bytesPerRow, colorSpace,
+//                                                     kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+//        CGColorSpaceRelease(colorSpace);
+//
+//        // Flip the context so the positive Y axis points down
+//        CGContextTranslateCTM(context, 0, height);
+//        CGContextScaleCTM(context, 1, -1);
+//
+//        CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
+//        CGContextRelease(context);
+    }
     
     // Update Map Buffers
     private func updateMapBuffer() {

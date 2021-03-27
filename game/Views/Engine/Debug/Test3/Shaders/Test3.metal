@@ -150,3 +150,35 @@ fragment float4 test3_fragment_grid(Test3ColoredVertex vert [[stage_in]])
 {
     return vert.color;
 }
+
+struct Test3TextureVertex {
+    float4 position [[position]];
+    float2 textureCords;
+};
+
+// MARK: Texture
+
+vertex Test3TextureVertex test3_vertex_texture(constant packed_float2 *position [[buffer(0)]],
+                                               constant packed_float2 *textureCords [[buffer(1)]],
+                                            uint                   vid [[vertex_id]])
+{
+    Test3TextureVertex vert;
+
+    vert.position = float4(position[vid].x,
+                  position[vid].y,
+                  0,
+                  1);
+    vert.textureCords = float2(textureCords[vid].x, textureCords[vid].y);
+    
+    return vert;
+}
+
+fragment float4 test3_fragment_texture(Test3TextureVertex vert [[stage_in]],
+                                       texture2d<float>  tex2D     [[ texture(0) ]],
+                                       sampler           sampler2D [[ sampler(0) ]]) {
+    
+    float2 interpolated = float2(vert.textureCords.x, vert.textureCords.y);
+    
+    float4 color = tex2D.sample(sampler2D, interpolated);
+    return color;
+}

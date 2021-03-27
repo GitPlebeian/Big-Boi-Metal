@@ -11,6 +11,7 @@
 		8613A7B425802DE20004425B /* Data Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613A7B325802DE20004425B /* Data Structures.swift */; };
 		862C153526042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862C153426042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift */; };
 		862C153C26042EF700D9D610 /* Test3GridLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862C153B26042EF700D9D610 /* Test3GridLayer.swift */; };
+		8644657B260F7953000851FC /* Test3TexureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644657A260F7953000851FC /* Test3TexureTest.swift */; };
 		864E267625F05DDD003F02E5 /* GameView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864E267525F05DDD003F02E5 /* GameView3.swift */; };
 		864E267925F05DE6003F02E5 /* Test3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864E267825F05DE6003F02E5 /* Test3.swift */; };
 		864E267C25F05DFE003F02E5 /* Test3.metal in Sources */ = {isa = PBXBuildFile; fileRef = 864E267B25F05DFE003F02E5 /* Test3.metal */; };
@@ -73,6 +74,7 @@
 		8613A7B325802DE20004425B /* Data Structures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data Structures.swift"; sourceTree = "<group>"; };
 		862C153426042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3MapLayerMapTerrianGeneration.swift; sourceTree = "<group>"; };
 		862C153B26042EF700D9D610 /* Test3GridLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3GridLayer.swift; sourceTree = "<group>"; };
+		8644657A260F7953000851FC /* Test3TexureTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3TexureTest.swift; sourceTree = "<group>"; };
 		864E267525F05DDD003F02E5 /* GameView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView3.swift; sourceTree = "<group>"; };
 		864E267825F05DE6003F02E5 /* Test3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test3.swift; sourceTree = "<group>"; };
 		864E267B25F05DFE003F02E5 /* Test3.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Test3.metal; sourceTree = "<group>"; };
@@ -150,6 +152,14 @@
 				862C153426042BD000D9D610 /* Test3MapLayerMapTerrianGeneration.swift */,
 			);
 			path = Map;
+			sourceTree = "<group>";
+		};
+		8644657D260F7959000851FC /* Texture */ = {
+			isa = PBXGroup;
+			children = (
+				8644657A260F7953000851FC /* Test3TexureTest.swift */,
+			);
+			path = Texture;
 			sourceTree = "<group>";
 		};
 		864E267425F05DBE003F02E5 /* Test3 */ = {
@@ -294,6 +304,7 @@
 		869CA4EF25F1DB7C00CADC2F /* Render Layers */ = {
 			isa = PBXGroup;
 			children = (
+				8644657D260F7959000851FC /* Texture */,
 				862C153226042B6000D9D610 /* Map */,
 				869CA4C925F1B23100CADC2F /* Test3RenderLayer.swift */,
 				869891A225FB438E0064F967 /* Test3TestLayer.swift */,
@@ -541,6 +552,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8650B10F25F0386700B211E1 /* Engine2.swift in Sources */,
+				8644657B260F7953000851FC /* Test3TexureTest.swift in Sources */,
 				86ADAFA2256074D600A252A5 /* AppDelegate.swift in Sources */,
 				86ADAFCC256083A800A252A5 /* UIColor.swift in Sources */,
 				864E267C25F05DFE003F02E5 /* Test3.metal in Sources */,

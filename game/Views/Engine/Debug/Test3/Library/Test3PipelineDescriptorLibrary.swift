@@ -12,6 +12,7 @@ enum Test3RenderPipelineDescriptorTypes {
     case Map
     case MapMarchingSquares
     case Grid
+    case Texture
 }
 
 class Test3RenderPipelineDescriptorLibrary {
@@ -35,6 +36,7 @@ class Test3RenderPipelineDescriptorLibrary {
         renderPipelineDescriptors.updateValue(Test3Map_RenderPipelineDescriptor(), forKey: .Map)
         renderPipelineDescriptors.updateValue(Test3MapMarchingSquares_RenderPipelineDescriptor(), forKey: .MapMarchingSquares)
         renderPipelineDescriptors.updateValue(Test3Grid_RenderPipelineDescriptor(), forKey: .Grid)
+        renderPipelineDescriptors.updateValue(Test3Texture_RenderPipelineDescriptor(), forKey: .Texture)
     }
     
     public func descriptor(_ renderPipelineDescriptorType: Test3RenderPipelineDescriptorTypes) -> MTLRenderPipelineDescriptor {
@@ -92,5 +94,25 @@ public struct Test3Grid_RenderPipelineDescriptor: Test3RenderPipelineDescriptor 
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.Grid)
         renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.Grid)
+    }
+}
+
+public struct Test3Texture_RenderPipelineDescriptor: Test3RenderPipelineDescriptor {
+    var name: String = "Texture Render Pipeline Descriptor"
+    var renderPipelineDescriptor: MTLRenderPipelineDescriptor!
+    init(){
+        renderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        
+        renderPipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
+        renderPipelineDescriptor.colorAttachments[0].rgbBlendOperation = .add
+        renderPipelineDescriptor.colorAttachments[0].alphaBlendOperation = .add
+        renderPipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = .one
+        renderPipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
+        renderPipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        renderPipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        
+        renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        renderPipelineDescriptor.vertexFunction = Test3ShaderLibrary.Shared.vertex(.Texture)
+        renderPipelineDescriptor.fragmentFunction = Test3ShaderLibrary.Shared.fragment(.Texture)
     }
 }
