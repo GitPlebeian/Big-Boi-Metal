@@ -28,7 +28,7 @@ class Engine3: UIView {
     // Rendering
     private var metalLayer:                CAMetalLayer!
     private var clearingPipelineState:     MTLRenderPipelineState!
-    private var commandQueue:              MTLCommandQueue!
+    var commandQueue:              MTLCommandQueue!
     private var timer:                     CADisplayLink!
     private var shouldClear:               Bool = false
     
@@ -123,21 +123,24 @@ class Engine3: UIView {
         guard let drawable = metalLayer?.nextDrawable() else { return }
         let renderPassDescriptor = MTLRenderPassDescriptor()
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
-        renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(
-            red: clearColor[0],
-            green: clearColor[1],
-            blue: clearColor[2],
-            alpha: 0)
+        renderPassDescriptor.colorAttachments[0].loadAction = .load
 
         let commandBuffer = commandQueue.makeCommandBuffer()!
         
-        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
+        var renderEncoder: MTLRenderCommandEncoder?
         for layer in renderLayers {
-            layer.render(renderEncoder)
+            if layer.isCustomPass {
+                renderEncoder?.endEncoding()
+                renderEncoder = nil
+                layer.render(commandBuffer, drawable.texture)
+            } else {
+                if renderEncoder == nil {
+                    renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
+                }
+                layer.render(renderEncoder!)
+            }
         }
-        renderEncoder.endEncoding()
-        
+        renderEncoder?.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
     }
@@ -178,13 +181,13 @@ class Engine3: UIView {
         timer = CADisplayLink(target: self, selector: #selector(gameloop))
         timer.add(to: RunLoop.main, forMode: .default)
         
-        let upsTimer = Timer(timeInterval: 1 / TimeInterval(ups), repeats: true) { [weak self] (timer) in
-            guard let self = self else {
-                timer.invalidate()
-                return
-            }
-            self.update()
-        }
-        RunLoop.main.add(upsTimer, forMode: .common)
+//        let upsTimer = Timer(timeInterval: 1 / TimeInterval(ups), repeats: true) { [weak self] (timer) in
+//            guard let self = self else {
+//                timer.invalidate()
+//                return
+//            }
+//            self.update()
+//        }
+//        RunLoop.main.add(upsTimer, forMode: .common)
     }
 }

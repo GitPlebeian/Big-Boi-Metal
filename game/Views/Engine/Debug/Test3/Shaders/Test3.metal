@@ -95,25 +95,24 @@ fragment float4 test3_fragment_map(Test3ColoredVertex vert [[stage_in]])
 // MARK: Marching Squares
 
 vertex Test3ColoredVertex test3_vertex_map_marching_squares(constant packed_float2 *position [[buffer(0)]],
-                                           constant packed_float3 *color [[buffer(1)]],
-                                           constant packed_float2 &globalTransform [[buffer(2)]],
-                                           constant float         &scale [[buffer(3)]],
-                                           constant float         &screenWidth [[buffer(4)]],
-                                           constant float         &screenHeight [[buffer(5)]],
-                                           constant float         &cellSize [[buffer(6)]],
-                                           uint                   vid [[vertex_id]])
+                                                            constant packed_float3 *color [[buffer(1)]],
+                                                            constant float         &chunkSize [[buffer(2)]],
+                                                            constant float         &minX     [[buffer(3)]],
+                                                            constant float         &maxX     [[buffer(4)]],
+                                                            constant float         &minY     [[buffer(5)]],
+                                                            constant float         &maxY     [[buffer(6)]],
+                                                            uint                   vid [[vertex_id]])
 {
     Test3ColoredVertex vert;
-    
-    float positionX;
-    float positionY;
-    
-    positionX = position[vid].x * cellSize;
-    positionY = position[vid].y * cellSize;
-    vert.position = float4(positionX / screenWidth * 2 + (globalTransform.x * scale),
-                           positionY / screenHeight * 2 - (globalTransform.y * scale),
+
+    vert.position = float4((position[vid].x - minX) / (maxX - minX) * 2 - 1,
+                           (position[vid].y - minY) / (maxY - minY) * 2 - 1,
                            0,
-                           scale);
+                           1);
+//    vert.position = float4(position[vid].x,
+//                           position[vid].y,
+//                           0,
+//                           1);
     vert.color = float4(color[vid], 1);
     
     return vert;

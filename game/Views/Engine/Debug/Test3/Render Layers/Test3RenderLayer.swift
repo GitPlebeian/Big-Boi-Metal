@@ -10,6 +10,7 @@ import UIKit
 class Test3RenderLayer {
     
     var pipelineState: MTLRenderPipelineState!
+    var isCustomPass:  Bool = false
     
     init() {
         setPipelineState()
@@ -21,8 +22,9 @@ class Test3RenderLayer {
     // Update
     func update() {}
     
-    // setPiple
-    
     // Render
     func render(_ encoder: MTLRenderCommandEncoder) {}
+    
+    // Render
+    func render(_ commandBuffer: MTLCommandBuffer, _ drawableTexture: MTLTexture) {}
 }

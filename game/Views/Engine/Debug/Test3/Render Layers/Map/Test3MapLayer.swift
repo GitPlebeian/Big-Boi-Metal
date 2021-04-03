@@ -84,10 +84,10 @@ class Test3MapLayer: Test3RenderLayer {
     
     weak var controller: Test3GameController?
     
-    let chunkSize:   Int   = 48
+    let chunkSize:   Int   = 64
     let cellSize:    Float = 44
     var fadeInset:   Int = 0
-    var fadeLength:  Int = 20
+    var fadeLength:  Int = 0
     
     var vertices: [Float] = []
     var colors: [Float] = []
@@ -97,6 +97,12 @@ class Test3MapLayer: Test3RenderLayer {
     
     var vertexBuffer: MTLBuffer!
     var colorBuffer: MTLBuffer!
+    
+    var mapTexture: MTLTexture!
+    
+    // Debug
+    
+    var tappes: Int = 0
     
     // Perlin
     var noiseSource: GKNoiseSource
@@ -115,9 +121,9 @@ class Test3MapLayer: Test3RenderLayer {
                                               lacunarity: lacunarity,
                                               seed: seed)
         self.noiseSource = noiseSource
+        
         super.init()
         
-        setupImageRendering()
     }
     
     // MARK: Deinit
@@ -130,9 +136,10 @@ class Test3MapLayer: Test3RenderLayer {
     
     override func setPipelineState() {
         self.pipelineState = Test3RenderPipelineStateLibrary.shared.pipelineState(.MapMarchingSquares)
+        isCustomPass = true
     }
     
-    override func render(_ encoder: MTLRenderCommandEncoder) {
+    override func render(_ commandBuffer: MTLCommandBuffer, _ drawableTexture: MTLTexture) {
         
         
         guard let controller = controller else {return}
@@ -140,22 +147,89 @@ class Test3MapLayer: Test3RenderLayer {
         if vertices.count != 0 {
             // Render Marching Squares Map
             
-            encoder.setRenderPipelineState(pipelineState)
+//            var seeableXCells = Int((controller.view.width / controller.map.cellSize * controller.view.vertexScale).rounded(.up))
+//            var seeableYCells = Int((controller.view.height / controller.map.cellSize * controller.view.vertexScale).rounded(.up))
             
-            var transform = controller.view.vertexTransform
-            var scale     = controller.view.vertexScale
-            var width     = controller.view.width
-            var height    = controller.view.height
-            var gridSize  = self.cellSize
+            let drawableRenderPassDescriptor = MTLRenderPassDescriptor()
+            drawableRenderPassDescriptor.colorAttachments[0].texture = drawableTexture
+            drawableRenderPassDescriptor.colorAttachments[0].loadAction = .clear
+            drawableRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(
+                red: Double(UIColor.mapDarkSea.redValue),
+                green: Double(UIColor.mapDarkSea.greenValue),
+                blue: Double(UIColor.mapDarkSea.blueValue),
+                alpha: 0)
             
-            encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
-            encoder.setVertexBuffer(colorBuffer, offset: 0, index: 1)
-            encoder.setVertexBytes(&transform, length: 8, index: 2)
-            encoder.setVertexBytes(&scale, length: 4, index: 3)
-            encoder.setVertexBytes(&width, length: 4, index: 4)
-            encoder.setVertexBytes(&height, length: 4, index: 5)
-            encoder.setVertexBytes(&gridSize, length: 4, index: 6)
+            let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: drawableRenderPassDescriptor)!
+            
+            encoder.setRenderPipelineState(Test3RenderPipelineStateLibrary.shared.pipelineState(.Texture))
+            
+            let samplerDescriptor = MTLSamplerDescriptor()
+            samplerDescriptor.minFilter             = MTLSamplerMinMagFilter.nearest
+            samplerDescriptor.magFilter             = MTLSamplerMinMagFilter.nearest
+            samplerDescriptor.mipFilter             = MTLSamplerMipFilter.nearest
+            samplerDescriptor.maxAnisotropy         = 1
+            samplerDescriptor.sAddressMode          = MTLSamplerAddressMode.clampToEdge
+            samplerDescriptor.tAddressMode          = MTLSamplerAddressMode.clampToEdge
+            samplerDescriptor.rAddressMode          = MTLSamplerAddressMode.clampToEdge
+            samplerDescriptor.normalizedCoordinates = true
+            samplerDescriptor.lodMinClamp           = 0
+            samplerDescriptor.lodMaxClamp           = .greatestFiniteMagnitude
+            
+            let sampler = GraphicsDevice.Device.makeSamplerState(descriptor: samplerDescriptor)!
+            
+            var ratio: Float
+            
+            if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
+                ratio = Float(UIScreen.main.bounds.width / UIScreen.main.bounds.height)
+            } else {
+                ratio = Float(UIScreen.main.bounds.height / UIScreen.main.bounds.width)
+            }
+            
+            let vertices: [Float] = [-0.8 * ratio, 0.8, 0.8 * ratio, -0.8, -0.8 * ratio, -0.8,
+                                     0.8 * ratio, 0.8, 0.8 * ratio, -0.8, -0.8 * ratio, 0.8]
+//
+//            let vertices: [Float] = [-1, 1, 1, -1, -1, -1,
+//                                     1, 1, 1, -1, -1, 1]
+            
+//            let xCellDiff1 = (controller.view.height / controller.map.cellSize * controller.view.vertexScale).rounded(.down)
+//            let xCellDiff2 = controller.view.vertexTransform.0.remainder(dividingBy: xCellDiff1 * 2)
+//            let xCellDiff3 = 0.3
+//            let xCellDiff4 = 0.3
+//
+//            print(xCellDiff4)
+//
+//            let textureCords: [Float] = [0 + 0.1, 0, 1 - 0.1, 1, 0 + 0.1, 1,
+//                                         1 - 0.1, 0, 1 - 0.1, 1, 0 + 0.1, 0]
+            
+//            let textureCords: [Float] = [0, 0 + 0.1, 1, 1 - 0.1, 0, 1 - 0.1,
+//                                         1, 0 + 0.1, 1, 1 - 0.1, 0, 0 + 0.1]
+            
+            let textureCords: [Float] = [0, 0, 1, 1, 0, 1,
+                                         1, 0, 1, 1, 0, 0]
+            
+            let buffer = GraphicsDevice.Device.makeBuffer(bytes: vertices, length: vertices.count * 4, options: [])
+            let textureBuffer = GraphicsDevice.Device.makeBuffer(bytes: textureCords, length: textureCords.count * 4, options: [])
+            
+            encoder.setVertexBuffer(buffer, offset: 0, index: 0)
+            encoder.setVertexBuffer(textureBuffer, offset: 0, index: 1)
+            encoder.setFragmentTexture(mapTexture, index: 0)
+            encoder.setFragmentSamplerState(sampler, index: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertices.count / 2)
+            encoder.endEncoding()
+        } else {
+            // Clear Screen
+            let renderPassDescriptor = MTLRenderPassDescriptor()
+            renderPassDescriptor.colorAttachments[0].texture = drawableTexture
+            renderPassDescriptor.colorAttachments[0].loadAction = .clear
+            renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(
+                red: Double(UIColor.mapDarkSea.redValue),
+                green: Double(UIColor.mapDarkSea.greenValue),
+                blue: Double(UIColor.mapDarkSea.blueValue),
+                alpha: 0)
+            
+            let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
+            renderEncoder.setRenderPipelineState(Test3RenderPipelineStateLibrary.shared.pipelineState(.Basic))
+            renderEncoder.endEncoding()
         }
     }
     
@@ -174,22 +248,58 @@ class Test3MapLayer: Test3RenderLayer {
     // Add Chunk
     func addChunk(_ chunk: IntCordinate) {
         
-        if chunks[chunk] != nil {
-            if let indexOfChunk = selectedChunks.firstIndex(of: chunk) {
-                selectedChunks.remove(at: indexOfChunk)
-                tintChunkColors(color: UIColor.white, strength: 0.12, cordinate: chunk)
-            } else {
-                selectedChunks.append(chunk)
-                tintChunkColors(color: UIColor.white, strength: -0.12, cordinate: chunk)
-            }
-        } else {
-            let chunkAddress = ChunkAddress(chunk: chunk, index: chunks.count)
+        print("Adding Chunk: \(chunk)")
+        
+//        if chunks[chunk] != nil {
+////            if let indexOfChunk = selectedChunks.firstIndex(of: chunk) {
+////                selectedChunks.remove(at: indexOfChunk)
+////                tintChunkColors(color: UIColor.white, strength: 0.12, cordinate: chunk)
+////            } else {
+////                selectedChunks.append(chunk)
+////                tintChunkColors(color: UIColor.white, strength: -0.12, cordinate: chunk)
+////            }
+//        } else {
+//            let chunkAddress = ChunkAddress(chunk: chunk, index: chunks.count)
+//
+//            chunks[chunk] = chunkAddress
+//
+//            updateChunksForNewChunk(chunkAddress)
+//            updateMapBuffer()
+//        }
+        
+        switch tappes {
+        case 0:
+            let chunkAddress = ChunkAddress(chunk: IntCordinate(0, 0), index: chunks.count)
             
-            chunks[chunk] = chunkAddress
+            chunks[IntCordinate(0, 0)] = chunkAddress
             
             updateChunksForNewChunk(chunkAddress)
+            updateMapBuffer()
+//        case 1:
+//            let chunkAddress = ChunkAddress(chunk: IntCordinate(-1, 0), index: chunks.count)
+//
+//            chunks[IntCordinate(-1, 0)] = chunkAddress
+//
+//            updateChunksForNewChunk(chunkAddress)
+//            updateMapBuffer()
+        case 1:
+            let chunkAddress = ChunkAddress(chunk: IntCordinate(-1, -1), index: chunks.count)
+
+            chunks[IntCordinate(-1, -1)] = chunkAddress
+
+            updateChunksForNewChunk(chunkAddress)
+            updateMapBuffer()
+//        case 3:
+//            let chunkAddress = ChunkAddress(chunk: IntCordinate(0, -1), index: chunks.count)
+//
+//            chunks[IntCordinate(0, -1)] = chunkAddress
+//
+//            updateChunksForNewChunk(chunkAddress)
+//            updateMapBuffer()
+        default:
+            break
         }
-        updateMapBuffer()
+        tappes += 1
         
 //        let afterChunksCount = Float(chunks.count)
 //        let afterVertexCount = Float(vertexs.count)
@@ -380,60 +490,110 @@ class Test3MapLayer: Test3RenderLayer {
     
     // MARK: Helpers
     
-    // Setup Image Rendering
-    private func setupImageRendering() {
-//        let image = UIImage(named: "testSprite")!
-//
-//        let imageRef = image.cgImage!
-//        
-//        let width = imageRef.width
-//        let height = imageRef.height
-//        
-//        let bitsPerPixel = 4
-//        let bitsPerComponent = 8
-//        let bytesPerRow = width * bitsPerPixel
-//    
-//        let colorSpace = CGColorSpaceCreateDeviceRGB()
-//        
-//        let data = UnsafeMutableRawPointer.allocate(byteCount: height * width * 4, alignment: 0)
-//        
-//        let context = CGContext(data: data,
-//                                width: width,
-//                                height: height,
-//                                bitsPerComponent: bitsPerComponent,
-//                                bytesPerRow: bytesPerRow,
-//                                space: colorSpace,
-//                                bitmapInfo: CGImageAlphaInfo.last.rawValue)
-        
-        
-        
-//        CGColorSpaceRelease
-        
-        
-//        uint8_t *rawData = (uint8_t *)calloc(height * width * 4, sizeof(uint8_t));
-//        NSUInteger bytesPerPixel = 4;
-//        NSUInteger bytesPerRow = bytesPerPixel * width;
-//        NSUInteger bitsPerComponent = 8;
-//        CGContextRef context = CGBitmapContextCreate(rawData, width, height,
-//                                                     bitsPerComponent, bytesPerRow, colorSpace,
-//                                                     kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-//        CGColorSpaceRelease(colorSpace);
-//
-//        // Flip the context so the positive Y axis points down
-//        CGContextTranslateCTM(context, 0, height);
-//        CGContextScaleCTM(context, 1, -1);
-//
-//        CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
-//        CGContextRelease(context);
-    }
-    
     // Update Map Buffers
     private func updateMapBuffer() {
+        
         if vertices.count == 0 {
             return
         }
+        
+        var furthestLeftChunk: Int = Int.max
+        var furthestRightChunk: Int = Int.min
+        var lowestChunk: Int = Int.max
+        var highestChunk: Int = Int.min
+        
+        for keyValueChunk in chunks {
+            let cordinate = keyValueChunk.key
+            if cordinate.x < furthestLeftChunk {
+                furthestLeftChunk = cordinate.x
+            }
+            if cordinate.x > furthestRightChunk {
+                furthestRightChunk = cordinate.x
+            }
+            if cordinate.y < lowestChunk {
+                lowestChunk = cordinate.y
+            }
+            if cordinate.y > highestChunk {
+                highestChunk = cordinate.y
+            }
+        }
+        
+//        let widthb = furthestRightChunk - furthestLeftChunk + 1
+//        let heightb = highestChunk - lowestChunk + 1
+//
+        
+        
+        var lowestXTest1: Float = .infinity
+        var highestXTest1: Float = -.infinity
+        var lowestYTest1: Float = .infinity
+        var highestYTest1: Float = -.infinity
+        for vertex in 0..<vertices.count / 2 {
+            let x = vertices[vertex * 2]
+            let y = vertices[vertex * 2 + 1]
+            if x < lowestXTest1 {
+                lowestXTest1 = x
+            }
+            if x > highestXTest1 {
+                highestXTest1 = x
+            }
+            if y < lowestYTest1 {
+                lowestYTest1 = y
+            }
+            if y > highestYTest1 {
+                highestYTest1 = y
+            }
+        }
+//        print("Lowest X: \(lowestXTest1) Highest X: \(highestXTest1) LY: \(lowestYTest1) HY: \(highestYTest1)")
+        
+//        var newVertices: [Float] = []
+//
+//        for index in 0..<vertices.count / 2 {
+//            var x = vertices[index * 2]
+//            var y = vertices[index * 2 + 1]
+//
+//            if x < 0 {
+//
+//            }
+//
+//            x = (x - lowestXTest1) / (Float(highestXTest1) - lowestXTest1) * 2 - 1
+//            y = (y - lowestXTest1) / (Float(highestYTest1) - lowestXTest1) * 2 - 1
+//            newVertices.append(contentsOf: [x, y])
+//        }
+        
         vertexBuffer = GraphicsDevice.Device.makeBuffer(bytes: vertices, length: vertices.count * 4, options: [])
         colorBuffer = GraphicsDevice.Device.makeBuffer(bytes: colors, length: colors.count * 4, options: [])
+        
+        
+        guard let controller = controller else {return}
+        
+        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm, width: 64 * 4, height: 64 * 4, mipmapped: false)
+//            let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm, width: Int(controller.view.width), height: Int(controller.view.height), mipmapped: false)
+        textureDescriptor.usage = [.renderTarget, .shaderRead]
+        
+        mapTexture = GraphicsDevice.Device.makeTexture(descriptor: textureDescriptor)
+        
+        let commandBuffer = controller.view.engine.commandQueue.makeCommandBuffer()!
+        
+        let renderPassDescriptor = MTLRenderPassDescriptor()
+        renderPassDescriptor.colorAttachments[0].texture = mapTexture
+        
+        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
+        
+        renderEncoder.setRenderPipelineState(pipelineState)
+        
+        var chunkSize = Float(self.chunkSize)
+        
+        renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+        renderEncoder.setVertexBuffer(colorBuffer, offset: 0, index: 1)
+        renderEncoder.setVertexBytes(&chunkSize, length: 4, index: 2)
+        renderEncoder.setVertexBytes(&lowestXTest1, length: 4, index: 3)
+        renderEncoder.setVertexBytes(&highestXTest1, length: 4, index: 4)
+        renderEncoder.setVertexBytes(&lowestYTest1, length: 4, index: 5)
+        renderEncoder.setVertexBytes(&highestYTest1, length: 4, index: 6)
+        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertices.count / 2)
+        
+        renderEncoder.endEncoding()
+        commandBuffer.commit()
     }
     
     // Update Chunks

@@ -115,10 +115,6 @@ class GameView3: UIView {
         } else {
             scale = 1 / scale
         }
-//        if scale - previousVertexScale > 1 {
-//            scale = 1
-//            previousVertexScale = 0
-//        }
         
         scale = 1 - (1 - scale) * (1 - previousVertexScale)
         
@@ -132,6 +128,10 @@ class GameView3: UIView {
             
             vertexScale = scale - previousVertexScale
             
+            if vertexScale > 10 {
+                vertexScale = 10
+            }
+            
             let transform = getPointInCordinateSpace(point: location)
             
             let multiplier = 1 / vertexScale
@@ -140,7 +140,11 @@ class GameView3: UIView {
         }
         
         if pinchGesture.state == .ended {
-            previousVertexScale += 1 - scale
+            if vertexScale == 10 {
+                previousVertexScale = -10
+            } else {
+                previousVertexScale += 1 - scale
+            }
             previousVertexTransform.x = vertexTransform.0
             previousVertexTransform.y = vertexTransform.1
         }

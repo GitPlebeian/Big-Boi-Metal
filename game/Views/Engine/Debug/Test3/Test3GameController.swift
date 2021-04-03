@@ -29,7 +29,7 @@ class Test3GameController {
         grid.controller = self
         view.addLayer(map, atLayer: 0)
         view.addLayer(grid, atLayer: 1)
-        view.addLayer(textureTest, atLayer: 2)
+//        view.addLayer(textureTest, atLayer: 2)
     }
     
     // MARK: Deinit
@@ -51,6 +51,10 @@ class Test3GameController {
         let chunk = getCurrentChunk(location: FloatPoint(location))
         
         map.addChunk(chunk)
+        
+        let seeableXCells = view.width / map.cellSize * view.vertexScale * 2
+        
+        print("\nScale: \(view.vertexScale) || Seeable Cells: \(seeableXCells)")
     }
     
     

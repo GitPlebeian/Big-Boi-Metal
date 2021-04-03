@@ -286,7 +286,12 @@ extension Test3MapLayer {
                     if address.types[index + chunkSize + y + 2] == mapLevel { // Top Right
                         config += 4
                     }
-                    if materials.count > 2 {
+//                    if mapLevel == address.types[index + y] {
+//                        config = 15
+//                    } else {
+//                        config = 0
+//                    }
+                    if materials.count > 2 && false {
                         
                         var lowestLevel = CellType.allCases.last!
                         var highestLevel = CellType.allCases.first!
