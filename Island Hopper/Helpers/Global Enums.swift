@@ -1,0 +1,25 @@
+//
+//  Global Enums.swift
+//  Island Hopper
+//
+//  Created by Jackson Tubbs on 4/11/21.
+//
+
+import Foundation
+
+enum AnimationState {
+    case open
+    case closed
+    case animating
+}
+
+enum Direction {
+    case north
+    case west
+    case east
+    case south
+    case northWest
+    case northEast
+    case southEast
+    case southWest
+}

@@ -8,22 +8,78 @@
 
 /* Begin PBXBuildFile section */
 		864465B326191CF2000851FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465B226191CF2000851FC /* AppDelegate.swift */; };
-		864465B526191CF2000851FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465B426191CF2000851FC /* SceneDelegate.swift */; };
-		864465B726191CF2000851FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465B626191CF2000851FC /* ViewController.swift */; };
-		864465BA26191CF2000851FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 864465B826191CF2000851FC /* Main.storyboard */; };
 		864465BC26191CF3000851FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 864465BB26191CF3000851FC /* Assets.xcassets */; };
 		864465BF26191CF3000851FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 864465BD26191CF3000851FC /* LaunchScreen.storyboard */; };
+		864465D026191F4E000851FC /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465CF26191F4E000851FC /* InitialViewController.swift */; };
+		864465D426191FBF000851FC /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465D326191FBF000851FC /* UIColor.swift */; };
+		864465DC261920B1000851FC /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 864465D7261920B0000851FC /* Roboto-Black.ttf */; };
+		864465DD261920B1000851FC /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 864465D8261920B0000851FC /* Roboto-Medium.ttf */; };
+		864465DE261920B1000851FC /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 864465D9261920B1000851FC /* Roboto-Bold.ttf */; };
+		864465DF261920B1000851FC /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 864465DA261920B1000851FC /* Roboto-Regular.ttf */; };
+		864465E0261920B1000851FC /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 864465DB261920B1000851FC /* Roboto-Light.ttf */; };
+		864465E4261920F8000851FC /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465E3261920F8000851FC /* Text.swift */; };
+		864465EA26192237000851FC /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465E926192237000851FC /* Layout.swift */; };
+		864465EE26192A04000851FC /* EditMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465ED26192A04000851FC /* EditMapViewController.swift */; };
+		8644660A26192E46000851FC /* ChunkEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465F226192E46000851FC /* ChunkEditorView.swift */; };
+		8644660B26192E46000851FC /* ChunkFadeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465F326192E46000851FC /* ChunkFadeEditor.swift */; };
+		8644660C26192E46000851FC /* ChunkSeedEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465F426192E46000851FC /* ChunkSeedEditor.swift */; };
+		8644660D26192E46000851FC /* MapEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465F526192E46000851FC /* MapEditorView.swift */; };
+		8644660F26192E46000851FC /* PipelineDescriptorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465F926192E46000851FC /* PipelineDescriptorLibrary.swift */; };
+		8644661026192E46000851FC /* ShaderLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465FA26192E46000851FC /* ShaderLibrary.swift */; };
+		8644661126192E46000851FC /* PipelineStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465FB26192E46000851FC /* PipelineStateLibrary.swift */; };
+		8644661226192E46000851FC /* TestLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465FD26192E46000851FC /* TestLayer.swift */; };
+		8644661326192E46000851FC /* GridLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465FE26192E46000851FC /* GridLayer.swift */; };
+		8644661426192E46000851FC /* MapLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660026192E46000851FC /* MapLayer.swift */; };
+		8644661526192E46000851FC /* MapLayerMapTerrianGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660126192E46000851FC /* MapLayerMapTerrianGeneration.swift */; };
+		8644661626192E46000851FC /* RenderLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660226192E46000851FC /* RenderLayer.swift */; };
+		8644661726192E46000851FC /* TexureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660426192E46000851FC /* TexureTest.swift */; };
+		8644661826192E46000851FC /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660526192E46000851FC /* Engine.swift */; };
+		8644661926192E46000851FC /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8644660726192E46000851FC /* Shaders.metal */; };
+		8644661A26192E46000851FC /* MapEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660826192E46000851FC /* MapEditorController.swift */; };
+		8644661B26192E46000851FC /* Test3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660926192E46000851FC /* Test3.swift */; };
+		8644662226195242000851FC /* GraphicsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644662126195242000851FC /* GraphicsEngine.swift */; };
+		864466282619540A000851FC /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864466272619540A000851FC /* Types.swift */; };
+		8668945B2623B31E006B6B21 /* Global Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668945A2623B31E006B6B21 /* Global Enums.swift */; };
+		86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A40C8C26197E4700481FEF /* EngineTouchController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		864465AF26191CF2000851FC /* Island Hopper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Island Hopper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		864465B226191CF2000851FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		864465B426191CF2000851FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		864465B626191CF2000851FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		864465B926191CF2000851FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		864465BB26191CF3000851FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		864465BE26191CF3000851FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		864465C026191CF3000851FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		864465CF26191F4E000851FC /* InitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
+		864465D326191FBF000851FC /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		864465D7261920B0000851FC /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
+		864465D8261920B0000851FC /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		864465D9261920B1000851FC /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		864465DA261920B1000851FC /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		864465DB261920B1000851FC /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
+		864465E3261920F8000851FC /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		864465E926192237000851FC /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		864465ED26192A04000851FC /* EditMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMapViewController.swift; sourceTree = "<group>"; };
+		864465F226192E46000851FC /* ChunkEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChunkEditorView.swift; sourceTree = "<group>"; };
+		864465F326192E46000851FC /* ChunkFadeEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChunkFadeEditor.swift; sourceTree = "<group>"; };
+		864465F426192E46000851FC /* ChunkSeedEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChunkSeedEditor.swift; sourceTree = "<group>"; };
+		864465F526192E46000851FC /* MapEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEditorView.swift; sourceTree = "<group>"; };
+		864465F926192E46000851FC /* PipelineDescriptorLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PipelineDescriptorLibrary.swift; sourceTree = "<group>"; };
+		864465FA26192E46000851FC /* ShaderLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderLibrary.swift; sourceTree = "<group>"; };
+		864465FB26192E46000851FC /* PipelineStateLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PipelineStateLibrary.swift; sourceTree = "<group>"; };
+		864465FD26192E46000851FC /* TestLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLayer.swift; sourceTree = "<group>"; };
+		864465FE26192E46000851FC /* GridLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayer.swift; sourceTree = "<group>"; };
+		8644660026192E46000851FC /* MapLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLayer.swift; sourceTree = "<group>"; };
+		8644660126192E46000851FC /* MapLayerMapTerrianGeneration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLayerMapTerrianGeneration.swift; sourceTree = "<group>"; };
+		8644660226192E46000851FC /* RenderLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderLayer.swift; sourceTree = "<group>"; };
+		8644660426192E46000851FC /* TexureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TexureTest.swift; sourceTree = "<group>"; };
+		8644660526192E46000851FC /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		8644660726192E46000851FC /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		8644660826192E46000851FC /* MapEditorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEditorController.swift; sourceTree = "<group>"; };
+		8644660926192E46000851FC /* Test3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test3.swift; sourceTree = "<group>"; };
+		8644662126195242000851FC /* GraphicsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsEngine.swift; sourceTree = "<group>"; };
+		864466272619540A000851FC /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		8668945A2623B31E006B6B21 /* Global Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Enums.swift"; sourceTree = "<group>"; };
+		86A40C8C26197E4700481FEF /* EngineTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTouchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +112,171 @@
 		864465B126191CF2000851FC /* Island Hopper */ = {
 			isa = PBXGroup;
 			children = (
-				864465B226191CF2000851FC /* AppDelegate.swift */,
-				864465B426191CF2000851FC /* SceneDelegate.swift */,
-				864465B626191CF2000851FC /* ViewController.swift */,
-				864465B826191CF2000851FC /* Main.storyboard */,
-				864465BB26191CF3000851FC /* Assets.xcassets */,
-				864465BD26191CF3000851FC /* LaunchScreen.storyboard */,
-				864465C026191CF3000851FC /* Info.plist */,
+				8644662A26195420000851FC /* Core */,
+				8644661D26192E68000851FC /* Engine */,
+				864465F026192E46000851FC /* Test3 */,
+				864465CC26191EB8000851FC /* Storyboards */,
+				864465CE26191F2E000851FC /* View Controllers */,
+				864465E2261920EE000851FC /* Helpers */,
+				864465D226191FB3000851FC /* Extensions */,
+				864465C726191E6F000851FC /* Resources */,
 			);
 			path = "Island Hopper";
+			sourceTree = "<group>";
+		};
+		864465C726191E6F000851FC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				864465D626192094000851FC /* Fonts */,
+				864465B226191CF2000851FC /* AppDelegate.swift */,
+				864465BB26191CF3000851FC /* Assets.xcassets */,
+				864465C026191CF3000851FC /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		864465CC26191EB8000851FC /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				864465BD26191CF3000851FC /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		864465CE26191F2E000851FC /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				864465CF26191F4E000851FC /* InitialViewController.swift */,
+				8644662C26195486000851FC /* Edit Map */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		864465D226191FB3000851FC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				864465D326191FBF000851FC /* UIColor.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		864465D626192094000851FC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				864465D7261920B0000851FC /* Roboto-Black.ttf */,
+				864465D9261920B1000851FC /* Roboto-Bold.ttf */,
+				864465DB261920B1000851FC /* Roboto-Light.ttf */,
+				864465D8261920B0000851FC /* Roboto-Medium.ttf */,
+				864465DA261920B1000851FC /* Roboto-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		864465E2261920EE000851FC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				864465E3261920F8000851FC /* Text.swift */,
+				864465E926192237000851FC /* Layout.swift */,
+				8668945A2623B31E006B6B21 /* Global Enums.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		864465F026192E46000851FC /* Test3 */ = {
+			isa = PBXGroup;
+			children = (
+				8644660926192E46000851FC /* Test3.swift */,
+			);
+			path = Test3;
+			sourceTree = "<group>";
+		};
+		864465F126192E46000851FC /* Chunk Editor */ = {
+			isa = PBXGroup;
+			children = (
+				864465F226192E46000851FC /* ChunkEditorView.swift */,
+				864465F326192E46000851FC /* ChunkFadeEditor.swift */,
+				864465F426192E46000851FC /* ChunkSeedEditor.swift */,
+			);
+			path = "Chunk Editor";
+			sourceTree = "<group>";
+		};
+		864465F826192E46000851FC /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				864465FB26192E46000851FC /* PipelineStateLibrary.swift */,
+				864465F926192E46000851FC /* PipelineDescriptorLibrary.swift */,
+				864465FA26192E46000851FC /* ShaderLibrary.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		864465FF26192E46000851FC /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				8644660026192E46000851FC /* MapLayer.swift */,
+				8644660126192E46000851FC /* MapLayerMapTerrianGeneration.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		8644660326192E46000851FC /* Texture */ = {
+			isa = PBXGroup;
+			children = (
+				8644660426192E46000851FC /* TexureTest.swift */,
+			);
+			path = Texture;
+			sourceTree = "<group>";
+		};
+		8644661D26192E68000851FC /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				86A40C9C261A8E3100481FEF /* Shaders */,
+				86A40C93261A8C5500481FEF /* RenderLayers */,
+				8644662126195242000851FC /* GraphicsEngine.swift */,
+				8644660526192E46000851FC /* Engine.swift */,
+				86A40C8C26197E4700481FEF /* EngineTouchController.swift */,
+				864465F826192E46000851FC /* Library */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		8644662A26195420000851FC /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				864466272619540A000851FC /* Types.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8644662C26195486000851FC /* Edit Map */ = {
+			isa = PBXGroup;
+			children = (
+				864465ED26192A04000851FC /* EditMapViewController.swift */,
+				864465F526192E46000851FC /* MapEditorView.swift */,
+				8644660826192E46000851FC /* MapEditorController.swift */,
+				864465F126192E46000851FC /* Chunk Editor */,
+			);
+			path = "Edit Map";
+			sourceTree = "<group>";
+		};
+		86A40C93261A8C5500481FEF /* RenderLayers */ = {
+			isa = PBXGroup;
+			children = (
+				8644660226192E46000851FC /* RenderLayer.swift */,
+				864465FD26192E46000851FC /* TestLayer.swift */,
+				864465FE26192E46000851FC /* GridLayer.swift */,
+				864465FF26192E46000851FC /* Map */,
+				8644660326192E46000851FC /* Texture */,
+			);
+			path = RenderLayers;
+			sourceTree = "<group>";
+		};
+		86A40C9C261A8E3100481FEF /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				8644660726192E46000851FC /* Shaders.metal */,
+			);
+			path = Shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,9 +336,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				864465DF261920B1000851FC /* Roboto-Regular.ttf in Resources */,
+				864465DD261920B1000851FC /* Roboto-Medium.ttf in Resources */,
 				864465BF26191CF3000851FC /* LaunchScreen.storyboard in Resources */,
+				864465DE261920B1000851FC /* Roboto-Bold.ttf in Resources */,
+				864465E0261920B1000851FC /* Roboto-Light.ttf in Resources */,
 				864465BC26191CF3000851FC /* Assets.xcassets in Resources */,
-				864465BA26191CF2000851FC /* Main.storyboard in Resources */,
+				864465DC261920B1000851FC /* Roboto-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,23 +353,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				864465B726191CF2000851FC /* ViewController.swift in Sources */,
+				8644660B26192E46000851FC /* ChunkFadeEditor.swift in Sources */,
 				864465B326191CF2000851FC /* AppDelegate.swift in Sources */,
-				864465B526191CF2000851FC /* SceneDelegate.swift in Sources */,
+				8644660A26192E46000851FC /* ChunkEditorView.swift in Sources */,
+				8644661726192E46000851FC /* TexureTest.swift in Sources */,
+				8644660F26192E46000851FC /* PipelineDescriptorLibrary.swift in Sources */,
+				8644661326192E46000851FC /* GridLayer.swift in Sources */,
+				8644660C26192E46000851FC /* ChunkSeedEditor.swift in Sources */,
+				864465D426191FBF000851FC /* UIColor.swift in Sources */,
+				8644661B26192E46000851FC /* Test3.swift in Sources */,
+				8644661A26192E46000851FC /* MapEditorController.swift in Sources */,
+				8644661826192E46000851FC /* Engine.swift in Sources */,
+				86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */,
+				8644662226195242000851FC /* GraphicsEngine.swift in Sources */,
+				8644661426192E46000851FC /* MapLayer.swift in Sources */,
+				8644661026192E46000851FC /* ShaderLibrary.swift in Sources */,
+				864465EA26192237000851FC /* Layout.swift in Sources */,
+				8644661126192E46000851FC /* PipelineStateLibrary.swift in Sources */,
+				8644660D26192E46000851FC /* MapEditorView.swift in Sources */,
+				864465E4261920F8000851FC /* Text.swift in Sources */,
+				864465D026191F4E000851FC /* InitialViewController.swift in Sources */,
+				864465EE26192A04000851FC /* EditMapViewController.swift in Sources */,
+				8668945B2623B31E006B6B21 /* Global Enums.swift in Sources */,
+				864466282619540A000851FC /* Types.swift in Sources */,
+				8644661226192E46000851FC /* TestLayer.swift in Sources */,
+				8644661926192E46000851FC /* Shaders.metal in Sources */,
+				8644661526192E46000851FC /* MapLayerMapTerrianGeneration.swift in Sources */,
+				8644661626192E46000851FC /* RenderLayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		864465B826191CF2000851FC /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				864465B926191CF2000851FC /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		864465BD26191CF3000851FC /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -288,7 +520,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
-				INFOPLIST_FILE = "Island Hopper/Info.plist";
+				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,7 +540,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
-				INFOPLIST_FILE = "Island Hopper/Info.plist";
+				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
