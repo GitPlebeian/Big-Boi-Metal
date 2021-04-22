@@ -1,19 +1,22 @@
 //
-//  EditMapViewController.swift
+//  PlayViewController.swift
 //  Island Hopper
 //
-//  Created by Jackson Tubbs on 4/3/21.
+//  Created by Jackson Tubbs on 4/12/21.
 //
 
 import UIKit
 
-class EditMapViewController: UIViewController {
+class PlayViewController: UIViewController {
 
     // MARK: Properties
     
-    // MARK: Views
+    var mapURL: URL!
     
-    weak var mapEditorView:     MapEditorView!
+    // MARK: Subviews
+    
+    weak var playView: PlayMapView!
+    weak var backButton: UIButton!
     
     // MARK: Lifecycle
     
@@ -21,12 +24,6 @@ class EditMapViewController: UIViewController {
         super.viewDidLoad()
         
         setupViews()
-    }
-    
-    // MARK: Deinit
-    
-    deinit {
-        print("Edit Map View Controller Deinit")
     }
     
     // MARK: Actions
@@ -37,10 +34,9 @@ class EditMapViewController: UIViewController {
         selectionFeedback.selectionChanged()
         
         let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
-        let initialViewController = InitialViewController()
-        window?.rootViewController = initialViewController
+        let viewController = SelectMapViewController()
+        window?.rootViewController = viewController
     }
-    
     
     // MARK: Public
     
@@ -51,20 +47,18 @@ class EditMapViewController: UIViewController {
     private func setupViews() {
         
         view.backgroundColor = .background1
-
-        // Map Editor View
-        let mapEditorView = MapEditorView()
-        mapEditorView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(mapEditorView)
-        NSLayoutConstraint.activate([
-            mapEditorView.topAnchor.constraint(equalTo: view.topAnchor),
-            mapEditorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mapEditorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapEditorView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        self.mapEditorView = mapEditorView
         
-        // Back Button
+        let playView = PlayMapView(mapURL: mapURL)
+        playView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(playView)
+        NSLayoutConstraint.activate([
+            playView.topAnchor.constraint(equalTo: view.topAnchor),
+            playView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            playView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            playView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.playView = playView
+        
         let backButton = UIButton()
         backButton.backgroundColor = .primary
         backButton.layer.cornerRadius = 8
@@ -76,9 +70,10 @@ class EditMapViewController: UIViewController {
         view.addSubview(backButton)
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            backButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 8),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             backButton.widthAnchor.constraint(equalToConstant: 200),
             backButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+        self.backButton = backButton
     }
 }

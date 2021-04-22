@@ -3,13 +3,7 @@ import UIKit
 import Metal
 import GameKit
 
-struct Map: Codable {
-    let width:  Int
-    let height: Int
-    let types:  [UInt8]
-}
-
-enum CellType: UInt8, CaseIterable {
+enum TileType: Int, CaseIterable {
     case darkSea = 0
     case superDeepWater = 1
     case deepWater = 2
@@ -45,7 +39,7 @@ enum ChunkType: Int, CaseIterable {
 struct ChunkAddress {
     var chunk: IntCordinate
     var index: Int
-    var types: [CellType] = []
+    var types: [TileType] = []
     var neighbors: [IntCordinate : ChunkAddress] = [:]
     var vertexCount: Int = 0
     var colorCount: Int = 0
@@ -72,7 +66,7 @@ struct Cell {
     var y: Int
 }
 
-class MapLayer: RenderLayer {
+class EditMapLayer: RenderLayer {
     
     // MARK: Properties
     
@@ -183,27 +177,6 @@ class MapLayer: RenderLayer {
             updateChunksForNewChunk(chunkAddress)
         }
         updateMapBuffer()
-        
-//        let afterChunksCount = Float(chunks.count)
-//        let afterVertexCount = Float(vertexs.count)
-//        let afterVertexSizeKB = Float(vertexs.count * 4) / 1024
-//        let afterVertexSizeMB = Float(vertexs.count * 4) / 1024 / 1024
-//        let afterColorsSizeKB = Float(newColors.count * 4) / 1024
-//        let afterColorsSizeMB = Float(newColors.count * 4) / 1024 / 1024
-
-//        print("""
-//\n\nTotal Chunks:        \(afterChunksCount)
-//Chunk / Vertex Ratio:    \(afterVertexCount / afterChunksCount)
-//Chunk / Vertex Ratio KB: \(afterVertexSizeKB / afterChunksCount)
-//Chunk / Vertex Ratio MB: \(afterVertexSizeMB / afterChunksCount)
-//Chunk / Color  Ratio KB: \(afterColorsSizeKB / afterChunksCount)
-//Chunk / Color  Ratio MB: \(afterColorsSizeMB / afterChunksCount)
-//Chunk Vertex Count:      \(vertexs.count)
-//Chunk Triangle Count:    \(vertexs.count / 6)
-//Chunk Vertex Size KB:    \(afterVertexSizeKB)
-//Chunk Vertex Size MB:    \(afterVertexSizeMB)
-//Chunk Color Size MB:     \(afterColorsSizeMB)
-//""")
     }
     
     // Update Selected Chunks For Config
@@ -249,7 +222,7 @@ class MapLayer: RenderLayer {
     }
     
     // Get Type For Cell
-    func getTypeForCell(chunkCordinate: IntCordinate, cell: Cell) -> CellType? {
+    func getTypeForCell(chunkCordinate: IntCordinate, cell: Cell) -> TileType? {
         guard let chunk = chunks[chunkCordinate] else {return nil}
         let cellX = cell.x % chunkSize
         let cellY = cell.y % chunkSize
@@ -258,117 +231,151 @@ class MapLayer: RenderLayer {
     
     // Export Map
     func exportMap() {
-//
-//        if chunks.count == 0 {
-//            print("No chunks, can't export data")
-//            return
-//        }
-//
-//        var furthestLeftChunk: Int = Int.max
-//        var furthestRightChunk: Int = Int.min
-//        var lowestChunk: Int = Int.max
-//        var highestChunk: Int = Int.min
-//
-//        for keyValueChunk in chunks {
-//            let cordinate = keyValueChunk.key
-//            if cordinate.x < furthestLeftChunk {
-//                furthestLeftChunk = cordinate.x
-//            }
-//            if cordinate.x > furthestRightChunk {
-//                furthestRightChunk = cordinate.x
-//            }
-//            if cordinate.y < lowestChunk {
-//                lowestChunk = cordinate.y
-//            }
-//            if cordinate.y > highestChunk {
-//                highestChunk = cordinate.y
-//            }
-//        }
-//
-//        let width = furthestRightChunk - furthestLeftChunk + 1
-//        let height = highestChunk - lowestChunk + 1
-//
-//        var types: [UInt8] = []
-//
+
+        if chunks.count == 0 {
+            print("No chunks, can't export data")
+            return
+        }
+
+        var furthestLeftChunk: Int = Int.max
+        var furthestRightChunk: Int = Int.min
+        var lowestChunk: Int = Int.max
+        var highestChunk: Int = Int.min
+
+        for keyValueChunk in chunks {
+            let cordinate = keyValueChunk.key
+            if cordinate.x < furthestLeftChunk {
+                furthestLeftChunk = cordinate.x
+            }
+            if cordinate.x > furthestRightChunk {
+                furthestRightChunk = cordinate.x
+            }
+            if cordinate.y < lowestChunk {
+                lowestChunk = cordinate.y
+            }
+            if cordinate.y > highestChunk {
+                highestChunk = cordinate.y
+            }
+        }
+
+        let width = furthestRightChunk - furthestLeftChunk + 1
+        let height = highestChunk - lowestChunk + 1
+
+        var types: [Int] = []
+
 //        print("MAP: \(width) | \(height)")
-//
-//        let startingY = lowestChunk * chunkSize
-//        let endingY = (highestChunk + 1) * chunkSize
-//
-//        let startingX = furthestLeftChunk * chunkSize
-//        let endingX = (furthestRightChunk + 1) * chunkSize
-//
+
+        let startingY = lowestChunk * chunkSize
+        let endingY = (highestChunk + 1) * chunkSize
+
+        let startingX = furthestLeftChunk * chunkSize
+        let endingX = (furthestRightChunk + 1) * chunkSize
+
 //        print("Starting Y: \(startingY) | EndingY: \(endingY) | StartingX: \(startingX) | EndingX: \(endingX)")
-//
-//        for y in startingY..<endingY {
-//            for x in startingX..<endingX {
-//                var chunkX: Int
-//                var chunkY: Int
-//
-//                if x >= 0 {
-//                    chunkX = x / chunkSize
-//                    chunkY = y / chunkSize
-//                } else {
-//                    chunkX = (x - chunkSize + 1) / chunkSize
-//                    chunkY = (y - chunkSize + 1) / chunkSize
-//                }
-//
-//                var cellX = x
-//                if cellX < 0 {
-//                    cellX += 1
-//                    cellX *= -1
-//                    cellX %= chunkSize
-//                    cellX = chunkSize - cellX
-//                } else {
-//                    cellX %= chunkSize
-//                }
-//                var cellY = y
-//                if cellY < 0 {
-//                    cellY += 1
-//                    cellY *= -1
-//                    cellY %= chunkSize
-//                    cellY = chunkSize - cellY
-//                } else {
-//                    cellY %= chunkSize
-//                }
-//
-//                if let cellType = getTypeForCell(chunkCordinate: IntCordinate(chunkX, chunkY), cell: Cell(x: cellX, y: cellY)) {
-//                    types.append(cellType.rawValue)
-//                } else {
-//                    types.append(CellType.superDeepWater.rawValue)
-//                }
-//            }
-//        }
-//
-//        let map = Map(width: width, height: height, types: types)
+
+        for y in startingY..<endingY {
+            for x in startingX..<endingX {
+                var chunkX: Int
+                var chunkY: Int
+
+                if x >= 0 {
+                    chunkX = x / chunkSize
+                    chunkY = y / chunkSize
+                } else {
+                    chunkX = (x - chunkSize + 1) / chunkSize
+                    chunkY = (y - chunkSize + 1) / chunkSize
+                }
+
+                var cellX = x
+                if cellX < 0 {
+                    cellX += 1
+                    cellX *= -1
+                    cellX %= chunkSize
+                    cellX = chunkSize - cellX
+                } else {
+                    cellX %= chunkSize
+                }
+                var cellY = y
+                if cellY < 0 {
+                    cellY += 1
+                    cellY *= -1
+                    cellY %= chunkSize
+                    cellY = chunkSize - cellY
+                } else {
+                    cellY %= chunkSize
+                }
+
+                if let cellType = getTypeForCell(chunkCordinate: IntCordinate(chunkX, chunkY), cell: Cell(x: cellX, y: cellY)) {
+                    types.append(cellType.rawValue)
+                } else {
+                    types.append(TileType.superDeepWater.rawValue)
+                }
+            }
+        }
+
+        let map = MapSave(width: width, height: height, types: types)
         
-//        var pathOptional: URL?
-//        do {
-//            pathOptional = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-//        } catch let e {
-//            print(e)
-//        }
-//
-//        guard let path = pathOptional else {return}
+        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first!
+        var topController = keyWindow.rootViewController!
+        while let presentedViewController = topController.presentedViewController {
+            topController = presentedViewController
+        }
         
-//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//        let documentDirectory = paths[0]
-//        let fileName = "map\(width)x\(height).json"
-//        let fullURL = documentDirectory.appendingPathComponent(fileName)
-//
-//        let jsonEncoder = JSONEncoder()
-//        do {
-//            let data = try jsonEncoder.encode(map)
-//            try data.write(to: fullURL)
-//        } catch let e {
-//            print(e)
-//        }
-        
-//        guard let urls = FileManager.default.urls(for: .documentDirectory) else {return}
-//        
-//        for url in urls {
-//            print(url.lastPathComponent)
-//        }
+        let ac = UIAlertController(title: "Save Map", message: nil, preferredStyle: .alert)
+            ac.addTextField()
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned ac] _ in
+            guard let mapName = ac.textFields![0].text else {return}
+            let fileManager = FileManager.default
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            do {
+                let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+                // process files
+                for url in fileURLs {
+                    print(url.lastPathComponent)
+                    if mapName + ".json" == url.lastPathComponent {
+                        let alertController = UIAlertController(title: "Name Already Taken", message: nil, preferredStyle: .alert)
+                        let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                        alertController.addAction(ok)
+                        let override = UIAlertAction(title: "Override", style: .destructive) { (_) in
+                            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+                            let documentDirectory = paths[0]
+                            let fileName = "\(mapName).json"
+                            let fullURL = documentDirectory.appendingPathComponent(fileName)
+                            print("Writing To URL: \(fullURL)")
+                            let jsonEncoder = JSONEncoder()
+                            do {
+                                let data = try jsonEncoder.encode(map)
+                                try data.write(to: fullURL)
+                            } catch let e {
+                                print(e)
+                            }
+                        }
+                        alertController.addAction(override)
+                        topController.present(alertController, animated: true)
+                        return
+                    }
+                }
+                let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+                let documentDirectory = paths[0]
+                let fileName = "\(mapName).json"
+                let fullURL = documentDirectory.appendingPathComponent(fileName)
+                print("Writing To URL: \(fullURL)")
+                let jsonEncoder = JSONEncoder()
+                do {
+                    let data = try jsonEncoder.encode(map)
+                    try data.write(to: fullURL)
+                } catch let e {
+                    print(e)
+                }
+                
+            } catch {
+                print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+            }
+            
+        }
+        ac.addAction(submitAction)
+        topController.present(ac, animated: true)
     }
     
     // MARK: Helpers

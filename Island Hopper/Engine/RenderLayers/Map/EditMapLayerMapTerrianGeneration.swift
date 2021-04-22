@@ -2,10 +2,10 @@
 import UIKit
 import GameKit
 
-extension MapLayer {
+extension EditMapLayer {
     
     // Get Chunk Data
-    func getChunkData(_ chunkAddress: ChunkAddress) -> [CellType] {
+    func getChunkData(_ chunkAddress: ChunkAddress) -> [TileType] {
         
         let chunk = chunkAddress.chunk
         
@@ -22,7 +22,7 @@ extension MapLayer {
         
         let fadeLengthInset = fadeLength
         
-        var types: [CellType] = []
+        var types: [TileType] = []
         for y in 0..<chunkSize + 1 {
             for x in 0..<chunkSize + 1 {
                 
@@ -244,7 +244,7 @@ extension MapLayer {
             var chunkVertices: [Float] = []
             var chunkColors:   [Float] = []
             
-            for mapLevel in CellType.allCases {
+            for mapLevel in TileType.allCases {
                 
                 let layerColor = getColorForType(mapLevel)
                 for index in 0..<chunkSize * chunkSize {
@@ -254,7 +254,7 @@ extension MapLayer {
                     // Get Type
                     var config: Int8 = 0
                     
-                    var materials: [CellType] = []
+                    var materials: [TileType] = []
                     if !materials.contains(address.types[index + y]) {
                         materials.append(address.types[index + y])
                     }
@@ -282,8 +282,8 @@ extension MapLayer {
                     }
                     if materials.count > 2 {
                         
-                        var lowestLevel = CellType.allCases.last!
-                        var highestLevel = CellType.allCases.first!
+                        var lowestLevel = TileType.allCases.last!
+                        var highestLevel = TileType.allCases.first!
                         for material in materials {
                             if material.rawValue < lowestLevel.rawValue {
                                 lowestLevel = material
@@ -292,7 +292,7 @@ extension MapLayer {
                                 highestLevel = material
                             }
                         }
-                        var middleLevel: CellType = highestLevel
+                        var middleLevel: TileType = highestLevel
                         for material in materials {
                             if material != lowestLevel && material != highestLevel && material.rawValue < middleLevel.rawValue {
                                 middleLevel = material
@@ -337,8 +337,8 @@ extension MapLayer {
     }
     
     // Get Config For Multiple Materials
-    func getFillerForMultipleMaterials(fill:        CellType,
-                                       corners:     [CellType],
+    func getFillerForMultipleMaterials(fill:        TileType,
+                                       corners:     [TileType],
                                        chunk:       IntCordinate,
                                        index:       Int,
                                        layerColor:  UIColor) -> ([Float], [Float]) {
@@ -362,7 +362,7 @@ extension MapLayer {
             return ([], [])
         }
         // Whole Empty
-        var accountedTypes: [CellType] = []
+        var accountedTypes: [TileType] = []
         for cellType in corners {
             if !accountedTypes.contains(cellType) {
                 accountedTypes.append(cellType)
@@ -491,7 +491,7 @@ extension MapLayer {
     
     
     // Get Type For Float
-    func getTypeForFloat(_ number: Float) -> CellType {
+    func getTypeForFloat(_ number: Float) -> TileType {
         if number <= -0.99 {
             return .darkSea
         } else if number <= -0.8 {
@@ -522,7 +522,7 @@ extension MapLayer {
     }
     
     // Get Color For Type
-    func getColorForType(_ type: CellType) -> UIColor {
+    func getColorForType(_ type: TileType) -> UIColor {
         switch type {
         case .darkSea: return .mapDarkSea
         case .superDeepWater: return .mapSuperDeepWater

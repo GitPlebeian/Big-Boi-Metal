@@ -29,8 +29,8 @@
 		8644661126192E46000851FC /* PipelineStateLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465FB26192E46000851FC /* PipelineStateLibrary.swift */; };
 		8644661226192E46000851FC /* TestLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465FD26192E46000851FC /* TestLayer.swift */; };
 		8644661326192E46000851FC /* GridLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465FE26192E46000851FC /* GridLayer.swift */; };
-		8644661426192E46000851FC /* MapLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660026192E46000851FC /* MapLayer.swift */; };
-		8644661526192E46000851FC /* MapLayerMapTerrianGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660126192E46000851FC /* MapLayerMapTerrianGeneration.swift */; };
+		8644661426192E46000851FC /* EditMapLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660026192E46000851FC /* EditMapLayer.swift */; };
+		8644661526192E46000851FC /* EditMapLayerMapTerrianGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660126192E46000851FC /* EditMapLayerMapTerrianGeneration.swift */; };
 		8644661626192E46000851FC /* RenderLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660226192E46000851FC /* RenderLayer.swift */; };
 		8644661726192E46000851FC /* TexureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660426192E46000851FC /* TexureTest.swift */; };
 		8644661826192E46000851FC /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644660526192E46000851FC /* Engine.swift */; };
@@ -40,6 +40,13 @@
 		8644662226195242000851FC /* GraphicsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8644662126195242000851FC /* GraphicsEngine.swift */; };
 		864466282619540A000851FC /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864466272619540A000851FC /* Types.swift */; };
 		8668945B2623B31E006B6B21 /* Global Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668945A2623B31E006B6B21 /* Global Enums.swift */; };
+		866894642623CC3F006B6B21 /* SelectMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866894632623CC3F006B6B21 /* SelectMapViewController.swift */; };
+		866894672623CE8E006B6B21 /* SelectMapButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866894662623CE8E006B6B21 /* SelectMapButton.swift */; };
+		8668946A26252955006B6B21 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668946926252955006B6B21 /* PlayViewController.swift */; };
+		8668946E26252BB1006B6B21 /* PlayMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668946D26252BB1006B6B21 /* PlayMapView.swift */; };
+		8668947126252C79006B6B21 /* PlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668947026252C79006B6B21 /* PlayController.swift */; };
+		866894752625315A006B6B21 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866894742625315A006B6B21 /* Map.swift */; };
+		8668947B2625382B006B6B21 /* MapLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668947A2625382B006B6B21 /* MapLayer.swift */; };
 		86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A40C8C26197E4700481FEF /* EngineTouchController.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,8 +75,8 @@
 		864465FB26192E46000851FC /* PipelineStateLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PipelineStateLibrary.swift; sourceTree = "<group>"; };
 		864465FD26192E46000851FC /* TestLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLayer.swift; sourceTree = "<group>"; };
 		864465FE26192E46000851FC /* GridLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayer.swift; sourceTree = "<group>"; };
-		8644660026192E46000851FC /* MapLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLayer.swift; sourceTree = "<group>"; };
-		8644660126192E46000851FC /* MapLayerMapTerrianGeneration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLayerMapTerrianGeneration.swift; sourceTree = "<group>"; };
+		8644660026192E46000851FC /* EditMapLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMapLayer.swift; sourceTree = "<group>"; };
+		8644660126192E46000851FC /* EditMapLayerMapTerrianGeneration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMapLayerMapTerrianGeneration.swift; sourceTree = "<group>"; };
 		8644660226192E46000851FC /* RenderLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderLayer.swift; sourceTree = "<group>"; };
 		8644660426192E46000851FC /* TexureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TexureTest.swift; sourceTree = "<group>"; };
 		8644660526192E46000851FC /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
@@ -79,6 +86,13 @@
 		8644662126195242000851FC /* GraphicsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphicsEngine.swift; sourceTree = "<group>"; };
 		864466272619540A000851FC /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		8668945A2623B31E006B6B21 /* Global Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Enums.swift"; sourceTree = "<group>"; };
+		866894632623CC3F006B6B21 /* SelectMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMapViewController.swift; sourceTree = "<group>"; };
+		866894662623CE8E006B6B21 /* SelectMapButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMapButton.swift; sourceTree = "<group>"; };
+		8668946926252955006B6B21 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		8668946D26252BB1006B6B21 /* PlayMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayMapView.swift; sourceTree = "<group>"; };
+		8668947026252C79006B6B21 /* PlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayController.swift; sourceTree = "<group>"; };
+		866894742625315A006B6B21 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		8668947A2625382B006B6B21 /* MapLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLayer.swift; sourceTree = "<group>"; };
 		86A40C8C26197E4700481FEF /* EngineTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTouchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -146,6 +160,8 @@
 		864465CE26191F2E000851FC /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				866894622623CC31006B6B21 /* Select Map */,
+				866894612623CC28006B6B21 /* Play Map */,
 				864465CF26191F4E000851FC /* InitialViewController.swift */,
 				8644662C26195486000851FC /* Edit Map */,
 			);
@@ -213,8 +229,8 @@
 		864465FF26192E46000851FC /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				8644660026192E46000851FC /* MapLayer.swift */,
-				8644660126192E46000851FC /* MapLayerMapTerrianGeneration.swift */,
+				8644660026192E46000851FC /* EditMapLayer.swift */,
+				8644660126192E46000851FC /* EditMapLayerMapTerrianGeneration.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -257,6 +273,43 @@
 				864465F126192E46000851FC /* Chunk Editor */,
 			);
 			path = "Edit Map";
+			sourceTree = "<group>";
+		};
+		866894612623CC28006B6B21 /* Play Map */ = {
+			isa = PBXGroup;
+			children = (
+				8668946926252955006B6B21 /* PlayViewController.swift */,
+				8668946C26252B9D006B6B21 /* Play Map */,
+				86689479262537ED006B6B21 /* Render Layers */,
+			);
+			path = "Play Map";
+			sourceTree = "<group>";
+		};
+		866894622623CC31006B6B21 /* Select Map */ = {
+			isa = PBXGroup;
+			children = (
+				866894632623CC3F006B6B21 /* SelectMapViewController.swift */,
+				866894662623CE8E006B6B21 /* SelectMapButton.swift */,
+			);
+			path = "Select Map";
+			sourceTree = "<group>";
+		};
+		8668946C26252B9D006B6B21 /* Play Map */ = {
+			isa = PBXGroup;
+			children = (
+				8668946D26252BB1006B6B21 /* PlayMapView.swift */,
+				8668947026252C79006B6B21 /* PlayController.swift */,
+				866894742625315A006B6B21 /* Map.swift */,
+			);
+			path = "Play Map";
+			sourceTree = "<group>";
+		};
+		86689479262537ED006B6B21 /* Render Layers */ = {
+			isa = PBXGroup;
+			children = (
+				8668947A2625382B006B6B21 /* MapLayer.swift */,
+			);
+			path = "Render Layers";
 			sourceTree = "<group>";
 		};
 		86A40C93261A8C5500481FEF /* RenderLayers */ = {
@@ -353,23 +406,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				866894672623CE8E006B6B21 /* SelectMapButton.swift in Sources */,
 				8644660B26192E46000851FC /* ChunkFadeEditor.swift in Sources */,
 				864465B326191CF2000851FC /* AppDelegate.swift in Sources */,
 				8644660A26192E46000851FC /* ChunkEditorView.swift in Sources */,
 				8644661726192E46000851FC /* TexureTest.swift in Sources */,
 				8644660F26192E46000851FC /* PipelineDescriptorLibrary.swift in Sources */,
 				8644661326192E46000851FC /* GridLayer.swift in Sources */,
+				866894752625315A006B6B21 /* Map.swift in Sources */,
 				8644660C26192E46000851FC /* ChunkSeedEditor.swift in Sources */,
 				864465D426191FBF000851FC /* UIColor.swift in Sources */,
+				8668947126252C79006B6B21 /* PlayController.swift in Sources */,
+				8668946E26252BB1006B6B21 /* PlayMapView.swift in Sources */,
 				8644661B26192E46000851FC /* Test3.swift in Sources */,
 				8644661A26192E46000851FC /* MapEditorController.swift in Sources */,
 				8644661826192E46000851FC /* Engine.swift in Sources */,
 				86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */,
 				8644662226195242000851FC /* GraphicsEngine.swift in Sources */,
-				8644661426192E46000851FC /* MapLayer.swift in Sources */,
+				8644661426192E46000851FC /* EditMapLayer.swift in Sources */,
 				8644661026192E46000851FC /* ShaderLibrary.swift in Sources */,
+				8668946A26252955006B6B21 /* PlayViewController.swift in Sources */,
 				864465EA26192237000851FC /* Layout.swift in Sources */,
 				8644661126192E46000851FC /* PipelineStateLibrary.swift in Sources */,
+				8668947B2625382B006B6B21 /* MapLayer.swift in Sources */,
+				866894642623CC3F006B6B21 /* SelectMapViewController.swift in Sources */,
 				8644660D26192E46000851FC /* MapEditorView.swift in Sources */,
 				864465E4261920F8000851FC /* Text.swift in Sources */,
 				864465D026191F4E000851FC /* InitialViewController.swift in Sources */,
@@ -378,7 +438,7 @@
 				864466282619540A000851FC /* Types.swift in Sources */,
 				8644661226192E46000851FC /* TestLayer.swift in Sources */,
 				8644661926192E46000851FC /* Shaders.metal in Sources */,
-				8644661526192E46000851FC /* MapLayerMapTerrianGeneration.swift in Sources */,
+				8644661526192E46000851FC /* EditMapLayerMapTerrianGeneration.swift in Sources */,
 				8644661626192E46000851FC /* RenderLayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

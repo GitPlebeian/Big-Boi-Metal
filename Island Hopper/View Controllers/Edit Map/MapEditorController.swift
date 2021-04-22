@@ -14,7 +14,7 @@ class MapEditorController {
     weak var engine: Engine!
     weak var touchController: EngineTouchController!
     
-    var map: MapLayer
+    var map: EditMapLayer
 //    var testLayer: TestLayer = Test3TestLayer()
 //    var grid: GridLayer = Test3GridLayer()
 //    var textureTest: Test3TextureTest = Test3TextureTest()
@@ -27,7 +27,7 @@ class MapEditorController {
          touchController: EngineTouchController) {
         self.engine = engine
         self.touchController = touchController
-        self.map = MapLayer(touchController: touchController)
+        self.map = EditMapLayer(touchController: touchController)
         touchController.delegate = self
 //        map.controller = self
 //        grid.controller = self

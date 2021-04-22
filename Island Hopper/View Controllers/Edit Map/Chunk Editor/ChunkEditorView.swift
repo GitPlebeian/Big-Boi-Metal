@@ -7,7 +7,7 @@ class ChunkEditorView: UIView {
 
     var open: Bool = false
     
-    weak var map: MapLayer!
+    weak var map: EditMapLayer!
     weak var controller: MapEditorController!
     weak var editorView: MapEditorView!
     
@@ -27,7 +27,7 @@ class ChunkEditorView: UIView {
 
     // MARK: Init
 
-    init(map: MapLayer, editorView: MapEditorView) {
+    init(map: EditMapLayer, editorView: MapEditorView) {
 //        self.gameController = controller
 //        self.gameView = gameView
         self.editorView = editorView

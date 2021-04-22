@@ -43,7 +43,9 @@ class InitialViewController: UIViewController {
         let feedback = UISelectionFeedbackGenerator()
         feedback.selectionChanged()
         
-        
+        let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+        let selectMapViewController = SelectMapViewController()
+        window?.rootViewController = selectMapViewController
     }
     
     // MARK: Public

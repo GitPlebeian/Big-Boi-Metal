@@ -36,3 +36,17 @@ struct Cordinate {
     var x:     Float = 0
     var y:     Float = 0
 }
+
+struct MapSave: Codable {
+    let width:  Int
+    let height: Int
+    let types:  [Int]
+}
+
+struct GraphicTile {
+    
+}
+
+struct Animation {
+    
+}

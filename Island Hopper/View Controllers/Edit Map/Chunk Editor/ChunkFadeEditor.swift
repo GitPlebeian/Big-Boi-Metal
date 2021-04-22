@@ -4,7 +4,7 @@ class ChunkFadeEditor: UIView {
 
     // MARK: Properties
     
-    weak var map: MapLayer!
+    weak var map: EditMapLayer!
 
     // MARK: Views
 
@@ -18,7 +18,7 @@ class ChunkFadeEditor: UIView {
 
     // MARK: Init
 
-    init(map: MapLayer) {
+    init(map: EditMapLayer) {
         self.map = map
 
         super.init(frame: .zero)
