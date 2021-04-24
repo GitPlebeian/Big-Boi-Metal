@@ -67,6 +67,14 @@ public struct Map_RenderPipelineDescriptor: RenderPipelineDescriptor{
     init(){
         renderPipelineDescriptor = MTLRenderPipelineDescriptor()
         
+        renderPipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
+        renderPipelineDescriptor.colorAttachments[0].rgbBlendOperation = .add
+        renderPipelineDescriptor.colorAttachments[0].alphaBlendOperation = .add
+        renderPipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = .one
+        renderPipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
+        renderPipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        renderPipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = ShaderLibrary.Shared.vertex(.Map)
         renderPipelineDescriptor.fragmentFunction = ShaderLibrary.Shared.fragment(.Map)

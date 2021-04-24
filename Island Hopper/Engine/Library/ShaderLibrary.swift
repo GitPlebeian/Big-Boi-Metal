@@ -98,7 +98,7 @@ public struct Basic_FragmentShader: Shader {
 
 public struct Map_VertexShader: Shader {
     public var name: String = "Map Vertex Shader"
-    public var functionName: String = "test3_vertex_map"
+    public var functionName: String = "map_vertex"
     public var function: MTLFunction!
     init(library: MTLLibrary){
         function = library.makeFunction(name: functionName)
@@ -108,7 +108,7 @@ public struct Map_VertexShader: Shader {
 
 public struct Map_FragmentShader: Shader {
     public var name: String = "Map Fragment Shader"
-    public var functionName: String = "test3_fragment_map"
+    public var functionName: String = "map_fragment"
     public var function: MTLFunction!
     init(library: MTLLibrary){
         function = library.makeFunction(name: functionName)

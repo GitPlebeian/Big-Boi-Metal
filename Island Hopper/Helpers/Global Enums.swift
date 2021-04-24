@@ -23,3 +23,21 @@ enum Direction {
     case southEast
     case southWest
 }
+
+enum TileGraphicType {
+    case top
+    case right
+    case bottom
+    case left
+    case topRight
+    case bottomRight
+    case bottomLeft
+    case topLeft
+    case whole
+    case diagonalTRBL
+    case diagonalTLBR
+    case topRightMissing
+    case bottomRightMissing
+    case bottomLeftMissing
+    case topLeftMissing
+}

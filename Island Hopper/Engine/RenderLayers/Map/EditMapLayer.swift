@@ -313,7 +313,7 @@ class EditMapLayer: RenderLayer {
             }
         }
 
-        let map = MapSave(width: width, height: height, types: types)
+        let map = MapSave(width: width * chunkSize, height: height * chunkSize, types: types)
         
         let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first!
         var topController = keyWindow.rootViewController!

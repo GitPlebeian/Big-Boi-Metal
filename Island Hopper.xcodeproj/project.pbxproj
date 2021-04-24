@@ -47,6 +47,7 @@
 		8668947126252C79006B6B21 /* PlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668947026252C79006B6B21 /* PlayController.swift */; };
 		866894752625315A006B6B21 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866894742625315A006B6B21 /* Map.swift */; };
 		8668947B2625382B006B6B21 /* MapLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668947A2625382B006B6B21 /* MapLayer.swift */; };
+		8684051B2632926E000F3845 /* TileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8684051A2632926E000F3845 /* TileHelper.swift */; };
 		86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A40C8C26197E4700481FEF /* EngineTouchController.swift */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +94,7 @@
 		8668947026252C79006B6B21 /* PlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayController.swift; sourceTree = "<group>"; };
 		866894742625315A006B6B21 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		8668947A2625382B006B6B21 /* MapLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLayer.swift; sourceTree = "<group>"; };
+		8684051A2632926E000F3845 /* TileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileHelper.swift; sourceTree = "<group>"; };
 		86A40C8C26197E4700481FEF /* EngineTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTouchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -307,6 +309,7 @@
 		86689479262537ED006B6B21 /* Render Layers */ = {
 			isa = PBXGroup;
 			children = (
+				8684051A2632926E000F3845 /* TileHelper.swift */,
 				8668947A2625382B006B6B21 /* MapLayer.swift */,
 			);
 			path = "Render Layers";
@@ -420,6 +423,7 @@
 				8668946E26252BB1006B6B21 /* PlayMapView.swift in Sources */,
 				8644661B26192E46000851FC /* Test3.swift in Sources */,
 				8644661A26192E46000851FC /* MapEditorController.swift in Sources */,
+				8684051B2632926E000F3845 /* TileHelper.swift in Sources */,
 				8644661826192E46000851FC /* Engine.swift in Sources */,
 				86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */,
 				8644662226195242000851FC /* GraphicsEngine.swift in Sources */,
@@ -581,7 +585,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -601,7 +605,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

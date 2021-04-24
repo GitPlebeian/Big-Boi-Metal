@@ -15,6 +15,7 @@ class PlayController {
     weak var touchController: EngineTouchController!
     
     var mapLayer: MapLayer!
+    var gridLayer: GridLayer!
     
     // MARK: Init
     
@@ -25,8 +26,12 @@ class PlayController {
         self.engine = engine
         self.touchController = touchController
         self.map = loadMap(url: mapURL)
-        self.mapLayer = MapLayer(map: self.map)
+        self.mapLayer = MapLayer(map: self.map,
+                                 touchController: touchController)
+        self.gridLayer = GridLayer(map: mapLayer,
+                                   touchController: touchController)
         engine.addLayer(mapLayer, atLayer: 0)
+        engine.addLayer(gridLayer, atLayer: 1)
     }
     
     // MARK: Public
