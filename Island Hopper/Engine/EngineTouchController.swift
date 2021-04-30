@@ -27,7 +27,7 @@ class EngineTouchController: UIView {
     private var scaleStartLocation:        FloatPoint     = FloatPoint()
     
     // Bounds
-    var maxZoom: Float = 10
+    var maxZoom: Float = 50
     var minZoom: Float = 0.1
     var width: Float!
     var height: Float!

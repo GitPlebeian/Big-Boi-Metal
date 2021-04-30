@@ -205,23 +205,11 @@ vertex MapTextureVertex map_vertex(constant packed_float2 *posBuffer [[buffer(0)
                                    uint vid [[vertex_id]]) {
     MapTextureVertex vert;
     
-//    float positionX = posBuffer[vid].x;
-//    float positionY = posBuffer[vid].y;
-//
-//    positionX = vert.position.x * cellSize;
-//    positionY = vert.position.y * cellSize;
-//    vert.position = float4(positionX / screenWidth * 2 + (globalTransform.x * scale),
-//                           positionY / screenHeight * 2 - (globalTransform.y * scale),
-//                           0,
-//                           scale);
-//    vert.position = float4(positionX / screenWidth * 2,
-//                           positionY / screenHeight * 2,
-//                           0,
-//                           1);
     vert.position = float4(posBuffer[vid].x * cellSize / screenWidth * 2 + (globalTransform.x * scale),
                            posBuffer[vid].y * cellSize / screenHeight * 2 - (globalTransform.y * scale),
                            0,
                            scale);
+    
     vert.textureCords = texturePosBuffer[vid];
     return vert;
 }

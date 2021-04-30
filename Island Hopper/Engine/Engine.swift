@@ -32,8 +32,7 @@ class Engine: UIView {
                 width = Float(bounds.width)
                 height = Float(bounds.height)
                 setupViews()
-                didSetBounds = true
-            }
+                didSetBounds = true            }
         }
     }
     

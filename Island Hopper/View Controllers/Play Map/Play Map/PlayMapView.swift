@@ -55,7 +55,7 @@ class PlayMapView: UIView {
     
     private func setupViews() {
         
-        let engine = Engine(clearColor: .mapSuperDeepWater)
+        let engine = Engine(clearColor: .systemPink)
         engine.translatesAutoresizingMaskIntoConstraints = false
         addSubview(engine)
         NSLayoutConstraint.activate([

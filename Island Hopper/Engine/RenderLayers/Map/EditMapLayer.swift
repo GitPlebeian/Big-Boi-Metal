@@ -222,11 +222,20 @@ class EditMapLayer: RenderLayer {
     }
     
     // Get Type For Cell
-    func getTypeForCell(chunkCordinate: IntCordinate, cell: Cell) -> TileType? {
+    func getTypeForCell(chunkCordinate: IntCordinate, cell: Cell, exludeExtra: Bool) -> TileType? {
+        if cell.x == 48 {
+//            print("boi")
+        }
         guard let chunk = chunks[chunkCordinate] else {return nil}
-        let cellX = cell.x % chunkSize
-        let cellY = cell.y % chunkSize
-        return chunk.types[chunkSize * cellY + cellX]
+        if exludeExtra {
+            let cellX = cell.x % chunkSize
+            let cellY = cell.y % chunkSize
+            return chunk.types[chunkSize * cellY + cellX + cellY]
+        } else {
+            let cellX = cell.x % (chunkSize + 1)
+            let cellY = cell.y % (chunkSize + 1)
+            return chunk.types[(chunkSize + 1) * cellY + cellX]
+        }
     }
     
     // Export Map
@@ -273,46 +282,173 @@ class EditMapLayer: RenderLayer {
 
 //        print("Starting Y: \(startingY) | EndingY: \(endingY) | StartingX: \(startingX) | EndingX: \(endingX)")
 
-        for y in startingY..<endingY {
-            for x in startingX..<endingX {
-                var chunkX: Int
-                var chunkY: Int
+        for y in startingY...endingY {
+            for x in startingX...endingX {
+                var chunkX: Int!
+                var chunkY: Int!
 
                 if x >= 0 {
-                    chunkX = x / chunkSize
-                    chunkY = y / chunkSize
+                    if x == endingX {
+                        chunkX = x / (chunkSize + 1)
+                        if x == 0 {
+                            chunkX = -1
+                        }
+                    } else {
+                        chunkX = x / chunkSize
+                    }
                 } else {
-                    chunkX = (x - chunkSize + 1) / chunkSize
-                    chunkY = (y - chunkSize + 1) / chunkSize
+                    if x == endingX {
+                        chunkX = (x - chunkSize + 2) / (chunkSize + 1)
+                    } else {
+                        chunkX = (x - chunkSize + 1) / chunkSize
+                    }
+                }
+                if y >= 0 {
+                    if y == endingY {
+                        chunkY = y / (chunkSize + 1)
+                        if y == 0 {
+                            chunkY = -1
+                        }
+                    } else {
+                        chunkY = y / chunkSize
+                    }
+                } else {
+                    if y == endingY {
+                        chunkY = (y - chunkSize + 2) / (chunkSize + 1)
+                    } else {
+                        chunkY = (y - chunkSize + 1) / chunkSize
+                    }
                 }
 
                 var cellX = x
                 if cellX < 0 {
                     cellX += 1
                     cellX *= -1
-                    cellX %= chunkSize
-                    cellX = chunkSize - cellX
+                    if chunkX == furthestRightChunk {
+                        cellX %= (chunkSize + 1)
+                        cellX = chunkSize - cellX - 1
+                    } else {
+                        cellX %= chunkSize
+                        cellX = chunkSize - cellX
+                    }
                 } else {
-                    cellX %= chunkSize
+                    if cellX == endingX {
+                        cellX %= (chunkSize + 1)
+                    } else {
+                        cellX %= chunkSize
+                    }
+                    if chunkX == furthestRightChunk {
+                    } else {
+                        
+                    }
                 }
                 var cellY = y
                 if cellY < 0 {
                     cellY += 1
                     cellY *= -1
-                    cellY %= chunkSize
-                    cellY = chunkSize - cellY
+                    if chunkY == highestChunk {
+                        cellY %= (chunkSize + 1)
+                        cellY = chunkSize - cellY - 1
+                    } else {
+                        cellY %= chunkSize
+                        cellY = chunkSize - cellY
+                    }
                 } else {
-                    cellY %= chunkSize
+                    
+                    if cellY == endingY {
+                        cellY %= (chunkSize + 1)
+                    } else {
+                        cellY %= chunkSize
+                    }
                 }
-
-                if let cellType = getTypeForCell(chunkCordinate: IntCordinate(chunkX, chunkY), cell: Cell(x: cellX, y: cellY)) {
-                    types.append(cellType.rawValue)
+//                var cellType: TileType
+                if cellX == 48 {
+//                    print(cellX)
+                }
+//                var exludeExtra: Bool = false
+//                if chunkX == furthestRightChunk {
+//                    exludeExtra = true
+//                }
+                if x == 0 {
+                    print()
+                }
+//                print(types.append(chunks[IntCordinate(chunkX, chunkY)]!.types[chunkSize * cellY + cellX + cellY].rawValue), terminator: "")
+                if let chunk = chunks[IntCordinate(chunkX, chunkY)] {
+                    
+                    if chunkX == furthestRightChunk {
+//                        let cellX = cellX % chunkSize
+//                        let cellY = cell.y % chunkSize
+//
+                        types.append(chunk.types[chunkSize * cellY + cellX + cellY].rawValue)
+                        print(chunk.types[chunkSize * cellY + cellX + cellY].rawValue, terminator: "")
+                        if y > 11 && y < 70 && x > 13 && x < 80 && chunk.types[(chunkSize + 1) * cellY + cellX] == .darkSea {
+//                            print()
+                        }
+                    } else {
+//                        let cellX = cell.x % (chunkSize + 1)
+//                        let cellY = cell.y % (chunkSize + 1)
+                        types.append(chunk.types[(chunkSize + 1) * cellY + cellX].rawValue)
+                        print(chunk.types[(chunkSize + 1) * cellY + cellX].rawValue, terminator: "")
+                        if y > 11 && y < 70 && x > 13 && x < 80 && chunk.types[(chunkSize + 1) * cellY + cellX] == .darkSea {
+//                            print()
+                        }
+                    }
                 } else {
-                    types.append(TileType.superDeepWater.rawValue)
+                    types.append(TileType.darkSea.rawValue)
                 }
+                
+                
+//                if let cellType = getTypeForCell(chunkCordinate: IntCordinate(chunkX, chunkY), cell: Cell(x: cellX, y: cellY), exludeExtra: exludeExtra) {
+//                    if x == 48 {
+////                        print(cellType.rawValue)
+//                    }
+//                    types.append(cellType.rawValue)
+//                    if x == 0 {
+//                                                    print()
+//                    }
+//                                            print(cellType.rawValue, terminator: "")
+//                } else {
+//                    types.append(TileType.superDeepWater.rawValue)
+//                }
             }
         }
-
+        
+//        for (index, type) in chunks[IntCordinate(0, 0)]!.types.enumerated() {
+//            if sqrt(Double(chunkSize)) {
+//                print()
+//            }
+//            print(cellType.rawValue, terminator: "")
+//        }
+//
+//        var types: [Int] = []
+//        for xChunk in furthestLeftChunk...furthestRightChunk {
+//            for yChunk in lowestChunk...highestChunk {
+//                let noise = GKNoise(noiseSource)
+//
+//                noise.move(by: SIMD3<Double>(Double(xChunk), 0, Double(yChunk)))
+//
+//                let noiseMap = GKNoiseMap(noise,
+//                                          size: SIMD2<Double>(arrayLiteral: 1, 1),
+//                                          origin: SIMD2(arrayLiteral: 0, 0),
+//                                          sampleCount: SIMD2<Int32>(Int32(Int(chunkSize + 1)), Int32(chunkSize + 1)),
+//                                          seamless: true)
+//                for y in 0..<chunkSize + 1 {
+//                    for x in 0..<chunkSize + 1 {
+//                        let value = noiseMap.value(at: SIMD2<Int32>(Int32(x), Int32(y)))
+//                        let type = getTypeForFloat(value)
+//                        types.append(type.rawValue)
+//                    }
+//                }
+//            }
+//        }
+        
+//        var newTypes: [Int] = []
+//        for x in 0..<width * chunkSize {
+//            for y in 0..<height * chunkSize {
+//                let xIndex =
+//            }
+//        }
+//
         let map = MapSave(width: width * chunkSize, height: height * chunkSize, types: types)
         
         let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first!
