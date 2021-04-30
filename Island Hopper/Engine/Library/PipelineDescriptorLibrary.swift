@@ -13,6 +13,7 @@ enum RenderPipelineDescriptorTypes {
     case MapMarchingSquares
     case Grid
     case Texture
+    case MapMovable
 }
 
 class RenderPipelineDescriptorLibrary {
@@ -37,6 +38,7 @@ class RenderPipelineDescriptorLibrary {
         renderPipelineDescriptors.updateValue(MapMarchingSquares_RenderPipelineDescriptor(), forKey: .MapMarchingSquares)
         renderPipelineDescriptors.updateValue(Grid_RenderPipelineDescriptor(), forKey: .Grid)
         renderPipelineDescriptors.updateValue(Texture_RenderPipelineDescriptor(), forKey: .Texture)
+        renderPipelineDescriptors.updateValue(MapMovable_RenderPipelineDescriptor(), forKey: .MapMovable)
     }
     
     public func descriptor(_ renderPipelineDescriptorType: RenderPipelineDescriptorTypes) -> MTLRenderPipelineDescriptor {
@@ -122,5 +124,17 @@ public struct Texture_RenderPipelineDescriptor: RenderPipelineDescriptor {
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = ShaderLibrary.Shared.vertex(.Texture)
         renderPipelineDescriptor.fragmentFunction = ShaderLibrary.Shared.fragment(.Texture)
+    }
+}
+
+public struct MapMovable_RenderPipelineDescriptor: RenderPipelineDescriptor {
+    var name: String = "Map Movable Render Pipeline Descriptor"
+    var renderPipelineDescriptor: MTLRenderPipelineDescriptor!
+    init(){
+        renderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        
+        renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        renderPipelineDescriptor.vertexFunction = ShaderLibrary.Shared.vertex(.MapMovable)
+        renderPipelineDescriptor.fragmentFunction = ShaderLibrary.Shared.fragment(.MapMovable)
     }
 }

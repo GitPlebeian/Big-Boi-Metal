@@ -29,7 +29,7 @@ extension EditMapLayer {
                 var value = noiseMap.value(at: SIMD2<Int32>(Int32(x), Int32(y)))
                 let inverseX = chunkSize - x
                 let inverseY = chunkSize - y
-                
+
                 if chunkAddress.type == .fadeNorth {
                     let multiplier = -2 * Float(chunkSize - inverseY) / Float(chunkSize)
                     value += multiplier

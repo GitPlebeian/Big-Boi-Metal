@@ -9,6 +9,7 @@ import MetalKit
 
 enum VertexShaderTypes {
     case Map
+    case MapMovable
     case MapMarchingSquares
     case Basic
     case Grid
@@ -17,6 +18,7 @@ enum VertexShaderTypes {
 
 enum FragmentShaderTypes {
     case Map
+    case MapMovable
     case MapMarchingSquares
     case Basic
     case Grid
@@ -50,6 +52,7 @@ class ShaderLibrary {
         vertexShaders.updateValue(Map_VertexShaderMarchingSquares(library: defaultLibrary), forKey: .MapMarchingSquares)
         vertexShaders.updateValue(Grid_VertexShader(library: defaultLibrary), forKey: .Grid)
         vertexShaders.updateValue(Texture_VertexShader(library: defaultLibrary), forKey: .Texture)
+        vertexShaders.updateValue(MapMovableTexture_VertexShader(library: defaultLibrary), forKey: .MapMovable)
         
         //Fragment Shaders
         fragmentShaders.updateValue(Basic_FragmentShader(library: defaultLibrary), forKey: .Basic)
@@ -57,7 +60,7 @@ class ShaderLibrary {
         fragmentShaders.updateValue(Map_FragmentShaderMarchingSquares(library: defaultLibrary), forKey: .MapMarchingSquares)
         fragmentShaders.updateValue(Grid_FragmentShader(library: defaultLibrary), forKey: .Grid)
         fragmentShaders.updateValue(Texture_FragmentShader(library: defaultLibrary), forKey: .Texture)
-        
+        fragmentShaders.updateValue(MapMovableTexture_FragmentShader(library: defaultLibrary), forKey: .MapMovable)
     }
     
     public func vertex(_ vertexShaderType: VertexShaderTypes) -> MTLFunction {
@@ -169,6 +172,26 @@ public struct Texture_VertexShader: Shader {
 public struct Texture_FragmentShader: Shader {
     public var name: String = "Texture Fragment Shader"
     public var functionName: String = "test3_fragment_texture"
+    public var function: MTLFunction!
+    init(library: MTLLibrary){
+        function = library.makeFunction(name: functionName)
+        function?.label = name
+    }
+}
+
+public struct MapMovableTexture_VertexShader: Shader {
+    public var name: String = "Texture Vertex Shader"
+    public var functionName: String = "mapMovableTexture_vertex"
+    public var function: MTLFunction!
+    init(library: MTLLibrary){
+        function = library.makeFunction(name: functionName)
+        function?.label = name
+    }
+}
+
+public struct MapMovableTexture_FragmentShader: Shader {
+    public var name: String = "Texture Fragment Shader"
+    public var functionName: String = "mapMovableTexture_fragment"
     public var function: MTLFunction!
     init(library: MTLLibrary){
         function = library.makeFunction(name: functionName)

@@ -14,7 +14,7 @@ struct Test3ColoredVertex{
     float4 color;
 };
 
-struct Test3TextureVertex {
+struct TextureVertex {
     float4 position [[position]];
     float2 textureCords;
 };
@@ -167,11 +167,11 @@ fragment float4 test3_fragment_grid(Test3ColoredVertex vert [[stage_in]])
 
 // MARK: Texture
 
-vertex Test3TextureVertex test3_vertex_texture(constant packed_float2 *position [[buffer(0)]],
+vertex TextureVertex test3_vertex_texture(constant packed_float2 *position [[buffer(0)]],
                                                constant packed_float2 *textureCords [[buffer(1)]],
                                             uint                   vid [[vertex_id]])
 {
-    Test3TextureVertex vert;
+    TextureVertex vert;
 
     vert.position = float4(position[vid].x,
                   position[vid].y,
@@ -182,16 +182,47 @@ vertex Test3TextureVertex test3_vertex_texture(constant packed_float2 *position 
     return vert;
 }
 
-fragment float4 test3_fragment_texture(Test3TextureVertex vert [[stage_in]],
-                                       texture2d<float>  tex2D     [[ texture(0) ]],
-                                       sampler           sampler2D [[ sampler(0) ]]) {
+fragment float4 test3_fragment_texture(TextureVertex vert [[stage_in]],
+                                       texture2d<float>  tex2D     [[ texture(0) ]]) {
+//                                       sampler           sampler2D [[ sampler(0) ]]) {
     
     float2 interpolated = float2(vert.textureCords.x, vert.textureCords.y);
     
-    float4 color = tex2D.sample(sampler2D, interpolated);
+    float4 color = tex2D.sample(BasicSampler, interpolated);
     return color;
 }
 
+
+// MARK: Map Movable Texture
+
+vertex TextureVertex mapMovableTexture_vertex(constant packed_float2 *posBuffer [[buffer(0)]],
+                                              constant packed_float2 *texturePosBuffer [[buffer(1)]],
+                                              constant packed_float2 &globalTransform [[buffer(2)]],
+                                              constant float         &scale [[buffer(3)]],
+                                              constant float         &screenWidth [[buffer(4)]],
+                                              constant float         &screenHeight [[buffer(5)]],
+                                              constant float         &cellSize [[buffer(6)]],
+                                              uint vid [[vertex_id]]) {
+    TextureVertex vert;
+    
+//    vert.position = float4(posBuffer[vid].x * cellSize / screenWidth * 2 + (globalTransform.x * scale),
+//                           posBuffer[vid].y * cellSize / screenHeight * 2 - (globalTransform.y * scale),
+//                           0,
+//                           scale);
+    vert.position = float4(posBuffer[vid].x + globalTransform.x * scale,
+                           posBuffer[vid].y - globalTransform.y * scale,
+                           0,
+                           scale);
+    
+    vert.textureCords = texturePosBuffer[vid];
+    return vert;
+}
+
+fragment float4 mapMovableTexture_fragment(TextureVertex    vert    [[stage_in]],
+                                           texture2d<float> texture [[texture(0)]]) {
+    float4 color = texture.sample(BasicSampler, vert.textureCords);
+    return color;
+}
 
 // MARK: Map Texture
 
@@ -205,10 +236,14 @@ vertex MapTextureVertex map_vertex(constant packed_float2 *posBuffer [[buffer(0)
                                    uint vid [[vertex_id]]) {
     MapTextureVertex vert;
     
-    vert.position = float4(posBuffer[vid].x * cellSize / screenWidth * 2 + (globalTransform.x * scale),
-                           posBuffer[vid].y * cellSize / screenHeight * 2 - (globalTransform.y * scale),
+//    vert.position = float4(posBuffer[vid].x * cellSize / screenWidth * 2 + (globalTransform.x * scale),
+//                           posBuffer[vid].y * cellSize / screenHeight * 2 - (globalTransform.y * scale),
+//                           0,
+//                           scale);
+    vert.position = float4(posBuffer[vid].x,
+                           posBuffer[vid].y,
                            0,
-                           scale);
+                           1);
     
     vert.textureCords = texturePosBuffer[vid];
     return vert;
