@@ -31,7 +31,7 @@ class PlayController {
         self.gridLayer = GridLayer(map: mapLayer,
                                    touchController: touchController)
         engine.addLayer(mapLayer, atLayer: 0)
-//        engine.addLayer(gridLayer, atLayer: 1)
+        engine.addLayer(gridLayer, atLayer: 1)
     }
     
     // MARK: Public

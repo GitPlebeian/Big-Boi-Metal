@@ -77,7 +77,6 @@ class MapLayer: RenderLayer {
         encoder.setVertexBytes(&gridSize, length: 4, index: 6)
         encoder.setFragmentTexture(mapTexture, index: 0)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
-        
     }
     
     // MARK: Public
@@ -104,12 +103,57 @@ class MapLayer: RenderLayer {
             xFloat = xFloat * xStep - 1
             yFloat = yFloat * yStep - 1
 
-            let result = getTextureCordsAndVerticesCountForCorners(corners: [map.tiles[index + y],
-                                                                             map.tiles[index + y + 1],
-                                                                             map.tiles[index + y + map.width + 1],
-                                                                             map.tiles[index + y + map.width + 2]])
+            let corners = [map.tiles[index + y],
+                           map.tiles[index + y + 1],
+                           map.tiles[index + y + map.width + 1],
+                           map.tiles[index + y + map.width + 2]]
+            
+            let result = getTextureCordsAndVerticesCountForCorners(corners: corners)
+            
+            let cornersSorted = corners.sorted { (left, right) -> Bool in
+                return left.rawValue < right.rawValue
+            }
+            
+            var sortedUniqueCorners: [TileType] = []
+            
+            for corner in cornersSorted {
+                if !sortedUniqueCorners.contains(corner) {
+                    sortedUniqueCorners.append(corner)
+                }
+            }
+            
+            var fillerMaterialCords: [Float] = []
+            var fillerMaterialType: TileGraphicFillerType!
+            var middleLevelOptional: TileType!
+//            var middleInsertIndex: Int!
+            if sortedUniqueCorners.count > 2 {
+                if sortedUniqueCorners.count == 3 {
+//                    middleInsertIndex = 1
+                    middleLevelOptional = sortedUniqueCorners[1]
+                } else {
+//                    middleInsertIndex = 2
+                    middleLevelOptional = sortedUniqueCorners[2]
+                }
+            }
+            
+            for sortedCorner in sortedUniqueCorners {
+                if let middleLevel = middleLevelOptional {
+                    if middleLevel == sortedCorner {
+                        let fillerResult = getFillerMaterialTextureCords(corners: corners, filler: middleLevel)
+                        fillerMaterialCords.append(contentsOf: fillerResult.0)
+                        fillerMaterialType = fillerResult.1
+                    }
+                }
+            }
             
             textureCords.append(contentsOf: result.1)
+            textureCords.append(contentsOf: fillerMaterialCords)
+//            for index in 0..<result.1.count {
+//                if middleInsertIndex == index {
+//
+//                }
+//                textureCo
+//            }
             for _ in 0..<result.0 {
                 vertexCords.append(contentsOf: [xFloat, yFloat + yStep,
                                                 xFloat + xStep, yFloat + yStep,
@@ -118,6 +162,40 @@ class MapLayer: RenderLayer {
                                                 xFloat + xStep, yFloat,
                                                 xFloat, yFloat])
             }
+            if fillerMaterialCords.count > 0 {
+                var x1ModOptional: Float?
+                var x2ModOptional: Float?
+                var y1ModOptional: Float?
+                var y2ModOptional: Float?
+                switch fillerMaterialType {
+                case .top: y2ModOptional = yStep / 2
+                default:
+                    break
+                }
+                var x1Mod: Float = 0
+                if x1ModOptional != nil {
+                    x1Mod = x1ModOptional!
+                }
+                var x2Mod: Float = 0
+                if x2ModOptional != nil {
+                    x2Mod = x2ModOptional!
+                }
+                var y1Mod: Float = 0
+                if y1ModOptional != nil {
+                    y1Mod = y1ModOptional!
+                }
+                var y2Mod: Float = 0
+                if y2ModOptional != nil {
+                    y2Mod = y2ModOptional!
+                }
+                vertexCords.append(contentsOf: [xFloat + x1Mod, yFloat + yStep + y1Mod,
+                                                xFloat + xStep + x2Mod, yFloat + yStep + y1Mod,
+                                                xFloat + x1Mod, yFloat + y2Mod,
+                                                xFloat + xStep + x2Mod, yFloat + yStep + y1Mod,
+                                                xFloat + xStep + x2Mod, yFloat + y2Mod,
+                                                xFloat + x1Mod, yFloat + y2Mod])
+            }
+            
 
         }
 
@@ -191,16 +269,6 @@ class MapLayer: RenderLayer {
                 sortedUniqueCorners.append(corner)
             }
         }
-        
-        if sortedUniqueCorners.count > 2 {
-            var middleLevel: TileType!
-            if sortedUniqueCorners.count == 3 {
-                middleLevel = sortedUniqueCorners[1]
-            } else {
-                middleLevel = sortedUniqueCorners[2]
-            }
-            tilesToAdd.append((middleLevel, .whole))
-        }
 
         for sortedCorner in sortedUniqueCorners {
             tilesToAdd.append((sortedCorner, getGraphicsTypeForCorners(targetType: sortedCorner, corners: corners)))
@@ -210,8 +278,77 @@ class MapLayer: RenderLayer {
             let cordinate = TileHelper.getTileForDirection(tile: tileToAdd.0, graphicType: tileToAdd.1)
             textureCords.append(contentsOf: getTextureCordsForCell(x: cordinate.x, y: cordinate.y))
         }
-        
         return (tilesToAdd.count, textureCords)
+    }
+    
+    // Get Filler Material Texture Cords
+    private func getFillerMaterialTextureCords(corners: [TileType], filler: TileType) -> ([Float], TileGraphicFillerType?) {
+//        if accountedTypes.count == 4 {
+//            let vertices: [Float] = [tmx, tmy,
+//                                     mrx, mry,
+//                                     bmx, bmy,
+//                                     tmx, tmy,
+//                                     bmx, bmy,
+//                                     mlx, mly]
+//            var colors: [Float] = []
+//
+//            for _ in 0..<vertices.count / 2 {
+//                colors.append(contentsOf: [Float(layerColor.redValue),
+//                                           Float(layerColor.greenValue),
+//                                           Float(layerColor.blueValue)])
+//            }
+//            return (vertices,
+//                    colors)
+//        }
+        var textureCords: [Float] = []
+        for (index, cellType) in corners.enumerated() {
+            var forwardIndex = index + 1
+            if forwardIndex == corners.count {
+                forwardIndex = 0
+            }
+            if cellType == corners[forwardIndex] && index == 0 {
+                return (getTextureCordsForFillerType(fillerType: .top, tileType: filler), .top)
+            } else {
+                return ([], nil)
+            }
+        }
+        return (textureCords, nil)
+    }
+    
+    // Get Texture Cords For Filler Type
+    private func getTextureCordsForFillerType(fillerType: TileGraphicFillerType, tileType: TileType) -> [Float] {
+        
+        let tileXStep = 16 / Float(terrainTileTexture.width)
+        let tileYStep = 16 / Float(terrainTileTexture.height)
+        let tileXHalfStep = 8 / Float(terrainTileTexture.width)
+        let tileYHalfStep = 8 / Float(terrainTileTexture.height)
+        
+        let x1: Float
+        let y1: Float
+        let x2: Float
+        let y2: Float
+        
+        switch tileType {
+        case .mountain3:
+            switch fillerType {
+            case .top:
+                x1 = tileXStep * 13
+                x2 = x1 + tileXStep
+                y1 = tileYStep * 11
+                y2 = y1 + tileYHalfStep
+            default:
+                return []
+            }
+        default:
+            return []
+        }
+        
+        return [x1, y1,
+                x2, y1,
+                x1, y2,
+                x2, y1,
+                x2, y2,
+                x1, y2]
     }
     
     // Get Graphics Type For Corners

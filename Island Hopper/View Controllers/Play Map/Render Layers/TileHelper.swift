@@ -269,6 +269,6 @@ class TileHelper {
             }
         }
         
-        return IntCordinate(0, 16)
+//        return IntCordinate(0, 16)
     }
 }

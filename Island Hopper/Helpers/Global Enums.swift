@@ -24,6 +24,14 @@ enum Direction {
     case southWest
 }
 
+enum TileGraphicFillerType {
+    case top
+    case right
+    case bottom
+    case left
+    case whole
+}
+
 enum TileGraphicType {
     case top
     case right
