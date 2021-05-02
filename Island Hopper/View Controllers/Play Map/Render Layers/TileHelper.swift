@@ -11,8 +11,6 @@ class TileHelper {
     
     static func getTileForDirection(tile: TileType, graphicType: TileGraphicType) -> IntCordinate {
         
-        
-        
         switch tile {
         case .beach:
             switch graphicType {
@@ -268,7 +266,102 @@ class TileHelper {
             case .diagonalTLBR: return IntCordinate(8, 4)
             }
         }
+    }
+    
+    // Get Texture Cords For Filler Type
+    static func getTextureCordsForFillerType(fillerType: TileGraphicFillerType,
+                                              tileType: TileType,
+                                              textureMapWidth: Int,
+                                              textureMapHeight: Int) -> [Float] {
         
-//        return IntCordinate(0, 16)
+        var tileXPos: Float
+        var tileYPos: Float
+        
+        switch tileType {
+        case .darkSea:
+            tileXPos = 9
+            tileYPos = 10
+        case .superDeepWater:
+            tileXPos = 10
+            tileYPos = 10
+        case .deepWater:
+            tileXPos = 11
+            tileYPos = 10
+        case .water:
+            tileXPos = 12
+            tileYPos = 10
+        case .shallowWater:
+            tileXPos = 13
+            tileYPos = 10
+        case .beach:
+            tileXPos = 14
+            tileYPos = 10
+        case .grass:
+            tileXPos = 9
+            tileYPos = 11
+        case .forest:
+            tileXPos = 10
+            tileYPos = 11
+        case .mountain1:
+            tileXPos = 11
+            tileYPos = 11
+        case .mountain2:
+            tileXPos = 12
+            tileYPos = 11
+        case .mountain3:
+            tileXPos = 13
+            tileYPos = 11
+        case .mountain4:
+            tileXPos = 14
+            tileYPos = 11
+        case .snow:
+            tileXPos = 9
+            tileYPos = 12
+        }
+        
+        let tileXStep = 16 / Float(textureMapWidth)
+        let tileYStep = 16 / Float(textureMapHeight)
+        let tileXHalfStep = 8 / Float(textureMapWidth)
+        let tileYHalfStep = 8 / Float(textureMapHeight)
+        
+        let x1: Float
+        let y1: Float
+        let x2: Float
+        let y2: Float
+        
+        switch fillerType {
+        case .top:
+            x1 = tileXStep * tileXPos
+            x2 = x1 + tileXStep
+            y1 = tileYStep * tileYPos
+            y2 = y1 + tileYHalfStep
+        case .bottom:
+            x1 = tileXStep * tileXPos
+            x2 = x1 + tileXStep
+            y1 = tileYStep * tileYPos + tileYHalfStep
+            y2 = y1 + tileYHalfStep
+        case .left:
+            x1 = tileXStep * tileXPos
+            x2 = x1 + tileXHalfStep
+            y1 = tileYStep * tileYPos
+            y2 = y1 + tileYStep
+        case .right:
+            x1 = tileXStep * tileXPos + tileXHalfStep
+            x2 = x1 + tileXHalfStep
+            y1 = tileYStep * tileYPos
+            y2 = y1 + tileYStep
+        case .whole:
+            x1 = tileXStep * tileXPos
+            x2 = x1 + tileXStep
+            y1 = tileYStep * tileYPos
+            y2 = y1 + tileYStep
+        }
+        
+        return [x1, y1,
+                x2, y1,
+                x1, y2,
+                x2, y1,
+                x2, y2,
+                x1, y2]
     }
 }
