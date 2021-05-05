@@ -83,7 +83,8 @@ class PlayMapView: UIView {
     private func setupController() {
         self.controller = PlayController(engine: engine,
                                          touchController: engineTouchController,
-                                         mapURL: mapURL)
+                                         mapURL: mapURL,
+                                         playMapView: self)
         engineTouchController.delegate = controller
     }
     

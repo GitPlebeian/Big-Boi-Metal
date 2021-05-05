@@ -8,7 +8,9 @@ class GridLayer: RenderLayer {
     weak var touchController: EngineTouchController!
     weak var map: MapLayer!
 
-    var gridColor: UIColor = .black
+    var gridColor: UIColor = UIColor(displayP3Red: 102/255, green: 63/255, blue: 69/255, alpha: 0.6)
+    
+    var enabled: Bool = false
 
     private var vertices: [Float] = [-1, 1, 1, -1]
 
@@ -27,6 +29,10 @@ class GridLayer: RenderLayer {
 
     override func render(_ encoder: MTLRenderCommandEncoder) {
 
+        if enabled == false {
+            return
+        }
+        
         encoder.setRenderPipelineState(pipelineState)
 
         var transform = touchController.vertexTransform

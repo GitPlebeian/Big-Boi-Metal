@@ -9,99 +9,84 @@ import Foundation
 
 class TileHelper {
     
+    // Get Tile For Direction
     static func getTileForDirection(tile: TileType, graphicType: TileGraphicType) -> IntCordinate {
         
         switch tile {
         case .beach:
             switch graphicType {
-            case .topLeft:
-                return IntCordinate(0, 0)
-            case .top:
-                return IntCordinate(1, 0)
-            case .topRight:
-                return IntCordinate(2, 0)
-            case .left:
-                return IntCordinate(0, 1)
-            case .whole:
-                return IntCordinate(1, 1)
-            case .right:
-                return IntCordinate(2, 1)
-            case .bottomLeft:
-                return IntCordinate(0, 2)
-            case .bottom:
-                return IntCordinate(1, 2)
-            case .bottomRight:
-                return IntCordinate(2, 2)
-            case .topLeftMissing:
-                return IntCordinate(0, 3)
-            case .topRightMissing: return IntCordinate(1,3)
-            case .bottomLeftMissing: return IntCordinate(0, 4)
+            case .topLeft:            return IntCordinate(0, 0)
+            case .top:                return IntCordinate(1, 0)
+            case .topRight:           return IntCordinate(2, 0)
+            case .left:               return IntCordinate(0, 1)
+            case .whole:              return IntCordinate(1, 1)
+            case .right:              return IntCordinate(2, 1)
+            case .bottomLeft:         return IntCordinate(0, 2)
+            case .bottom:             return IntCordinate(1, 2)
+            case .bottomRight:        return IntCordinate(2, 2)
+            case .topLeftMissing:     return IntCordinate(0, 3)
+            case .topRightMissing:    return IntCordinate(1,3)
+            case .bottomLeftMissing:  return IntCordinate(0, 4)
             case .bottomRightMissing: return IntCordinate(1, 4)
-            case .diagonalTRBL: return IntCordinate(2, 3)
-            case .diagonalTLBR: return IntCordinate(2, 4)
+            case .diagonalTRBL:       return IntCordinate(2, 3)
+            case .diagonalTLBR:       return IntCordinate(2, 4)
             }
         case .shallowWater:
             switch graphicType {
-            case .topLeft:
-                return IntCordinate(3, 0)
-            case .top:
-                return IntCordinate(4, 0)
-            case .topRight:
-                return IntCordinate(5, 0)
-            case .left:
-                return IntCordinate(3, 1)
-            case .whole:
-                return IntCordinate(4, 1)
-            case .right:
-                return IntCordinate(5, 1)
-            case .bottomLeft:
-                return IntCordinate(3, 2)
-            case .bottom:
-                return IntCordinate(4, 2)
-            case .bottomRight:
-                return IntCordinate(5, 2)
-            case .topLeftMissing: return IntCordinate(3, 3)
-            case .topRightMissing: return IntCordinate(4, 3)
-            case .bottomLeftMissing: return IntCordinate(3, 4)
+            case .topLeft:            return IntCordinate(3, 0)
+            case .top:                return IntCordinate(4, 0)
+            case .topRight:           return IntCordinate(5, 0)
+            case .left:               return IntCordinate(3, 1)
+            case .whole:              return IntCordinate(4, 1)
+            case .right:              return IntCordinate(5, 1)
+            case .bottomLeft:         return IntCordinate(3, 2)
+            case .bottom:             return IntCordinate(4, 2)
+            case .bottomRight:        return IntCordinate(5, 2)
+            case .topLeftMissing:     return IntCordinate(3, 3)
+            case .topRightMissing:    return IntCordinate(4, 3)
+            case .bottomLeftMissing:  return IntCordinate(3, 4)
             case .bottomRightMissing: return IntCordinate(4, 4)
-            case .diagonalTRBL: return IntCordinate(5, 3)
-            case .diagonalTLBR: return IntCordinate(5, 4)
+            case .diagonalTRBL:       return IntCordinate(5, 3)
+            case .diagonalTLBR:       return IntCordinate(5, 4)
             }
         case .water:
             switch graphicType {
-            case .topLeft: return IntCordinate(0, 5)
-            case .top: return IntCordinate(1, 5)
-            case .topRight: return IntCordinate(2, 5)
-            case .left: return IntCordinate(0, 6)
-            case .whole: return IntCordinate(1, 6)
-            case .right: return IntCordinate(2, 6)
-            case .bottomLeft: return IntCordinate(0, 7)
-            case .bottom: return IntCordinate(1, 7)
-            case .bottomRight: return IntCordinate(2, 7)
-            case .topLeftMissing: return IntCordinate(0, 8)
-            case .topRightMissing: return IntCordinate(1, 8)
-            case .diagonalTRBL: return IntCordinate(2, 8)
-            case .bottomLeftMissing: return IntCordinate(0, 9)
+            case .topLeft:            return IntCordinate(0, 5)
+            case .top:                return IntCordinate(1, 5)
+            case .topRight:           return IntCordinate(2, 5)
+            case .left:               return IntCordinate(0, 6)
+            case .whole:              return IntCordinate(1, 6)
+            case .right:              return IntCordinate(2, 6)
+            case .bottomLeft:         return IntCordinate(0, 7)
+            case .bottom:             return IntCordinate(1, 7)
+            case .bottomRight:        return IntCordinate(2, 7)
+            case .topLeftMissing:     return IntCordinate(0, 8)
+            case .topRightMissing:    return IntCordinate(1, 8)
+            case .diagonalTRBL:       return IntCordinate(2, 8)
+            case .bottomLeftMissing:  return IntCordinate(0, 9)
             case .bottomRightMissing: return IntCordinate(1, 9)
-            case .diagonalTLBR: return IntCordinate(2, 9)
+            case .diagonalTLBR:       return IntCordinate(2, 9)
             }
         case .forest:
             switch graphicType {
-            case .topLeft:            return IntCordinate(9, 0)
-            case .top:                return IntCordinate(10, 0)
-            case .topRight:           return IntCordinate(11, 0)
-            case .left:               return IntCordinate(9, 1)
-            case .whole:              return IntCordinate(10, 1)
-            case .right:              return IntCordinate(11, 1)
-            case .bottomLeft:         return IntCordinate(9, 2)
-            case .bottom:             return IntCordinate(10, 2)
-            case .bottomRight:        return IntCordinate(11, 2)
-            case .topLeftMissing:     return IntCordinate(9, 3)
-            case .topRightMissing:    return IntCordinate(10, 3)
-            case .diagonalTRBL:       return IntCordinate(11, 3)
-            case .bottomLeftMissing:  return IntCordinate(9, 4)
-            case .bottomRightMissing: return IntCordinate(10, 4)
-            case .diagonalTLBR:       return IntCordinate(11, 4)
+            case .topLeft:            return IntCordinate(18, 10)
+            case .top:                return IntCordinate(16, 10)
+            case .topRight:           return IntCordinate(19, 10)
+            case .left:               return IntCordinate(17, 9)
+            case .whole:
+                let tiles = [(15, 4), (16, 4), (17, 4), (18, 4), (15, 5), (16, 5), (17, 5), (18, 5), (15, 6), (16, 6), (17, 6), (18, 6), (15, 7), (16, 7), (17, 7), (18, 7)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .right:              return IntCordinate(15, 9)
+            case .bottomLeft:         return IntCordinate(18, 11)
+            case .bottom:             return IntCordinate(16, 8)
+            case .bottomRight:        return IntCordinate(19, 11)
+            case .topLeftMissing:     return IntCordinate(17, 10)
+            case .topRightMissing:    return IntCordinate(15, 10)
+            case .diagonalTRBL:       return IntCordinate(18, 8)
+            case .bottomLeftMissing:  return IntCordinate(17, 8)
+            case .bottomRightMissing: return IntCordinate(15, 8)
+            case .diagonalTLBR:       return IntCordinate(18, 9)
             }
         case .mountain1:
             switch graphicType {
@@ -249,119 +234,49 @@ class TileHelper {
             }
         case .grass:
             switch graphicType {
-            case .topLeft: return IntCordinate(6,0)
-            case .top: return IntCordinate(7, 0)
-            case .topRight: return IntCordinate(8, 0)
-            case .left: return IntCordinate(6, 1)
-            case .whole: return IntCordinate(7, 1)
-            case .right: return IntCordinate(8, 1)
-            case .bottomLeft: return IntCordinate(6, 2)
-            case .bottom: return IntCordinate(7, 2)
-            case .bottomRight: return IntCordinate(8, 2)
-            case .topLeftMissing: return IntCordinate(6, 3)
-            case .topRightMissing: return IntCordinate(7, 3)
-            case .diagonalTRBL: return IntCordinate(8, 3)
-            case .bottomLeftMissing: return IntCordinate(6, 4)
-            case .bottomRightMissing: return IntCordinate(7, 4)
-            case .diagonalTLBR: return IntCordinate(8, 4)
+            case .topLeft: return IntCordinate(19,8)
+            case .top:
+                let tiles = [(19, 0), (20, 0), (21, 0)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .topRight: return IntCordinate(20, 8)
+            case .left:
+                let tiles = [(19, 3), (20, 3), (21, 3)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .whole:
+                let tiles = [(15, 0), (16, 0), (17, 0), (18, 0), (15, 1), (16, 1), (17, 1), (18, 1), (15, 2), (16, 2), (17, 2), (18, 2), (15, 3), (16, 3), (17, 3), (18, 3)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .right:
+                let tiles = [(19, 2), (20, 2), (21, 2)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .bottomLeft: return IntCordinate(19, 9)
+            case .bottom:
+                let tiles = [(19, 1), (20, 1), (21, 1)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .bottomRight: return IntCordinate(20, 9)
+            case .topLeftMissing:
+                let tiles = [(19, 5), (20, 5), (21, 5)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .topRightMissing:
+                let tiles = [(19, 4), (20, 4), (21, 4)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .diagonalTRBL: return IntCordinate(21, 8)
+            case .bottomLeftMissing:
+                let tiles = [(19, 7), (20, 7), (21, 7)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .bottomRightMissing:
+                let tiles = [(19, 6), (20, 6), (21, 6)]
+                let tile = tiles.randomElement()!
+                return IntCordinate(tile.0, tile.1)
+            case .diagonalTLBR: return IntCordinate(21, 9)
             }
         }
-    }
-    
-    // Get Texture Cords For Filler Type
-    static func getTextureCordsForFillerType(fillerType: TileGraphicFillerType,
-                                              tileType: TileType,
-                                              textureMapWidth: Int,
-                                              textureMapHeight: Int) -> [Float] {
-        
-        var tileXPos: Float
-        var tileYPos: Float
-        
-        switch tileType {
-        case .darkSea:
-            tileXPos = 9
-            tileYPos = 10
-        case .superDeepWater:
-            tileXPos = 10
-            tileYPos = 10
-        case .deepWater:
-            tileXPos = 11
-            tileYPos = 10
-        case .water:
-            tileXPos = 12
-            tileYPos = 10
-        case .shallowWater:
-            tileXPos = 13
-            tileYPos = 10
-        case .beach:
-            tileXPos = 14
-            tileYPos = 10
-        case .grass:
-            tileXPos = 9
-            tileYPos = 11
-        case .forest:
-            tileXPos = 10
-            tileYPos = 11
-        case .mountain1:
-            tileXPos = 11
-            tileYPos = 11
-        case .mountain2:
-            tileXPos = 12
-            tileYPos = 11
-        case .mountain3:
-            tileXPos = 13
-            tileYPos = 11
-        case .mountain4:
-            tileXPos = 14
-            tileYPos = 11
-        case .snow:
-            tileXPos = 9
-            tileYPos = 12
-        }
-        
-        let tileXStep = 16 / Float(textureMapWidth)
-        let tileYStep = 16 / Float(textureMapHeight)
-        let tileXHalfStep = 8 / Float(textureMapWidth)
-        let tileYHalfStep = 8 / Float(textureMapHeight)
-        
-        let x1: Float
-        let y1: Float
-        let x2: Float
-        let y2: Float
-        
-        switch fillerType {
-        case .top:
-            x1 = tileXStep * tileXPos
-            x2 = x1 + tileXStep
-            y1 = tileYStep * tileYPos
-            y2 = y1 + tileYHalfStep
-        case .bottom:
-            x1 = tileXStep * tileXPos
-            x2 = x1 + tileXStep
-            y1 = tileYStep * tileYPos + tileYHalfStep
-            y2 = y1 + tileYHalfStep
-        case .left:
-            x1 = tileXStep * tileXPos
-            x2 = x1 + tileXHalfStep
-            y1 = tileYStep * tileYPos
-            y2 = y1 + tileYStep
-        case .right:
-            x1 = tileXStep * tileXPos + tileXHalfStep
-            x2 = x1 + tileXHalfStep
-            y1 = tileYStep * tileYPos
-            y2 = y1 + tileYStep
-        case .whole:
-            x1 = tileXStep * tileXPos
-            x2 = x1 + tileXStep
-            y1 = tileYStep * tileYPos
-            y2 = y1 + tileYStep
-        }
-        
-        return [x1, y1,
-                x2, y1,
-                x1, y2,
-                x2, y1,
-                x2, y2,
-                x1, y2]
     }
 }

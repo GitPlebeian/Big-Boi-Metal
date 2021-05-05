@@ -11,8 +11,10 @@ class PlayController {
     
     var map: Map!
     
+    weak var playMapView: PlayMapView!
     weak var engine: Engine!
     weak var touchController: EngineTouchController!
+    var      cardDock: CardDockView!
     
     var mapLayer: MapLayer!
     var gridLayer: GridLayer!
@@ -21,8 +23,10 @@ class PlayController {
     
     init(engine: Engine,
          touchController: EngineTouchController,
-         mapURL: URL) {
+         mapURL: URL,
+         playMapView: PlayMapView) {
         
+        self.playMapView = playMapView
         self.engine = engine
         self.touchController = touchController
         self.map = loadMap(url: mapURL)
@@ -30,10 +34,38 @@ class PlayController {
                                  touchController: touchController)
         self.gridLayer = GridLayer(map: mapLayer,
                                    touchController: touchController)
+        
+        
+        self.cardDock = CardDockView(controller: self, playMapView: playMapView)
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        cardDock.addCard(card: Card())
+        
         engine.addLayer(mapLayer, atLayer: 0)
+        engine.addLayer(gridLayer, atLayer: 1)
     }
     
     // MARK: Public
+    
+    
     
     // MARK: Private
     

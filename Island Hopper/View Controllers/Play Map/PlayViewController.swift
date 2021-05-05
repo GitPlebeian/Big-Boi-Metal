@@ -26,6 +26,12 @@ class PlayViewController: UIViewController {
         setupViews()
     }
     
+    // MARK: Overrides
+    
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+        return [.top, .bottom, .left, .right]
+    }
+    
     // MARK: Actions
     
     // Back Button Tapped
@@ -39,6 +45,11 @@ class PlayViewController: UIViewController {
     }
     
     // MARK: Public
+    
+    // Add Card
+    func addCard(card: Card) {
+        
+    }
     
     // MARK: Private
     
