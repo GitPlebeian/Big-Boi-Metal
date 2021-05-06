@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Metal
 
 class PlayController {
     
@@ -15,9 +16,12 @@ class PlayController {
     weak var engine: Engine!
     weak var touchController: EngineTouchController!
     var      cardDock: CardDockView!
+    var entityPlacer: EntityPlacer!
+    var mapLocationHelper: MapLocationHelper!
     
     var mapLayer: MapLayer!
     var gridLayer: GridLayer!
+    var celledTextureLayer: CelledTextureLayer!
     
     // MARK: Init
     
@@ -35,32 +39,21 @@ class PlayController {
         self.gridLayer = GridLayer(map: mapLayer,
                                    touchController: touchController)
         
+        self.celledTextureLayer = CelledTextureLayer(map: mapLayer,
+                                                     touchController: touchController)
         
         self.cardDock = CardDockView(controller: self, playMapView: playMapView)
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
-        cardDock.addCard(card: Card())
+        cardDock.addCard(card: WarriorCard(controller: self))
+        
+        self.entityPlacer = EntityPlacer(controller: self)
+        
+        self.mapLocationHelper = MapLocationHelper(controller: self)
         
         engine.addLayer(mapLayer, atLayer: 0)
         engine.addLayer(gridLayer, atLayer: 1)
+        engine.addLayer(celledTextureLayer, atLayer: 2)
+        
+        setupTilesetTexture()
     }
     
     // MARK: Public
@@ -80,6 +73,28 @@ class PlayController {
             print("Unable To Decode Map From URL")
             return Map()
         }
+    }
+    
+    // Setup Texture
+    private func setupTilesetTexture() {
+        let image = UIImage(named: "tileset")!
+        let imageRef = image.cgImage!
+
+        let tileSetWidth = imageRef.width
+        let tilSetHeight = imageRef.height
+
+        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm, width: tileSetWidth, height: tilSetHeight, mipmapped: false)
+        textureDescriptor.usage = [.shaderRead]
+        
+        let region = MTLRegionMake2D(0, 0, tileSetWidth, tilSetHeight)
+
+        let pixelData = imageRef.dataProvider!.data
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+        
+        let texture = GraphicsDevice.Device.makeTexture(descriptor: textureDescriptor)!
+        texture.replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: tileSetWidth * 4)
+        mapLayer.terrainTileTexture = texture
+        celledTextureLayer.tileTexure = texture
     }
 }
 

@@ -8,7 +8,7 @@ class GridLayer: RenderLayer {
     weak var touchController: EngineTouchController!
     weak var map: MapLayer!
 
-    var gridColor: UIColor = UIColor(displayP3Red: 102/255, green: 63/255, blue: 69/255, alpha: 0.6)
+    var gridColor: UIColor = UIColor(displayP3Red: 0/255, green: 0/255, blue: 0/255, alpha: 0.2)
     
     var enabled: Bool = false
 

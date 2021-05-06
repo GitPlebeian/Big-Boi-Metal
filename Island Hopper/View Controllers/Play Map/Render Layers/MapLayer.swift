@@ -16,7 +16,11 @@ class MapLayer: RenderLayer {
     
     private var vertexPosBuffer:  MTLBuffer!
     private var texturePosBuffer: MTLBuffer!
-    private var terrainTileTexture: MTLTexture!
+    var terrainTileTexture: MTLTexture! {
+        didSet {
+            setupVertexTextureData()
+        }
+    }
     private var mapTexture: MTLTexture!
     
     private var vertexCords: [Float] = []
@@ -30,7 +34,6 @@ class MapLayer: RenderLayer {
         self.map = map
         self.touchController = touchController
         super.init()
-        setupVertexTextureData()
         let textureCords: [Float] = [0,0,1,0,0,1,1,0,1,1,0,1]
         self.renderingTextureCordsBuffer = GraphicsDevice.Device.makeBuffer(bytes: textureCords, length: textureCords.count * 4, options: [])
     }
@@ -85,7 +88,6 @@ class MapLayer: RenderLayer {
     
     // Setup Vertex Texture Data
     private func setupVertexTextureData() {
-        setupTileMapTexture()
         
         var vertexCords:   [Float] = []
         var textureCords:  [Float] = []
@@ -129,8 +131,11 @@ class MapLayer: RenderLayer {
     
     // Get Texture Cords For Cell
     private func getTextureCordsForCell(x: Int, y: Int) -> [Float] {
-        let xStep = 16 / Float(terrainTileTexture.width)
-        let yStep = 16 / Float(terrainTileTexture.height)
+//        let xStep = 16 / Float(terrainTileTexture.width)
+//        let yStep = 16 / Float(terrainTileTexture.height)
+        
+        let xStep: Float = 16
+        let yStep: Float = 16
 
         let pixelOffsetX: Float = 0
         let pixelOffsetY: Float = 0
@@ -221,27 +226,6 @@ class MapLayer: RenderLayer {
         }
     }
     
-    // Setup Texture
-    private func setupTileMapTexture() {
-        let image = UIImage(named: "terrain_tile_set")!
-        let imageRef = image.cgImage!
-
-        let tileSetWidth = imageRef.width
-        let tilSetHeight = imageRef.height
-
-        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm, width: tileSetWidth, height: tilSetHeight, mipmapped: false)
-        textureDescriptor.usage = [.shaderRead]
-        
-        let region = MTLRegionMake2D(0, 0, tileSetWidth, tilSetHeight)
-
-        let pixelData = imageRef.dataProvider!.data
-        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
-        
-        let texture = GraphicsDevice.Device.makeTexture(descriptor: textureDescriptor)!
-        texture.replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: tileSetWidth * 4)
-        terrainTileTexture = texture
-    }
-    
     // Setup Map Texture
     private func setupMapTexture() {
         let mapTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm, width: map.width * 16, height: map.height * 16, mipmapped: false)
@@ -269,7 +253,7 @@ class MapLayer: RenderLayer {
         samplerDescriptor.sAddressMode          = MTLSamplerAddressMode.clampToZero
         samplerDescriptor.tAddressMode          = MTLSamplerAddressMode.clampToZero
         samplerDescriptor.rAddressMode          = MTLSamplerAddressMode.clampToZero
-        samplerDescriptor.normalizedCoordinates = true
+        samplerDescriptor.normalizedCoordinates = false
         samplerDescriptor.lodMinClamp           = 0
         samplerDescriptor.lodMaxClamp           = .greatestFiniteMagnitude
         samplerDescriptor.mipFilter = .notMipmapped

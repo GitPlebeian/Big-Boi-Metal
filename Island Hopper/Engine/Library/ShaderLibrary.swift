@@ -14,6 +14,7 @@ enum VertexShaderTypes {
     case Basic
     case Grid
     case Texture
+    case CelledTexture
 }
 
 enum FragmentShaderTypes {
@@ -23,6 +24,7 @@ enum FragmentShaderTypes {
     case Basic
     case Grid
     case Texture
+    case CelledTexture
 }
 
 class ShaderLibrary {
@@ -53,6 +55,7 @@ class ShaderLibrary {
         vertexShaders.updateValue(Grid_VertexShader(library: defaultLibrary), forKey: .Grid)
         vertexShaders.updateValue(Texture_VertexShader(library: defaultLibrary), forKey: .Texture)
         vertexShaders.updateValue(MapMovableTexture_VertexShader(library: defaultLibrary), forKey: .MapMovable)
+        vertexShaders.updateValue(CelledTexture_VertexShader(library: defaultLibrary), forKey: .CelledTexture)
         
         //Fragment Shaders
         fragmentShaders.updateValue(Basic_FragmentShader(library: defaultLibrary), forKey: .Basic)
@@ -61,6 +64,7 @@ class ShaderLibrary {
         fragmentShaders.updateValue(Grid_FragmentShader(library: defaultLibrary), forKey: .Grid)
         fragmentShaders.updateValue(Texture_FragmentShader(library: defaultLibrary), forKey: .Texture)
         fragmentShaders.updateValue(MapMovableTexture_FragmentShader(library: defaultLibrary), forKey: .MapMovable)
+        fragmentShaders.updateValue(CelledTexture_FragmentShader(library: defaultLibrary), forKey: .CelledTexture)
     }
     
     public func vertex(_ vertexShaderType: VertexShaderTypes) -> MTLFunction {
@@ -192,6 +196,26 @@ public struct MapMovableTexture_VertexShader: Shader {
 public struct MapMovableTexture_FragmentShader: Shader {
     public var name: String = "Texture Fragment Shader"
     public var functionName: String = "map_movable_texture_fragment"
+    public var function: MTLFunction!
+    init(library: MTLLibrary){
+        function = library.makeFunction(name: functionName)
+        function?.label = name
+    }
+}
+
+public struct CelledTexture_VertexShader: Shader {
+    public var name: String = "Celled Texture Vertex Shader"
+    public var functionName: String = "celled_texture_vertex"
+    public var function: MTLFunction!
+    init(library: MTLLibrary){
+        function = library.makeFunction(name: functionName)
+        function?.label = name
+    }
+}
+
+public struct CelledTexture_FragmentShader: Shader {
+    public var name: String = "Celled Texture Fragment Shader"
+    public var functionName: String = "celled_texture_fragment"
     public var function: MTLFunction!
     init(library: MTLLibrary){
         function = library.makeFunction(name: functionName)

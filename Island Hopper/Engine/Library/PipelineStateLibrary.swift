@@ -8,6 +8,7 @@ enum RenderPipelineStateTypes {
     case Grid
     case Texture
     case MapMovable
+    case CelledTexture
 }
 
 class RenderPipelineStateLibrary {
@@ -39,6 +40,7 @@ class RenderPipelineStateLibrary {
         renderPipelineStates.updateValue(GridPiplineState(), forKey: .Grid)
         renderPipelineStates.updateValue(TexturePiplineState(), forKey: .Texture)
         renderPipelineStates.updateValue(MapMovablePiplineState(), forKey: .MapMovable)
+        renderPipelineStates.updateValue(CelledTexturePiplineState(), forKey: .CelledTexture)
     }
 }
 
@@ -113,6 +115,18 @@ public struct MapMovablePiplineState: RenderPipelineState {
     init() {
         do{
             renderPipelineState = try GraphicsDevice.Device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.shared.descriptor(.MapMovable))
+        }catch let error as NSError {
+            print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
+        }
+    }
+}
+
+public struct CelledTexturePiplineState: RenderPipelineState {
+    var name: String = "Celled Texture Pipeline State"
+    var renderPipelineState: MTLRenderPipelineState!
+    init() {
+        do{
+            renderPipelineState = try GraphicsDevice.Device.makeRenderPipelineState(descriptor: RenderPipelineDescriptorLibrary.shared.descriptor(.CelledTexture))
         }catch let error as NSError {
             print("ERROR::CREATE::RENDER_PIPELINE_STATE::__\(name)__::\(error)")
         }

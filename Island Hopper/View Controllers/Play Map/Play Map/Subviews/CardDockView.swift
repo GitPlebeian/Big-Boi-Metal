@@ -262,20 +262,19 @@ class CardDockView: UIView {
 }
 
 extension CardDockView: CardViewDelegate {
-    
-    
+
     // Pan Ended
     func panEnded() {
-        controller.gridLayer.enabled = false
         openDock()
+        openDockButton.isEnabled = true
     }
-    
-    
+
+
     // Did Start Pan
-    func didStartPan(card: Card) {
+    func didStartPan() {
         let selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.selectionChanged()
         closeDock()
-        controller.gridLayer.enabled = true
+        openDockButton.isEnabled = false
     }
 }

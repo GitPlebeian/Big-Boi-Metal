@@ -14,6 +14,7 @@ enum RenderPipelineDescriptorTypes {
     case Grid
     case Texture
     case MapMovable
+    case CelledTexture
 }
 
 class RenderPipelineDescriptorLibrary {
@@ -39,6 +40,7 @@ class RenderPipelineDescriptorLibrary {
         renderPipelineDescriptors.updateValue(Grid_RenderPipelineDescriptor(), forKey: .Grid)
         renderPipelineDescriptors.updateValue(Texture_RenderPipelineDescriptor(), forKey: .Texture)
         renderPipelineDescriptors.updateValue(MapMovable_RenderPipelineDescriptor(), forKey: .MapMovable)
+        renderPipelineDescriptors.updateValue(CelledTexture_RenderPipelineDescriptor(), forKey: .CelledTexture)
     }
     
     public func descriptor(_ renderPipelineDescriptorType: RenderPipelineDescriptorTypes) -> MTLRenderPipelineDescriptor {
@@ -136,5 +138,25 @@ public struct MapMovable_RenderPipelineDescriptor: RenderPipelineDescriptor {
         renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineDescriptor.vertexFunction = ShaderLibrary.Shared.vertex(.MapMovable)
         renderPipelineDescriptor.fragmentFunction = ShaderLibrary.Shared.fragment(.MapMovable)
+    }
+}
+
+public struct CelledTexture_RenderPipelineDescriptor: RenderPipelineDescriptor {
+    var name: String = "Celled Texture Render Pipeline Descriptor"
+    var renderPipelineDescriptor: MTLRenderPipelineDescriptor!
+    init(){
+        renderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        
+        renderPipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
+        renderPipelineDescriptor.colorAttachments[0].rgbBlendOperation = .add
+        renderPipelineDescriptor.colorAttachments[0].alphaBlendOperation = .add
+        renderPipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = .one
+        renderPipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
+        renderPipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        renderPipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        
+        renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        renderPipelineDescriptor.vertexFunction = ShaderLibrary.Shared.vertex(.CelledTexture)
+        renderPipelineDescriptor.fragmentFunction = ShaderLibrary.Shared.fragment(.CelledTexture)
     }
 }

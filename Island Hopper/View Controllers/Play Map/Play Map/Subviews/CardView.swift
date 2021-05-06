@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CardViewDelegate: class {
-    func didStartPan(card: Card)
+    func didStartPan()
     func panEnded()
 }
 
@@ -42,10 +42,16 @@ class CardView: UIView {
     // MARK: Actions
     @objc private func panned() {
         if panGesture.state == .began {
-            delegate?.didStartPan(card: card)
-        }
-        if panGesture.state == .failed || panGesture.state == .cancelled || panGesture.state == .ended {
+            delegate?.didStartPan()
+            card.startedPlacingBlock(panGesture.location(in: nil))
+        } else if panGesture.state == .failed || panGesture.state == .cancelled {
             delegate?.panEnded()
+            card.placingCancelled()
+        } else if panGesture.state == .ended {
+            delegate?.panEnded()
+            card.placedCard(panGesture.location(in: nil))
+        } else {
+            card.placingPannedBlock(panGesture.location(in: nil))
         }
     }
     

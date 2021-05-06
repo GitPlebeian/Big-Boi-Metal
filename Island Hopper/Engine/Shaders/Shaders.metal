@@ -19,9 +19,17 @@ struct TextureVertex {
     float2 textureCords;
 };
 
+struct Vertex {
+    float4 position [[position]];
+};
+
 constexpr sampler BasicSampler(coord::normalized,
                                address::repeat,
                                filter::nearest);
+
+constexpr sampler BasicSamplerPixel(coord::pixel,
+                                    address::clamp_to_zero,
+                                    filter::nearest);
 
 // MARK: Basic
 
@@ -195,5 +203,77 @@ fragment float4 map_fragment(TextureVertex vert [[stage_in]],
 
 // MARK: Celled Texture
 
+vertex TextureVertex celled_texture_vertex(constant packed_float2   *posCords [[buffer(0)]],
+                                           constant packed_float2 *textureCords [[buffer(1)]],
+                                           constant packed_float2   *spriteWidthHeight [[buffer(2)]],
+                                           constant packed_float2 &globalTransform [[buffer(3)]],
+                                           constant float         &scale [[buffer(4)]],
+                                           constant float         &screenWidth [[buffer(5)]],
+                                           constant float         &screenHeight [[buffer(6)]],
+                                           constant float         &cellSize [[buffer(7)]],
+                                           uint                   vid [[vertex_id]])
+{
+    TextureVertex vert;
+    
+    float positionX = posCords[vid / 6].x * cellSize;
+    float positionY = posCords[vid / 6].y * cellSize;
 
+    float textureCordX = textureCords[vid / 6].x;
+    float textureCordY = textureCords[vid / 6].y;
 
+    switch (vid % 6) {
+        case 0:
+            positionY += cellSize;
+            break;
+        case 1:
+            positionX += cellSize;
+            positionY += cellSize;
+            break;
+        case 2:
+            break;
+        case 3:
+            positionX += cellSize;
+            positionY += cellSize;
+            break;
+        case 4:
+            positionX += cellSize;
+            break;
+        case 5:
+            break;
+    }
+    switch (vid % 6) {
+        case 0:
+            break;
+        case 1:
+            textureCordX += spriteWidthHeight[vid / 6].x;
+            break;
+        case 2:
+            textureCordY += spriteWidthHeight[vid / 6].y;
+            break;
+        case 3:
+            textureCordX += spriteWidthHeight[vid / 6].x;
+            break;
+        case 4:
+            textureCordX += spriteWidthHeight[vid / 6].x;
+            textureCordY += spriteWidthHeight[vid / 6].y;
+            break;
+        case 5:
+            textureCordY += spriteWidthHeight[vid / 6].y;
+            break;
+    }
+
+    vert.position = float4(positionX / screenWidth * 2 + (globalTransform.x * scale),
+                           positionY / screenHeight * 2 - (globalTransform.y * scale),
+                           0,
+                           scale);
+    vert.textureCords = float2(textureCordX, textureCordY);
+
+    return vert;
+}
+
+fragment float4 celled_texture_fragment(TextureVertex vert [[stage_in]],
+                                        texture2d<float> texture [[texture(0)]]) {
+    
+    float4 color = texture.sample(BasicSamplerPixel, vert.textureCords);
+    return color;
+}
