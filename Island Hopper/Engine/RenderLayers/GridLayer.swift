@@ -21,6 +21,12 @@ class GridLayer: RenderLayer {
         super.init()
     }
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Grid Layer DEINIT")
+    }
+    
     // MARK: Rendering
 
     override func setPipelineState() {

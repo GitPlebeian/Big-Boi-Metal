@@ -9,14 +9,20 @@ import UIKit
 
 class WarriorCard: Card {
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Warrior Card DEINIT")
+    }
+    
     // Set Placing Block
     override func setPlacingBlock(){
-        self.startedPlacingBlock = {[weak self] location in
-            guard let self = self else {return}
+        self.startedPlacingBlock = { location in
             let cord = self.controller.mapLocationHelper.getCellForLocation(location: location)
-            let entity = Entity(position: cord, textureCords: [16, 512], width: 16, height: 16)
+            let entity = WarriorEntity(position: cord, textureCords: [16, 512], width: 16, height: 16)
             self.controller.gridLayer.enabled = true
             self.controller.entityPlacer.startedPlacing(entity: entity)
+            self.entityBeingPlaced = entity
         }
     }
     
@@ -32,6 +38,8 @@ class WarriorCard: Card {
         self.placedCard = { location in
             self.controller.gridLayer.enabled = false
             self.controller.entityPlacer.placedCard()
+            self.controller.entityController.addEntity(entity: self.entityBeingPlaced!)
+            self.entityBeingPlaced = nil
         }
     }
     
@@ -39,6 +47,7 @@ class WarriorCard: Card {
     override func setPlacingCancelled() {
         self.placingCancelled = {
             self.controller.entityPlacer.cancelledPlacing()
+            self.entityBeingPlaced = nil
         }
     }
 }

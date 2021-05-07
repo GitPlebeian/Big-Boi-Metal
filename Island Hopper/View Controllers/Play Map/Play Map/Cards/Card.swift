@@ -9,7 +9,8 @@ import UIKit
 
 class Card {
     
-    var controller: PlayController
+    weak var entityBeingPlaced: Entity?
+    weak var controller: PlayController!
     
     var startedPlacingBlock: ((CGPoint) -> Void)!
     var placingPannedBlock: ((CGPoint) -> Void)!
@@ -22,6 +23,12 @@ class Card {
         setPannedBlock()
         setPlacedCard()
         setPlacingCancelled()
+    }
+    
+    // MARK: Deinit
+    
+    deinit {
+        print("Card DEINIT")
     }
     
     // Setup Placin Block

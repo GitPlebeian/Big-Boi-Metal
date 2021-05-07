@@ -60,6 +60,12 @@ class CardDockView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Card Dock View DEINITs")
+    }
+    
     // MARK: Did Layout
     
     override func layoutSubviews() {

@@ -17,6 +17,12 @@ class Map {
     
     // MARK: Init
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Map DEINIT")
+    }
+    
     init() {
         self.width = 0
         self.height = 0

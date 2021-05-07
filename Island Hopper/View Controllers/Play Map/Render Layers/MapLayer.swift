@@ -38,6 +38,12 @@ class MapLayer: RenderLayer {
         self.renderingTextureCordsBuffer = GraphicsDevice.Device.makeBuffer(bytes: textureCords, length: textureCords.count * 4, options: [])
     }
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Map Layer DEINIT")
+    }
+    
     override func setPipelineState() {
         self.pipelineState = RenderPipelineStateLibrary.shared.pipelineState(.MapMovable)
     }

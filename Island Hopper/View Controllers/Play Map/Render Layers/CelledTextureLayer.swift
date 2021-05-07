@@ -8,23 +8,6 @@
 import UIKit
 import Metal
 
-class Entity {
-    var position: IntCordinate
-    var textureCords: [Float]
-    var width: Int // In Pixels
-    var height: Int // In Pixels
-    
-    init(position: IntCordinate = IntCordinate(),
-         textureCords: [Float],
-         width: Int,
-         height: Int) {
-        
-        self.position = position
-        self.textureCords = textureCords
-        self.width = width
-        self.height = height
-    }
-}
 
 class CelledTextureLayer: RenderLayer {
 
@@ -44,6 +27,12 @@ class CelledTextureLayer: RenderLayer {
         self.map = map
         self.touchController = touchController
         super.init()
+    }
+    
+    // MARK: Deinit
+    
+    deinit {
+        print("Celled Texture Layer Deinit")
     }
     
     // MARK: Rendering

@@ -39,6 +39,12 @@ class CardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Card View DEINIT")
+    }
+    
     // MARK: Actions
     @objc private func panned() {
         if panGesture.state == .began {

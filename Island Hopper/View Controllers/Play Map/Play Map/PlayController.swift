@@ -22,6 +22,8 @@ class PlayController {
     var mapLayer: MapLayer!
     var gridLayer: GridLayer!
     var celledTextureLayer: CelledTextureLayer!
+    var entityController: EntityController!
+    var network: PlayNetwork!
     
     // MARK: Init
     
@@ -49,11 +51,21 @@ class PlayController {
         
         self.mapLocationHelper = MapLocationHelper(controller: self)
         
+        self.entityController = EntityController(controller: self)
+        
+        self.network = PlayNetwork(controller: self)
+        
         engine.addLayer(mapLayer, atLayer: 0)
         engine.addLayer(gridLayer, atLayer: 1)
         engine.addLayer(celledTextureLayer, atLayer: 2)
         
         setupTilesetTexture()
+        startUpdate()
+    }
+    // MARK: DEINIT
+    
+    deinit {
+        print("Play Controller DEINIT")
     }
     
     // MARK: Public
@@ -95,6 +107,18 @@ class PlayController {
         texture.replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: tileSetWidth * 4)
         mapLayer.terrainTileTexture = texture
         celledTextureLayer.tileTexure = texture
+    }
+    
+    // Start Update
+    private func startUpdate() {
+        let timer = Timer(timeInterval: 1, repeats: true) {[weak self] (timer) in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+            self.entityController.update()
+        }
+        RunLoop.main.add(timer, forMode: .common)
     }
 }
 

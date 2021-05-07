@@ -43,6 +43,12 @@ class PlayMapView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: DEINIT
+    
+    deinit {
+        print("Play Map View DEINIT")
+    }
+    
     // MARK: Deinit
     
     // MARK: Actions
@@ -55,7 +61,7 @@ class PlayMapView: UIView {
     
     private func setupViews() {
         
-        let engine = Engine(clearColor: .mapDarkSea)
+        let engine = Engine(clearColor: UIColor(displayP3Red: 10/255,  green: 20/255,  blue: 39/255,  alpha: 1))
         engine.translatesAutoresizingMaskIntoConstraints = false
         addSubview(engine)
         NSLayoutConstraint.activate([

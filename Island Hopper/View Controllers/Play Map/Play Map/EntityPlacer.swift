@@ -26,6 +26,12 @@ class EntityPlacer {
         self.controller = controller
     }
     
+    // MARK: Deinit
+    
+    deinit {
+        print("Enity Placer DEINIT")
+    }
+    
     // MARK: Public
     
     func startedPlacing(entity: Entity) {

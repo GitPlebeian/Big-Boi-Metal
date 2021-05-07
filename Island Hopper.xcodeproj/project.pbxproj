@@ -10,6 +10,9 @@
 		861D4C1D26419B020091C242 /* CardDockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D4C1C26419B020091C242 /* CardDockView.swift */; };
 		861D4C2026419C020091C242 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D4C1F26419C020091C242 /* CardView.swift */; };
 		861D4C232641B20C0091C242 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D4C222641B20C0091C242 /* Card.swift */; };
+		862E3432264471A8005E3F11 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862E3431264471A8005E3F11 /* EntityController.swift */; };
+		862E343526447331005E3F11 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862E343426447331005E3F11 /* Entity.swift */; };
+		862E3439264473FD005E3F11 /* WarriorEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862E3438264473FD005E3F11 /* WarriorEntity.swift */; };
 		864465B326191CF2000851FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864465B226191CF2000851FC /* AppDelegate.swift */; };
 		864465BC26191CF3000851FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 864465BB26191CF3000851FC /* Assets.xcassets */; };
 		864465BF26191CF3000851FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 864465BD26191CF3000851FC /* LaunchScreen.storyboard */; };
@@ -49,6 +52,7 @@
 		8668947B2625382B006B6B21 /* MapLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8668947A2625382B006B6B21 /* MapLayer.swift */; };
 		8684051B2632926E000F3845 /* TileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8684051A2632926E000F3845 /* TileHelper.swift */; };
 		86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A40C8C26197E4700481FEF /* EngineTouchController.swift */; };
+		86A6B22E264484F300F63D25 /* PlayNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A6B22D264484F300F63D25 /* PlayNetwork.swift */; };
 		86AC2CFA26438D51002D23E0 /* EntityPlacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2CF926438D50002D23E0 /* EntityPlacer.swift */; };
 		86AC2CFD264394E1002D23E0 /* MapLocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2CFC264394E1002D23E0 /* MapLocationHelper.swift */; };
 		86AC2D01264466C1002D23E0 /* WarriorCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2D00264466C1002D23E0 /* WarriorCard.swift */; };
@@ -59,6 +63,9 @@
 		861D4C1C26419B020091C242 /* CardDockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDockView.swift; sourceTree = "<group>"; };
 		861D4C1F26419C020091C242 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		861D4C222641B20C0091C242 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		862E3431264471A8005E3F11 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
+		862E343426447331005E3F11 /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
+		862E3438264473FD005E3F11 /* WarriorEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarriorEntity.swift; sourceTree = "<group>"; };
 		864465AF26191CF2000851FC /* Island Hopper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Island Hopper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		864465B226191CF2000851FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		864465BB26191CF3000851FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -100,6 +107,7 @@
 		8668947A2625382B006B6B21 /* MapLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLayer.swift; sourceTree = "<group>"; };
 		8684051A2632926E000F3845 /* TileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileHelper.swift; sourceTree = "<group>"; };
 		86A40C8C26197E4700481FEF /* EngineTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTouchController.swift; sourceTree = "<group>"; };
+		86A6B22D264484F300F63D25 /* PlayNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayNetwork.swift; sourceTree = "<group>"; };
 		86AC2CF926438D50002D23E0 /* EntityPlacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityPlacer.swift; sourceTree = "<group>"; };
 		86AC2CFC264394E1002D23E0 /* MapLocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationHelper.swift; sourceTree = "<group>"; };
 		86AC2D00264466C1002D23E0 /* WarriorCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarriorCard.swift; sourceTree = "<group>"; };
@@ -124,6 +132,15 @@
 				861D4C1F26419C020091C242 /* CardView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		862E3437264473E8005E3F11 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				862E343426447331005E3F11 /* Entity.swift */,
+				862E3438264473FD005E3F11 /* WarriorEntity.swift */,
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		864465A626191CF2000851FC = {
@@ -306,14 +323,16 @@
 		8668946C26252B9D006B6B21 /* Play Map */ = {
 			isa = PBXGroup;
 			children = (
+				86A6B22C264484D900F63D25 /* Networking */,
+				862E3437264473E8005E3F11 /* Entities */,
 				86AC2CFF264466A4002D23E0 /* Cards */,
 				861D4C1B26419AE40091C242 /* Subviews */,
 				8668946D26252BB1006B6B21 /* PlayMapView.swift */,
 				8668947026252C79006B6B21 /* PlayController.swift */,
 				866894742625315A006B6B21 /* Map.swift */,
-				861D4C222641B20C0091C242 /* Card.swift */,
 				86AC2CF926438D50002D23E0 /* EntityPlacer.swift */,
 				86AC2CFC264394E1002D23E0 /* MapLocationHelper.swift */,
+				862E3431264471A8005E3F11 /* EntityController.swift */,
 			);
 			path = "Play Map";
 			sourceTree = "<group>";
@@ -347,9 +366,18 @@
 			path = Shaders;
 			sourceTree = "<group>";
 		};
+		86A6B22C264484D900F63D25 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				86A6B22D264484F300F63D25 /* PlayNetwork.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		86AC2CFF264466A4002D23E0 /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				861D4C222641B20C0091C242 /* Card.swift */,
 				86AC2D00264466C1002D23E0 /* WarriorCard.swift */,
 			);
 			path = Cards;
@@ -447,13 +475,16 @@
 				8644661A26192E46000851FC /* MapEditorController.swift in Sources */,
 				8684051B2632926E000F3845 /* TileHelper.swift in Sources */,
 				8644661826192E46000851FC /* Engine.swift in Sources */,
+				862E3432264471A8005E3F11 /* EntityController.swift in Sources */,
 				86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */,
+				862E343526447331005E3F11 /* Entity.swift in Sources */,
 				8644662226195242000851FC /* GraphicsEngine.swift in Sources */,
 				8644661426192E46000851FC /* EditMapLayer.swift in Sources */,
 				861D4C232641B20C0091C242 /* Card.swift in Sources */,
 				8644661026192E46000851FC /* ShaderLibrary.swift in Sources */,
 				8668946A26252955006B6B21 /* PlayViewController.swift in Sources */,
 				864465EA26192237000851FC /* Layout.swift in Sources */,
+				86A6B22E264484F300F63D25 /* PlayNetwork.swift in Sources */,
 				8644661126192E46000851FC /* PipelineStateLibrary.swift in Sources */,
 				8668947B2625382B006B6B21 /* MapLayer.swift in Sources */,
 				866894642623CC3F006B6B21 /* SelectMapViewController.swift in Sources */,
@@ -466,6 +497,7 @@
 				864466282619540A000851FC /* Types.swift in Sources */,
 				8644661926192E46000851FC /* Shaders.metal in Sources */,
 				8644661526192E46000851FC /* EditMapLayerMapTerrianGeneration.swift in Sources */,
+				862E3439264473FD005E3F11 /* WarriorEntity.swift in Sources */,
 				86AC2CFA26438D51002D23E0 /* EntityPlacer.swift in Sources */,
 				8644661626192E46000851FC /* RenderLayer.swift in Sources */,
 			);
@@ -609,7 +641,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -629,7 +661,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
