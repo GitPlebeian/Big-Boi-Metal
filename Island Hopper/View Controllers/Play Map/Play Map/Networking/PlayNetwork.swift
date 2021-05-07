@@ -35,10 +35,15 @@ class PlayNetwork {
     var startTime: DispatchTime!
     var endTime: DispatchTime!
     
+    let uuid: String
+    
+    var connected: Bool = false
+    
     // MARK: Init
 
     init(controller: PlayController) {
         self.controller = controller
+        self.uuid = UUID().uuidString
         connectToUDP(hostUDP,portUDP)
     }
     
@@ -48,47 +53,47 @@ class PlayNetwork {
         print("Play Network DEINIT")
     }
     
+    // MARK: Public
+    
+    // MARK: Private
+    
+    // Get Data For Out Type
+    private func getDataForOutType(type: PacketTypeOut) -> Data {
+        var num = type.rawValue
+        return Data(bytes: &num, count: 8)
+    }
+    
+    // Connect To UDP
     func connectToUDP(_ hostUDP: NWEndpoint.Host, _ portUDP: NWEndpoint.Port) {
         
-
+        self.connection = NWConnection(host: hostUDP, port: portUDP, using: .udp)
         
-        do {
+        self.connection?.stateUpdateHandler = {[weak self] (newState) in
+            guard let self = self else {return}
+            print("This is stateUpdateHandler:")
+            switch (newState) {
+            case .ready:
+                print("State: Ready\n")
 
-            self.connection = NWConnection(host: hostUDP, port: portUDP, using: .udp)
-
-            self.connection?.stateUpdateHandler = {[weak self] (newState) in
-                guard let self = self else {return}
-                print("This is stateUpdateHandler:")
-                switch (newState) {
-                    case .ready:
-                        print("State: Ready\n")
-                        var packetTypeOut: UInt64 = PacketTypeOut.Connect.rawValue
-                        var connectionRequestData = Data(bytes: &packetTypeOut, count: 8)
-                        
-                        let uuid = UUID().uuidString
-                        let uuidData = try! JSONEncoder().encode(uuid)
-                        connectionRequestData.append(uuidData)
-                        self.startTime = DispatchTime.now()
-                        self.sendUDP(connectionRequestData)
-                        self.receiveUDP()
-                    case .setup:
-                        print("State: Setup\n")
-                    case .cancelled:
-                        print("State: Cancelled\n")
-                    case .preparing:
-                        print("State: Preparing\n")
-                    default:
-                        print("ERROR! State not defined!\n")
-                }
+                var data = self.getDataForOutType(type: .Connect)
+                data.append(self.uuid.data(using: .utf8)!)
+                
+                self.startTime = DispatchTime.now()
+                self.sendUDP(data)
+                self.receiveUDP()
+            case .setup:
+                print("State: Setup\n")
+            case .cancelled:
+                print("State: Cancelled\n")
+            case .preparing:
+                print("State: Preparing\n")
+            default:
+                print("ERROR! State not defined!\n")
             }
-
-            self.connection?.start(queue: .global())
+        }
+        
+        self.connection?.start(queue: .global())
             
-            
-            // and decode it back
-//            let decodedSentences = try JSONDecoder().decode([Sentence].self, from: jsonData)
-//            print(decodedSentences)
-        } catch { print(error) }
     }
 
     func sendUDP(_ content: Data) {
@@ -114,7 +119,9 @@ class PlayNetwork {
     }
 
     func receiveUDP() {
+//        self.connection.
         self.connection?.receiveMessage {[weak self] (data, context, isComplete, error) in
+            print("Received")
             guard let self = self else {return}
             self.endTime = DispatchTime.now()
             let nanoTime = self.endTime.uptimeNanoseconds - self.startTime.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
