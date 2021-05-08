@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CardViewDelegate: class {
+protocol CardViewDelegate: AnyObject {
     func didStartPan()
     func panEnded()
 }

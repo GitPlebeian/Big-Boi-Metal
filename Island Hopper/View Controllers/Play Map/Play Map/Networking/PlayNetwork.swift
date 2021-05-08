@@ -8,17 +8,17 @@
 import Foundation
 import Network
 
-struct Person: Codable {
-    var name: String
-    var age: Int
-}
-
 enum PacketTypeOut: UInt64 {
     case Connect = 0
+    case SubmitMoves = 1
 }
 
 enum PacketTypeIn: UInt64 {
     case Connected = 0
+    case AlreadyConnected = 1
+    case WaitingForPlayers = 2
+    case StartGame = 3
+    case PlayerMoves = 4
 }
 
 class PlayNetwork {
@@ -27,9 +27,12 @@ class PlayNetwork {
         
     weak var controller: PlayController!
     
+//    192.168.0.121 IPad
+//    192.168.0.30 Iphone
+//    192.168.0.86 Macbook Pro
     
     var connection: NWConnection?
-    var hostUDP: NWEndpoint.Host = "192.168.0.83"
+    var hostUDP: NWEndpoint.Host = "192.168.0.86"
     var portUDP: NWEndpoint.Port = 80
     
     var startTime: DispatchTime!
@@ -55,31 +58,66 @@ class PlayNetwork {
     
     // MARK: Public
     
-    // MARK: Private
-    
     // Get Data For Out Type
-    private func getDataForOutType(type: PacketTypeOut) -> Data {
+    func getDataForOutType(type: PacketTypeOut) -> Data {
         var num = type.rawValue
         return Data(bytes: &num, count: 8)
     }
     
+    // Send UDP
+    func sendUDP(_ content: Data) {
+        self.connection?.send(content: content, completion: NWConnection.SendCompletion.contentProcessed(({ (NWError) in
+            if (NWError == nil) {
+                // Good To Go
+            } else {
+                print("ERROR! Error when data (Type: Data) sending. NWError: \n \(NWError!)")
+            }
+        })))
+    }
+    
+    // Start Packet Test
+    func startPacketTest() {
+        let timer = Timer(timeInterval: 0.2, repeats: true) { [weak self] timer in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+            var data = self.getDataForOutType(type: .Connect)
+            data.append(self.uuid.data(using: .utf8)!)
+            self.startTime = DispatchTime.now()
+            self.sendUDP(data)
+            print("Sent Connection Test")
+        }
+        RunLoop.main.add(timer, forMode: .common)
+    }
+    
+    // MARK: Private
+    
+    // Get In Type From Data
+    private func getPacketInTypeFromData(from data: Data) -> PacketTypeIn? {
+        guard data.count >= 8 else {
+            return nil
+        }
+        let num: UInt64 = data.subdata(in: 0..<8).withUnsafeBytes {
+            pointer in
+            return pointer.load(as: UInt64.self)
+        }
+        return PacketTypeIn.init(rawValue: num)
+    }
+    
     // Connect To UDP
-    func connectToUDP(_ hostUDP: NWEndpoint.Host, _ portUDP: NWEndpoint.Port) {
+    private func connectToUDP(_ hostUDP: NWEndpoint.Host, _ portUDP: NWEndpoint.Port) {
         
-        self.connection = NWConnection(host: hostUDP, port: portUDP, using: .udp)
+        let params = NWParameters.udp
+        params.allowLocalEndpointReuse = true
+        params.allowFastOpen = true
         
+        self.connection = NWConnection(host: hostUDP, port: portUDP, using: params)
         self.connection?.stateUpdateHandler = {[weak self] (newState) in
             guard let self = self else {return}
-            print("This is stateUpdateHandler:")
             switch (newState) {
             case .ready:
-                print("State: Ready\n")
-
-                var data = self.getDataForOutType(type: .Connect)
-                data.append(self.uuid.data(using: .utf8)!)
-                
-                self.startTime = DispatchTime.now()
-                self.sendUDP(data)
+                self.sendConnectionRequest()
                 self.receiveUDP()
             case .setup:
                 print("State: Setup\n")
@@ -88,61 +126,52 @@ class PlayNetwork {
             case .preparing:
                 print("State: Preparing\n")
             default:
-                print("ERROR! State not defined!\n")
+                print("ERROR! State not defined! \(newState)\n")
             }
         }
         
         self.connection?.start(queue: .global())
             
     }
-
-    func sendUDP(_ content: Data) {
-        self.connection?.send(content: content, completion: NWConnection.SendCompletion.contentProcessed(({ (NWError) in
-            if (NWError == nil) {
-                print("Data was sent to UDP")
-            } else {
-                print("ERROR! Error when data (Type: Data) sending. NWError: \n \(NWError!)")
-            }
-        })))
+    
+    // Send Connection Request
+    private func sendConnectionRequest() {
+        var data = self.getDataForOutType(type: .Connect)
+        data.append(self.uuid.data(using: .utf8)!)
+        self.startTime = DispatchTime.now()
+        self.sendUDP(data)
+        print("Sent Connection Request")
     }
 
-    func sendUDP(_ content: String) {
-        let contentToSendUDP = content.data(using: String.Encoding.utf8)
-        self.connection?.send(content: contentToSendUDP, completion: NWConnection.SendCompletion.contentProcessed(({ (NWError) in
-            
-            if (NWError == nil) {
-                print("Data was sent to UDP")
-            } else {
-                print("ERROR! Error when data (Type: Data) sending. NWError: \n \(NWError!)")
-            }
-        })))
-    }
-
-    func receiveUDP() {
-//        self.connection.
+    // Receive
+    private func receiveUDP() {
         self.connection?.receiveMessage {[weak self] (data, context, isComplete, error) in
-            print("Received")
             guard let self = self else {return}
-            self.endTime = DispatchTime.now()
-            let nanoTime = self.endTime.uptimeNanoseconds - self.startTime.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
-            let timeInterval = Double(nanoTime) / 1_000_000 // Technically could overflow for long running tests
-            print("Time: \(timeInterval)")
-            if (isComplete) {
-                print("Receive is complete")
-                if (data != nil) {
-//                    let backToString = String(decoding: data!, as: UTF8.self)
-//                    print("Received message: \(backToString)")
-                    do {
-                        let string = String(decoding: data!, as: UTF8.self)
-//                        let person = tr`y JSONDecoder().decode(String.self, from: data!)
-                        print(string)
-                    } catch let e {
-                        print("Big EE: \(e)")
+            DispatchQueue.main.async {
+                self.endTime = DispatchTime.now()
+                //            let nanoTime = self.endTime.uptimeNanoseconds - self.startTime.uptimeNanoseconds
+                //            let timeInterval = Double(nanoTime) / 1_000_000 // Technically could overflow for long running tests
+                //            print("\(timeInterval)")
+                if (isComplete) {
+                    if (data != nil) {
+                        guard let type = self.getPacketInTypeFromData(from: data!) else {return}
+                        print("Type: \(type)")
+                        switch type {
+                        case .WaitingForPlayers:
+                            self.handleWaitingForPlayers()
+                        case .StartGame:
+                            self.handleStartGame(data: data!.subdata(in: 8..<data!.count))
+                        case .PlayerMoves:
+                            self.handlePlayerMoves(data: data!.subdata(in: 8..<data!.count))
+                        default:
+                            break
+                        }
+                    } else {
+                        print("Data == nil")
                     }
-                } else {
-                    print("Data == nil")
                 }
             }
+            self.receiveUDP()
         }
     }
 }

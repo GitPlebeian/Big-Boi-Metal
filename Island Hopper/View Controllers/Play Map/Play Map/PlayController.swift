@@ -12,18 +12,23 @@ class PlayController {
     
     var map: Map!
     
-    weak var playMapView: PlayMapView!
-    weak var engine: Engine!
-    weak var touchController: EngineTouchController!
-    var      cardDock: CardDockView!
-    var entityPlacer: EntityPlacer!
-    var mapLocationHelper: MapLocationHelper!
+    weak var playMapView:       PlayMapView!
+    weak var engine:            Engine!
+    weak var touchController:   EngineTouchController!
+    var      cardDock:          CardDockView!
+    var      alertController:   AlertController!
+    var      entityPlacer:      EntityPlacer!
+    var      mapLocationHelper: MapLocationHelper!
+    var      orderQueue:        OrderQueue!
     
-    var mapLayer: MapLayer!
-    var gridLayer: GridLayer!
+    var mapLayer:           MapLayer!
+    var gridLayer:          GridLayer!
     var celledTextureLayer: CelledTextureLayer!
-    var entityController: EntityController!
-    var network: PlayNetwork!
+    var entityController:   EntityController!
+    var network:            PlayNetwork!
+    
+    var currentPlayer: Int!
+    var gameUUID: String!
     
     // MARK: Init
     
@@ -54,6 +59,10 @@ class PlayController {
         self.entityController = EntityController(controller: self)
         
         self.network = PlayNetwork(controller: self)
+        
+        self.alertController = AlertController(controller: self, playMapView: playMapView)
+        
+        self.orderQueue = OrderQueue(controller: self)
         
         engine.addLayer(mapLayer, atLayer: 0)
         engine.addLayer(gridLayer, atLayer: 1)

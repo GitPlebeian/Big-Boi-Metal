@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol EngineTouchControllerDelegate: class {
+protocol EngineTouchControllerDelegate: AnyObject {
     func tapped(location: FloatPoint)
 }
 
@@ -17,8 +17,10 @@ class EngineTouchController: UIView {
     
     weak var delegate: EngineTouchControllerDelegate?
     
-    var vertexTransform:           (Float, Float) = (0, 0)
-    private var previousVertexTransform:   FloatPoint     = FloatPoint()
+//    var vertexTransform:           (Float, Float) = (0, 0)
+    var vertexTransform:           (Float, Float) = (-1.8644, 2.74)
+//    private var previousVertexTransform:   FloatPoint     = FloatPoint()
+    private var previousVertexTransform:   FloatPoint     = FloatPoint(-1.8644, 2.74)
     private var startPanLocation:          FloatPoint     = FloatPoint()
     
     var vertexScale:               Float          = 1

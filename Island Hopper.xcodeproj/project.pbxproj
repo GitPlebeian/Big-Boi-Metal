@@ -53,9 +53,13 @@
 		8684051B2632926E000F3845 /* TileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8684051A2632926E000F3845 /* TileHelper.swift */; };
 		86A40C8D26197E4700481FEF /* EngineTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A40C8C26197E4700481FEF /* EngineTouchController.swift */; };
 		86A6B22E264484F300F63D25 /* PlayNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A6B22D264484F300F63D25 /* PlayNetwork.swift */; };
+		86A6B2332645CF9E00F63D25 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A6B2322645CF9E00F63D25 /* AlertController.swift */; };
+		86A6B2382645D13600F63D25 /* WaitingForPlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A6B2372645D13600F63D25 /* WaitingForPlayersView.swift */; };
 		86AC2CFA26438D51002D23E0 /* EntityPlacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2CF926438D50002D23E0 /* EntityPlacer.swift */; };
 		86AC2CFD264394E1002D23E0 /* MapLocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2CFC264394E1002D23E0 /* MapLocationHelper.swift */; };
 		86AC2D01264466C1002D23E0 /* WarriorCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2D00264466C1002D23E0 /* WarriorCard.swift */; };
+		86B126F52645EAFA000DCB61 /* PlayNetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B126F42645EAFA000DCB61 /* PlayNetworkHelper.swift */; };
+		86B126F72645FB39000DCB61 /* OrderQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B126F62645FB39000DCB61 /* OrderQueue.swift */; };
 		86FEAF7F26434EA40084BFF1 /* CelledTextureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FEAF7E26434EA40084BFF1 /* CelledTextureLayer.swift */; };
 /* End PBXBuildFile section */
 
@@ -108,9 +112,13 @@
 		8684051A2632926E000F3845 /* TileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileHelper.swift; sourceTree = "<group>"; };
 		86A40C8C26197E4700481FEF /* EngineTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTouchController.swift; sourceTree = "<group>"; };
 		86A6B22D264484F300F63D25 /* PlayNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayNetwork.swift; sourceTree = "<group>"; };
+		86A6B2322645CF9E00F63D25 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
+		86A6B2372645D13600F63D25 /* WaitingForPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingForPlayersView.swift; sourceTree = "<group>"; };
 		86AC2CF926438D50002D23E0 /* EntityPlacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityPlacer.swift; sourceTree = "<group>"; };
 		86AC2CFC264394E1002D23E0 /* MapLocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationHelper.swift; sourceTree = "<group>"; };
 		86AC2D00264466C1002D23E0 /* WarriorCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarriorCard.swift; sourceTree = "<group>"; };
+		86B126F42645EAFA000DCB61 /* PlayNetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayNetworkHelper.swift; sourceTree = "<group>"; };
+		86B126F62645FB39000DCB61 /* OrderQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderQueue.swift; sourceTree = "<group>"; };
 		86FEAF7E26434EA40084BFF1 /* CelledTextureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelledTextureLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +138,7 @@
 			children = (
 				861D4C1C26419B020091C242 /* CardDockView.swift */,
 				861D4C1F26419C020091C242 /* CardView.swift */,
+				86A6B2352645D11E00F63D25 /* Alerts */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -370,8 +379,19 @@
 			isa = PBXGroup;
 			children = (
 				86A6B22D264484F300F63D25 /* PlayNetwork.swift */,
+				86B126F42645EAFA000DCB61 /* PlayNetworkHelper.swift */,
+				86B126F62645FB39000DCB61 /* OrderQueue.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		86A6B2352645D11E00F63D25 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				86A6B2322645CF9E00F63D25 /* AlertController.swift */,
+				86A6B2372645D13600F63D25 /* WaitingForPlayersView.swift */,
+			);
+			path = Alerts;
 			sourceTree = "<group>";
 		};
 		86AC2CFF264466A4002D23E0 /* Cards */ = {
@@ -462,10 +482,14 @@
 				864465B326191CF2000851FC /* AppDelegate.swift in Sources */,
 				8644660A26192E46000851FC /* ChunkEditorView.swift in Sources */,
 				86AC2D01264466C1002D23E0 /* WarriorCard.swift in Sources */,
+				86A6B2382645D13600F63D25 /* WaitingForPlayersView.swift in Sources */,
 				861D4C2026419C020091C242 /* CardView.swift in Sources */,
 				86FEAF7F26434EA40084BFF1 /* CelledTextureLayer.swift in Sources */,
 				8644660F26192E46000851FC /* PipelineDescriptorLibrary.swift in Sources */,
+				86A6B2332645CF9E00F63D25 /* AlertController.swift in Sources */,
+				86B126F52645EAFA000DCB61 /* PlayNetworkHelper.swift in Sources */,
 				8644661326192E46000851FC /* GridLayer.swift in Sources */,
+				86B126F72645FB39000DCB61 /* OrderQueue.swift in Sources */,
 				866894752625315A006B6B21 /* Map.swift in Sources */,
 				8644660C26192E46000851FC /* ChunkSeedEditor.swift in Sources */,
 				864465D426191FBF000851FC /* UIColor.swift in Sources */,
@@ -641,7 +665,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -661,7 +685,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Island Hopper/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

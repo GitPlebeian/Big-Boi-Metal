@@ -15,6 +15,7 @@ class Entity {
     var textureCords: [Float]
     var width: Int // In Pixels
     var height: Int // In Pixels
+    var id: EntityID
     
     // MARK: Blocks
     
@@ -25,12 +26,14 @@ class Entity {
     init(position: IntCordinate = IntCordinate(),
          textureCords: [Float],
          width: Int,
-         height: Int) {
+         height: Int,
+         id: EntityID) {
         
         self.position = position
         self.textureCords = textureCords
         self.width = width
         self.height = height
+        self.id = id
         
         setUpdate()
     }
@@ -45,3 +48,8 @@ class Entity {
     
     func setUpdate() {}
 }
+
+enum EntityID: UInt64, Codable {
+    case Warrior = 0
+}
+
