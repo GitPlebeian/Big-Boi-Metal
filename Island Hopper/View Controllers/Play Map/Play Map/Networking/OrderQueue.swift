@@ -25,7 +25,7 @@ struct PlayerMove: Codable {
     let cordY:    UInt64
     
     enum CodingKeys: String, CodingKey {
-        case entityID = "EntityID"
+        case entityID = "ID"
         case cordX    = "CordX"
         case cordY    = "CordY"
     }
@@ -69,8 +69,16 @@ class OrderQueue {
     
     // Get Queued Moves
     func getMovesBundle() -> MovesBundle {
+        if queuedMoves.count > 0 {
+            print("Queued Moves > 1 Returning")
+        }
         return MovesBundle(player: UInt64(controller.currentPlayer),
                            gameUUID: controller.gameUUID,
                            moves: queuedMoves)
+    }
+    
+    // Clear Queue
+    func clearQueue() {
+        self.queuedMoves = []
     }
 }

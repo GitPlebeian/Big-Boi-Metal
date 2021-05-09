@@ -35,6 +35,7 @@ extension PlayNetwork {
     // Send Moves
     func sendMoves(bundle: MovesBundle) {
         do {
+            controller.orderQueue.clearQueue()
             var data = getDataForOutType(type: .SubmitMoves)
             let moveData = try JSONEncoder().encode(bundle)
             data.append(moveData)
@@ -46,14 +47,13 @@ extension PlayNetwork {
     
     // Handle Player Moves
     func handlePlayerMoves(data: Data) {
-        print("Data For Player Moves: \(data)")
+        let string = String(decoding: data, as: UTF8.self)
         do {
-            let string = String(decoding: data, as: UTF8.self)
-            print("String: \(string)")
-            let move = try JSONDecoder().decode(ReceivedMoves.self, from: data)
-            print(move)
+            let moves = try JSONDecoder().decode(ReceivedMoves.self, from: data)
+            self.controller.stepGame(receivedMoves: moves)
         } catch let e {
             print("Error:  💩💩💩: \(e)")
+            print("\n\n\(string)")
         }
     }
 }

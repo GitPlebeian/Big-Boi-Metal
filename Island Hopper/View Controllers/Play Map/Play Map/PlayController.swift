@@ -29,6 +29,7 @@ class PlayController {
     
     var currentPlayer: Int!
     var gameUUID: String!
+    var gameStep: Int = 0
     
     // MARK: Init
     
@@ -69,7 +70,6 @@ class PlayController {
         engine.addLayer(celledTextureLayer, atLayer: 2)
         
         setupTilesetTexture()
-        startUpdate()
     }
     // MARK: DEINIT
     
@@ -79,7 +79,26 @@ class PlayController {
     
     // MARK: Public
     
-    
+    // Step Game
+    func stepGame(receivedMoves: ReceivedMoves) {
+        gameStep += 1
+        entityController.update()
+        
+        for move in receivedMoves.playerOneMoves.moves {
+            let entity = Entity.getEntityTypeForID(id: move.entityID)
+            entity.position = IntCordinate(Int(move.cordX), Int(move.cordY))
+            entityController.addEntity(entity: entity)
+        }
+        for move in receivedMoves.playerTwoMoves.moves {
+            let entity = Entity.getEntityTypeForID(id: move.entityID)
+            entity.position = IntCordinate(Int(move.cordX), Int(move.cordY))
+            entityController.addEntity(entity: entity)
+        }
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+            timer.invalidate()
+            self.network.sendMoves(bundle: self.orderQueue.getMovesBundle())
+        }
+    }
     
     // MARK: Private
     
@@ -116,18 +135,6 @@ class PlayController {
         texture.replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: tileSetWidth * 4)
         mapLayer.terrainTileTexture = texture
         celledTextureLayer.tileTexure = texture
-    }
-    
-    // Start Update
-    private func startUpdate() {
-        let timer = Timer(timeInterval: 1, repeats: true) {[weak self] (timer) in
-            guard let self = self else {
-                timer.invalidate()
-                return
-            }
-            self.entityController.update()
-        }
-        RunLoop.main.add(timer, forMode: .common)
     }
 }
 

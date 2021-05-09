@@ -9,7 +9,7 @@ import UIKit
 
 class Card {
     
-    weak var entityBeingPlaced: Entity?
+    var entityBeingPlaced: Entity?
     weak var controller: PlayController!
     
     var startedPlacingBlock: ((CGPoint) -> Void)!

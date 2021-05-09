@@ -32,7 +32,7 @@ class PlayNetwork {
 //    192.168.0.86 Macbook Pro
     
     var connection: NWConnection?
-    var hostUDP: NWEndpoint.Host = "192.168.0.86"
+    var hostUDP: NWEndpoint.Host = "localhost"
     var portUDP: NWEndpoint.Port = 80
     
     var startTime: DispatchTime!

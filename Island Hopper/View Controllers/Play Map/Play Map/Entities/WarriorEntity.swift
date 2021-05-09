@@ -11,7 +11,19 @@ class WarriorEntity: Entity {
     
     // MARK: Properties
     
-    // Set Update
+    // MARK: Init
+    
+    override init(position: IntCordinate = IntCordinate(),
+                  textureCords: [Float],
+                  width: Int,
+                  height: Int) {
+        
+        super.init(position: position,
+                   textureCords: textureCords,
+                   width: width,
+                   height: height)
+        self.id = .Warrior
+    }
     
     // MARK: Deinit
     

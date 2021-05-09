@@ -32,6 +32,7 @@ class EntityController {
     // Add Entity
     func addEntity(entity: Entity) {
         entities.append(entity)
+        controller.celledTextureLayer.addEntity(entity: entity)
     }
     
     // Remove Entity

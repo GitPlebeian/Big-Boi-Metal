@@ -44,6 +44,7 @@ class EntityPlacer {
     }
     
     func placedCard() {
+        controller.celledTextureLayer.removeEntity(entity: placingEntity!)
         placingEntity = nil
     }
     
