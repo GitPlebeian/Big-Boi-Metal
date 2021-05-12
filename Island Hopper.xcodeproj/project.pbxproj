@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8617536F264B018E00C9EB8F /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8617536E264B018E00C9EB8F /* DebugView.swift */; };
 		861D4C1D26419B020091C242 /* CardDockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D4C1C26419B020091C242 /* CardDockView.swift */; };
 		861D4C2026419C020091C242 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D4C1F26419C020091C242 /* CardView.swift */; };
 		861D4C232641B20C0091C242 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861D4C222641B20C0091C242 /* Card.swift */; };
@@ -58,12 +59,14 @@
 		86AC2CFA26438D51002D23E0 /* EntityPlacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2CF926438D50002D23E0 /* EntityPlacer.swift */; };
 		86AC2CFD264394E1002D23E0 /* MapLocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2CFC264394E1002D23E0 /* MapLocationHelper.swift */; };
 		86AC2D01264466C1002D23E0 /* WarriorCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC2D00264466C1002D23E0 /* WarriorCard.swift */; };
+		86AEA386264B9F6B008660DE /* PingTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AEA385264B9F6B008660DE /* PingTestViewController.swift */; };
 		86B126F52645EAFA000DCB61 /* PlayNetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B126F42645EAFA000DCB61 /* PlayNetworkHelper.swift */; };
 		86B126F72645FB39000DCB61 /* OrderQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B126F62645FB39000DCB61 /* OrderQueue.swift */; };
 		86FEAF7F26434EA40084BFF1 /* CelledTextureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FEAF7E26434EA40084BFF1 /* CelledTextureLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8617536E264B018E00C9EB8F /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		861D4C1C26419B020091C242 /* CardDockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDockView.swift; sourceTree = "<group>"; };
 		861D4C1F26419C020091C242 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		861D4C222641B20C0091C242 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 		86AC2CF926438D50002D23E0 /* EntityPlacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityPlacer.swift; sourceTree = "<group>"; };
 		86AC2CFC264394E1002D23E0 /* MapLocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationHelper.swift; sourceTree = "<group>"; };
 		86AC2D00264466C1002D23E0 /* WarriorCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarriorCard.swift; sourceTree = "<group>"; };
+		86AEA385264B9F6B008660DE /* PingTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingTestViewController.swift; sourceTree = "<group>"; };
 		86B126F42645EAFA000DCB61 /* PlayNetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayNetworkHelper.swift; sourceTree = "<group>"; };
 		86B126F62645FB39000DCB61 /* OrderQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderQueue.swift; sourceTree = "<group>"; };
 		86FEAF7E26434EA40084BFF1 /* CelledTextureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelledTextureLayer.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 				861D4C1C26419B020091C242 /* CardDockView.swift */,
 				861D4C1F26419C020091C242 /* CardView.swift */,
 				86A6B2352645D11E00F63D25 /* Alerts */,
+				8617536E264B018E00C9EB8F /* DebugView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -204,6 +209,7 @@
 		864465CE26191F2E000851FC /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				86AEA384264B9F49008660DE /* Ping Test */,
 				866894622623CC31006B6B21 /* Select Map */,
 				866894612623CC28006B6B21 /* Play Map */,
 				864465CF26191F4E000851FC /* InitialViewController.swift */,
@@ -403,6 +409,14 @@
 			path = Cards;
 			sourceTree = "<group>";
 		};
+		86AEA384264B9F49008660DE /* Ping Test */ = {
+			isa = PBXGroup;
+			children = (
+				86AEA385264B9F6B008660DE /* PingTestViewController.swift */,
+			);
+			path = "Ping Test";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -478,6 +492,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				866894672623CE8E006B6B21 /* SelectMapButton.swift in Sources */,
+				86AEA386264B9F6B008660DE /* PingTestViewController.swift in Sources */,
 				8644660B26192E46000851FC /* ChunkFadeEditor.swift in Sources */,
 				864465B326191CF2000851FC /* AppDelegate.swift in Sources */,
 				8644660A26192E46000851FC /* ChunkEditorView.swift in Sources */,
@@ -489,6 +504,7 @@
 				86A6B2332645CF9E00F63D25 /* AlertController.swift in Sources */,
 				86B126F52645EAFA000DCB61 /* PlayNetworkHelper.swift in Sources */,
 				8644661326192E46000851FC /* GridLayer.swift in Sources */,
+				8617536F264B018E00C9EB8F /* DebugView.swift in Sources */,
 				86B126F72645FB39000DCB61 /* OrderQueue.swift in Sources */,
 				866894752625315A006B6B21 /* Map.swift in Sources */,
 				8644660C26192E46000851FC /* ChunkSeedEditor.swift in Sources */,

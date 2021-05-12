@@ -36,6 +36,7 @@ class PlayViewController: UIViewController {
     
     // Back Button Tapped
     @objc private func backButtonTapped() {
+        playView.controller.network.disconnect()
         let selectionFeedback = UISelectionFeedbackGenerator()
         selectionFeedback.selectionChanged()
         

@@ -55,6 +55,13 @@ class PlayMapView: UIView {
     
     // MARK: Public
     
+    // Back
+    func back() {
+        let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+        let viewController = SelectMapViewController()
+        window?.rootViewController = viewController
+    }
+    
     // MARK: Private
     
     // MARK: Setup Views

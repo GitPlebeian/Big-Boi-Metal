@@ -26,10 +26,15 @@ class PlayController {
     var celledTextureLayer: CelledTextureLayer!
     var entityController:   EntityController!
     var network:            PlayNetwork!
+    var debugView:          DebugView!
     
     var currentPlayer: Int!
-    var gameUUID: String!
+    var gameUUID: String = ""
     var gameStep: Int = 0
+    var gameTickTime: TimeInterval = 0.1
+    
+    var serverStep: Int = 0
+    var serverCommandTimer: Timer?
     
     // MARK: Init
     
@@ -65,6 +70,8 @@ class PlayController {
         
         self.orderQueue = OrderQueue(controller: self)
         
+        self.debugView = DebugView(controller: self, playView: playMapView)
+        
         engine.addLayer(mapLayer, atLayer: 0)
         engine.addLayer(gridLayer, atLayer: 1)
         engine.addLayer(celledTextureLayer, atLayer: 2)
@@ -79,24 +86,75 @@ class PlayController {
     
     // MARK: Public
     
+    // Update
+    
     // Step Game
-    func stepGame(receivedMoves: ReceivedMoves) {
-        gameStep += 1
+    func stepGame(receivedMoves: ReceivedMoves? = nil) {
+        
+        debugView.stopWaitingForServerMoves()
+        
+        defer {
+            serverStep += 1
+        }
+        
+        debugView.stepLabel.text = "Step: \(serverStep)"
+        
+        guard let moves = receivedMoves else {
+//            print("Stepping Game: \(serverStep). Sending Empty Moves")
+            self.network.sendMoves(bundle: self.orderQueue.getMovesBundle())
+            let timer = Timer.scheduledTimer(withTimeInterval: network.serverTickTime, repeats: false) { [weak self] timer in
+                timer.invalidate()
+                guard let self = self else {return}
+//                print("Empty Moves Timer Fired: Calling StepGameIfApplicable(). Step: \(self.serverStep)")
+                self.serverCommandTimer = nil
+                self.stepGameIfApplicable()
+            }
+            self.serverCommandTimer?.invalidate()
+            self.serverCommandTimer = timer
+            RunLoop.main.add(serverCommandTimer!, forMode: .common)
+            
+            return
+        }
+        
         entityController.update()
         
-        for move in receivedMoves.playerOneMoves.moves {
+        for move in moves.playerOneMoves.moves {
             let entity = Entity.getEntityTypeForID(id: move.entityID)
             entity.position = IntCordinate(Int(move.cordX), Int(move.cordY))
             entityController.addEntity(entity: entity)
         }
-        for move in receivedMoves.playerTwoMoves.moves {
+        for move in moves.playerTwoMoves.moves {
             let entity = Entity.getEntityTypeForID(id: move.entityID)
             entity.position = IntCordinate(Int(move.cordX), Int(move.cordY))
             entityController.addEntity(entity: entity)
         }
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+//        print("Stepping Game: \(serverStep). Sending Moves From Get Moves Bundle")
+        self.network.sendMoves(bundle: self.orderQueue.getMovesBundle())
+        let timer = Timer.scheduledTimer(withTimeInterval: network.serverTickTime, repeats: false) { [weak self] timer in
             timer.invalidate()
-            self.network.sendMoves(bundle: self.orderQueue.getMovesBundle())
+            guard let self = self else {return}
+//            print("Server Command Timer Fired. Step: \(self.serverStep). Calling Step Game If Applicable")
+            self.serverCommandTimer = nil
+            self.stepGameIfApplicable()
+        }
+        self.serverCommandTimer?.invalidate()
+        self.serverCommandTimer = timer
+        RunLoop.main.add(serverCommandTimer!, forMode: .common)
+    }
+    
+    // Step Game If Applicable
+    func stepGameIfApplicable() {
+//        print("Stepping Game If Applicable For Step: \(serverStep). Server Command Timer: \(serverCommandTimer != nil)")
+        if serverCommandTimer != nil {
+            return
+        }
+        if let moves = orderQueue.nextMoves {
+//            print("Calling Step Game. Step: \(serverStep). Moves Step: \(moves.step)")
+            stepGame(receivedMoves: moves)
+            orderQueue.nextMoves = nil
+        } else {
+            debugView.startWaitingForServerMoves()
+            network.requestPreviousMoves()
         }
     }
     

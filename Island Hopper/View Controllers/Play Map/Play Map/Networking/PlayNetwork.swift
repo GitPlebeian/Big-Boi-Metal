@@ -11,6 +11,10 @@ import Network
 enum PacketTypeOut: UInt64 {
     case Connect = 0
     case SubmitMoves = 1
+    case RequestGameStartData = 2
+    case GetPreviousMoves = 3
+    case Disconnect = 4
+    case Ping = 5
 }
 
 enum PacketTypeIn: UInt64 {
@@ -19,6 +23,14 @@ enum PacketTypeIn: UInt64 {
     case WaitingForPlayers = 2
     case StartGame = 3
     case PlayerMoves = 4
+    case RequestPlayerMoves = 5
+    case Deleted = 6
+    case Ping = 7
+}
+
+struct GameUUIDUserUUID: Codable {
+    let playerUUID: String
+    let gameUUID: String
 }
 
 class PlayNetwork {
@@ -32,7 +44,8 @@ class PlayNetwork {
 //    192.168.0.86 Macbook Pro
     
     var connection: NWConnection?
-    var hostUDP: NWEndpoint.Host = "localhost"
+    var hostUDP: NWEndpoint.Host = "18.225.11.207"
+//    var hostUDP: NWEndpoint.Host = "localhost"
     var portUDP: NWEndpoint.Port = 80
     
     var startTime: DispatchTime!
@@ -41,6 +54,17 @@ class PlayNetwork {
     let uuid: String
     
     var connected: Bool = false
+    
+    var serverTickTime: TimeInterval = 0.5
+    
+    var expectedConnectionTimer: Timer?
+    var expectedMovesTimer: Timer?
+    var hasReceivedGameStartData: Bool = false
+    var expectedRequestGameStartDataTimer: Timer?
+    
+    // MARK: Delay
+    
+    var randomDelay: Bool = false
     
     // MARK: Init
 
@@ -58,6 +82,21 @@ class PlayNetwork {
     
     // MARK: Public
     
+    // Disconnect
+    func disconnect() {
+        let dataStruct = GameUUIDUserUUID(playerUUID: uuid,
+                                          gameUUID: controller.gameUUID)
+        do {
+            var data = getDataForOutType(type: .Disconnect)
+            let structData = try JSONEncoder().encode(dataStruct)
+            data.append(structData)
+            sendUDP(data)
+            print("SENT: Disconnect")
+        } catch let error {
+            print("Error converting struct to data in Network.disconnect: \(error)")
+        }
+    }
+    
     // Get Data For Out Type
     func getDataForOutType(type: PacketTypeOut) -> Data {
         var num = type.rawValue
@@ -66,18 +105,37 @@ class PlayNetwork {
     
     // Send UDP
     func sendUDP(_ content: Data) {
-        self.connection?.send(content: content, completion: NWConnection.SendCompletion.contentProcessed(({ (NWError) in
-            if (NWError == nil) {
-                // Good To Go
-            } else {
-                print("ERROR! Error when data (Type: Data) sending. NWError: \n \(NWError!)")
+        if randomDelay {
+            if Float.random(in: 0...1) < 0.3 {
+                print("Failing To Send UDP")
+                return
             }
-        })))
+//            Timer.scheduledTimer(withTimeInterval: TimeInterval.random(in: 1..<4), repeats: false) { [weak self] timer in
+//                timer.invalidate()
+////                print("Sending UDP")
+//            }
+//            guard let self = self else {return}
+            self.connection?.send(content: content, completion: NWConnection.SendCompletion.contentProcessed(({ (NWError) in
+                if (NWError == nil) {
+                    
+                } else {
+                    print("ERROR! Error when data (Type: Data) sending. NWError: \n \(NWError!)")
+                }
+            })))
+        } else {
+            self.connection?.send(content: content, completion: NWConnection.SendCompletion.contentProcessed(({ (NWError) in
+                if (NWError == nil) {
+                    // Good To Go
+                } else {
+                    print("ERROR! Error when data (Type: Data) sending. NWError: \n \(NWError!)")
+                }
+            })))
+        }
     }
     
     // Start Packet Test
     func startPacketTest() {
-        let timer = Timer(timeInterval: 0.2, repeats: true) { [weak self] timer in
+        let timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] timer in
             guard let self = self else {
                 timer.invalidate()
                 return
@@ -129,18 +187,32 @@ class PlayNetwork {
                 print("ERROR! State not defined! \(newState)\n")
             }
         }
-        
+//        if randomDelay {
+//            self.connection?.start(queue: .main)
+//        } else {
+//        }
         self.connection?.start(queue: .global())
             
     }
     
     // Send Connection Request
     private func sendConnectionRequest() {
+        // Send Data
         var data = self.getDataForOutType(type: .Connect)
         data.append(self.uuid.data(using: .utf8)!)
         self.startTime = DispatchTime.now()
         self.sendUDP(data)
-        print("Sent Connection Request")
+        // Set Expectation Timer
+        DispatchQueue.main.async {
+            self.expectedConnectionTimer?.invalidate()
+            self.expectedConnectionTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { [weak self] timer in
+                timer.invalidate()
+                guard let self = self else {return}
+                self.sendConnectionRequest()
+            })
+            RunLoop.main.add(self.expectedConnectionTimer!, forMode: .common)
+        }
+        print("SENT: Connection Request")
     }
 
     // Receive
@@ -155,16 +227,73 @@ class PlayNetwork {
                 if (isComplete) {
                     if (data != nil) {
                         guard let type = self.getPacketInTypeFromData(from: data!) else {return}
-                        print("Type: \(type)")
+                        if self.randomDelay {
+                            if Float.random(in: 0...1) < 0.3 {
+                                print("READ Fail: \(type)")
+                                return
+                            } else {
+                                print("READ GOOD: \(type)")
+                            }
+                        } else {
+                            print("Bytes Type: \(type)")
+                        }
                         switch type {
+                        case .Connected:
+                            self.expectedConnectionTimer?.invalidate()
+                            // Start Request Game Start Data Timer
+                            self.expectedRequestGameStartDataTimer?.invalidate()
+                            self.expectedRequestGameStartDataTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { [weak self] timer in
+                                timer.invalidate()
+                                guard let self = self else {return}
+                                self.requestGameStartData()
+                            })
+                            RunLoop.main.add(self.expectedRequestGameStartDataTimer!, forMode: .common)
+                        case .AlreadyConnected:
+                            self.expectedConnectionTimer?.invalidate()
+                            // Start Request Game Start Data Timer
+                            self.expectedRequestGameStartDataTimer?.invalidate()
+                            self.expectedRequestGameStartDataTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { [weak self] timer in
+                                timer.invalidate()
+                                guard let self = self else {return}
+                                self.requestGameStartData()
+                            })
+                            RunLoop.main.add(self.expectedRequestGameStartDataTimer!, forMode: .common)
                         case .WaitingForPlayers:
+                            self.expectedConnectionTimer?.invalidate()
                             self.handleWaitingForPlayers()
+                            // Start Request Game Start Data Timer
+                            self.expectedRequestGameStartDataTimer?.invalidate()
+                            self.expectedRequestGameStartDataTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { [weak self] timer in
+                                timer.invalidate()
+                                guard let self = self else {return}
+                                self.requestGameStartData()
+                            })
+                            RunLoop.main.add(self.expectedRequestGameStartDataTimer!, forMode: .common)
                         case .StartGame:
+                            self.expectedConnectionTimer?.invalidate()
+                            // Cancel Expected Received Game Start Timer
+                            self.expectedRequestGameStartDataTimer?.invalidate()
+                            if self.hasReceivedGameStartData == true {
+                                return
+                            }
+                            // Handle Start Game
                             self.handleStartGame(data: data!.subdata(in: 8..<data!.count))
                         case .PlayerMoves:
+                            if self.hasReceivedGameStartData == false {
+                                fatalError("Received Move Data Before Game Start Data")
+                            }
                             self.handlePlayerMoves(data: data!.subdata(in: 8..<data!.count))
-                        default:
-                            break
+                        case .RequestPlayerMoves:
+                            // You need game start data to send moves
+                            if self.hasReceivedGameStartData == false {
+                                self.requestGameStartData()
+                                return
+                            }
+                            self.handleRequestPlayerMoves()
+                        case .Deleted:
+                            self.controller.playMapView.back()
+                        case .Ping:
+                            print("I was pinged")
                         }
                     } else {
                         print("Data == nil")

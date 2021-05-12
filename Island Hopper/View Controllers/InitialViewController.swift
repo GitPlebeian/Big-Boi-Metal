@@ -17,6 +17,7 @@ class InitialViewController: UIViewController {
     weak var titleLabel:      UILabel!
     weak var mapEditorButton: UIButton!
     weak var playButton:      UIButton!
+    weak var pingButton:      UIButton!
     
     // MARK: Lifecycle
     
@@ -45,6 +46,16 @@ class InitialViewController: UIViewController {
         
         let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
         let selectMapViewController = SelectMapViewController()
+        window?.rootViewController = selectMapViewController
+    }
+    
+    // Ping Tapped
+    @objc private func pingTapped() {
+        let feedback = UISelectionFeedbackGenerator()
+        feedback.selectionChanged()
+        
+        let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+        let selectMapViewController = PingTestViewController()
         window?.rootViewController = selectMapViewController
     }
     
@@ -106,9 +117,27 @@ class InitialViewController: UIViewController {
             playButton.topAnchor.constraint(equalTo: mapEditorButton.bottomAnchor, constant: 8),
             playButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             playButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            playButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             playButton.heightAnchor.constraint(equalToConstant: 44)
         ])
         self.playButton = playButton
+        
+        // Play Button
+        let pingButton = UIButton()
+        pingButton.addTarget(self, action: #selector(pingTapped), for: .touchUpInside)
+        pingButton.backgroundColor = .primary
+        pingButton.layer.cornerRadius = 8
+        pingButton.setTitle("Ping", for: .normal)
+        pingButton.titleLabel?.font = UIFont(name: Text.robotoBold, size: 14)
+        pingButton.titleLabel?.textColor = .white
+        pingButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(pingButton)
+        NSLayoutConstraint.activate([
+            pingButton.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 8),
+            pingButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            pingButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            pingButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            pingButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        self.pingButton = pingButton
     }
 }

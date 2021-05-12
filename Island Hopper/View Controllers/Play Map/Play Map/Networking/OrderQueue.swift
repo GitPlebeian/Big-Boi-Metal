@@ -11,11 +11,23 @@ struct MovesBundle: Codable {
     let player: UInt64
     let gameUUID: String
     let moves: [PlayerMove]
+    let step: UInt64
+    
+    init(player: UInt64,
+         gameUUID: String,
+         moves: [PlayerMove] = [],
+         step: UInt64) {
+        self.player = player
+        self.gameUUID = gameUUID
+        self.moves = moves
+        self.step = step
+    }
     
     enum CodingKeys: String, CodingKey {
         case player   = "Player"
         case gameUUID = "GameUUID"
         case moves    = "Moves"
+        case step     = "Step"
     }
 }
 
@@ -50,6 +62,8 @@ class OrderQueue {
     weak var controller: PlayController!
     
     private var queuedMoves: [PlayerMove] = []
+    private var previousSubmittedMoves: [PlayerMove] = []
+    var nextMoves: ReceivedMoves?
     
     // MARK: Init
     
@@ -69,16 +83,25 @@ class OrderQueue {
     
     // Get Queued Moves
     func getMovesBundle() -> MovesBundle {
-        if queuedMoves.count > 0 {
-            print("Queued Moves > 1 Returning")
-        }
+
+//        print("Getting Moves Bundle: \(controller.serverStep). Moves Count: \(queuedMoves.count)")
         return MovesBundle(player: UInt64(controller.currentPlayer),
                            gameUUID: controller.gameUUID,
-                           moves: queuedMoves)
+                           moves: queuedMoves,
+                           step: UInt64(controller.serverStep))
+    }
+    
+    // Get Previous Queued Moves
+    func getPreviousQueuedMoves() -> MovesBundle {
+        return MovesBundle(player: UInt64(controller.currentPlayer),
+                           gameUUID: controller.gameUUID,
+                           moves: previousSubmittedMoves,
+                           step: UInt64(controller.serverStep - 1))
     }
     
     // Clear Queue
     func clearQueue() {
+        self.previousSubmittedMoves = queuedMoves
         self.queuedMoves = []
     }
 }
